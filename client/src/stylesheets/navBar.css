@@ -17,3 +17,9 @@
     border-bottom: 1px solid #e0e2e4;
     padding: 5px;
 }
+
+#sbu-logo-img{
+    cursor: pointer;
+    height: 40px;
+    width: auto;
+}

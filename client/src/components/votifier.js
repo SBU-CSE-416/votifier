@@ -1,6 +1,6 @@
 import { useState } from "react";
-import NavBar from "./navBar.js";
-import HomePg from "./homePg.js";
+import NavBar from "./navBar";
+import HomePg from "./homePg";
 
 export default function Votifier() {
     const [pg, setPg] = useState('home');
