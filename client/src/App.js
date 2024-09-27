@@ -1,4 +1,3 @@
-import HomePg from './components/homePg.js';
 import Votifier from './components/votifier.js';
 import './stylesheets/App.css';
 

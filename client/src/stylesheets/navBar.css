@@ -1,6 +1,6 @@
 .nav-container{
     width: 100%;
-    height: 50px;
+    height: 35px;
 }
 
 .navbar {
@@ -11,9 +11,42 @@
     z-index: 1000;
     border-top: 3px solid #e7700d;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
     display: flex;
     border-bottom: 1px solid #e0e2e4;
-    padding: 5px;
+}
+
+.text-btn {
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Arial', sans-serif;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+#sbu-logo-img{
+    cursor: pointer;
+    height: 30px;
+    width: auto;
+    margin-left: 5px;
+
+}
+
+#home-btn{
+    margin-left: 5px;
+}
+
+#map-btn{
+    margin-right: 5px;
+}
+
+#data-btn{
+    margin-right: 5px;
+
+}
+
+#credits-btn{
+    margin-right: 5px;
+
 }
