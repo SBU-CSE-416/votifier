@@ -11,7 +11,8 @@ echo -e "${RED}Make sure to have everything committed on your branch and test it
 echo -e "Are you ready to proceed? (${GREEN}y${NC}/${RED}n${NC})"
 
 read answer
-answer="${answer,,}"
+
+answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
 if [[ "$answer" != "y" ]]; then
     echo -e "${RED}Aborting the sync process.${NC} Please commit and test your changes before pulling from main."
