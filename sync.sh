@@ -28,4 +28,4 @@ cd server/
 npm install
 
 echo -e "${GREEN}Switching back to the previous branch: $current_branch${NC}"
-git checkout "$current_branch
+git checkout "$current_branch"
