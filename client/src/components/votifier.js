@@ -1,5 +1,5 @@
 import { useState } from "react";
-import NavBar from "./navBar";
+import NavBar from "./NavBar";
 import LeftSideMenu from "./leftSideMenu";
 import HomePg from "./homePg";
 import MapPg from "./mapPg";

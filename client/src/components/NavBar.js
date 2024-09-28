@@ -1,4 +1,4 @@
-import '../stylesheets/navBar.css';
+import '../stylesheets/NavBar.css';
 //top nav bar here
 export default function NavBar(props) {
 

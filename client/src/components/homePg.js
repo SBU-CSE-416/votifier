@@ -1,3 +1,5 @@
+import { useState } from "react";
+import NavBar from "./NavBar.js";
 
 export default function HomePg() {
     return (
