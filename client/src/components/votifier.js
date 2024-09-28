@@ -1,5 +1,5 @@
 import { useState } from "react";
-import NavBar from "./navBar";
+import NavBar from "./NavBar";
 import HomePg from "./homePg";
 import MapPg from "./mapPg";
 import DataPg from "./dataPg";
