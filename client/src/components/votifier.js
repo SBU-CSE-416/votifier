@@ -1,5 +1,6 @@
 import { useState } from "react";
 import NavBar from "./NavBar";
+import LeftSideMenu from "./leftSideMenu";
 import HomePg from "./homePg";
 import MapPg from "./mapPg";
 import DataPg from "./dataPg";
@@ -11,37 +12,41 @@ export default function Votifier() {
     const checkState = () => {
         if (pg === 'home'){
             return (
-                <section>
-                    <NavBar setPage={setPage}></NavBar>
+                <>
                     <HomePg></HomePg>
-                </section>
+                </>
             );
         }
         else if (pg === 'map'){
             return(
-                <section>
-                    <NavBar setPage={setPage}></NavBar>
+                <>
                     <MapPg></MapPg>
-                </section>
+                </>
             );
         }
         else if (pg === 'data'){
             return(
-                <section>
-                    <NavBar setPage={setPage}></NavBar>
+                <>
                     <DataPg></DataPg>
-                </section>
+                </>
             );
         }
         else if (pg === 'credits'){
             return(
-                <section>
-                    <NavBar setPage={setPage}></NavBar>
+                <>
                     <CreditPg></CreditPg>
-                </section>
+                </>
             );
         }
     };
 
-    return <>{checkState()}</>;
+    return (
+        <section>
+            <NavBar setPage={setPage}></NavBar>
+            <div style={{display:"flex"}}>
+                {pg !== "home" ? (<LeftSideMenu></LeftSideMenu>) : null}
+                {checkState()}
+            </div>
+        </section>
+    );
 }
