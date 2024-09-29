@@ -1,0 +1,9 @@
+.side-panel{
+    width: 200px;
+    height: 100vh;
+    background-color: #EBECFF;
+}
+
+.content-area{
+    flex-grow: 1;
+}
