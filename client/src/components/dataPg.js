@@ -1,33 +1,7 @@
 export default function DataPg() {
     return(
         <div>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
+            <p>Notice: select data to be displayed from the side bar</p>
 
         </div>
     );

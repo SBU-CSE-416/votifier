@@ -56,9 +56,9 @@ export default function LeftSideMenu(){
 
     return (
         <div className="side-nav-container">
-            {/* States Dropdown */}
+            {/* States Dropdown Menu*/}
             <div className="dropdown-category">
-                <p onClick={toggleStateDropdown} className="dropdown-title">{ isStatesOpen ? "v States" : "> States"}</p>
+                <p onClick={toggleStateDropdown} className="dropdown-title">{ isStatesOpen ? "v States" : ">States"}</p>
                 {isStatesOpen && (
                     <div className="dropdown-content">
                         <label>
@@ -83,7 +83,7 @@ export default function LeftSideMenu(){
                 )}
             </div>
 
-            {/* Graphs Dropdown */}
+            {/* Graphs Dropdown Menu*/}
             <div className="dropdown-category">
                 <p onClick={toggleGraphsDropdown} className="dropdown-title">{ isGraphsOpen ? "v Graphs" : ">Graphs"}</p>
                 {isGraphsOpen && (
@@ -110,7 +110,7 @@ export default function LeftSideMenu(){
                 )}
             </div>
 
-            {/* Demographics Dropdown */}
+            {/* Demographics Dropdown Menu */}
             <div className="dropdown-category">
                 <p onClick={toggleDemographicsDropdown} className="dropdown-title">{isDemographicsOpen ? "v Demographics" : ">Demographics"}</p>
                 {isDemographicsOpen && (

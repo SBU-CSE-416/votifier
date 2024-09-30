@@ -1,6 +1,6 @@
 .side-nav-container{
     width: 200px;
-    height: auto;
+    height: 100vw;
     background-color: #EBECFF;
     border-right: #000000 1px solid;
 }
