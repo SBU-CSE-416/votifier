@@ -1,0 +1,22 @@
+.side-nav-container{
+    width: 200px;
+    height: 100vw;
+    background-color: #EBECFF;
+    border-right: #000000 1px solid;
+}
+
+.dropdown-title {
+    cursor: pointer;
+    color: black;
+    border-radius: 1px;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    padding-left: 15px;
+    font-size: 18px;
+}
+
+.dropdown-content label {
+    display: block;
+}
