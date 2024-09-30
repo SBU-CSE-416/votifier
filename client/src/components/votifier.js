@@ -25,14 +25,16 @@ export default function Votifier() {
                 </>
             );
         } else if (pg === 'data') {
+            return(
                 <>
                    <DataPg></DataPg>
                 </>
+            )
         }
         else if (pg === 'credits'){
             return(
                 <>
-                    <DataPg></DataPg>
+                    <CreditPg></CreditPg>
                 </>
             );
         }
