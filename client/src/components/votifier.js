@@ -6,6 +6,7 @@ import MapPg from "./mapPg";
 import DataPg from "./dataPg";
 import CreditPg from "./creditPg";
 
+
 export default function Votifier() {
     const [pg, setPage] = useState('home');
 
@@ -23,25 +24,22 @@ export default function Votifier() {
                     <MapPg></MapPg>
                 </>
             );
+        } else if (pg === 'data') {
+                <>
+                   <DataPg></DataPg>
+                </>
         }
-        else if (pg === 'data'){
+        else if (pg === 'credits'){
             return(
                 <>
                     <DataPg></DataPg>
                 </>
             );
         }
-        else if (pg === 'credits'){
-            return(
-                <>
-                    <CreditPg></CreditPg>
-                </>
-            );
-        }
     };
 
     return (
-        <section>
+        <section style={{marginTop: '50px' }}>
             <NavBar setPage={setPage}></NavBar>
             <div style={{display:"flex"}}>
                 {pg !== "home" ? (<LeftSideMenu></LeftSideMenu>) : null}

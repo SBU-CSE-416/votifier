@@ -1,34 +1,9 @@
+import RacialBarChart from "./RacialChart";
+import "../stylesheets/dataPg.css"
 export default function DataPg() {
     return(
-        <div>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-            <p>DataPg Testing</p>
-
+        <div className="datapg-container">
+            <RacialBarChart></RacialBarChart>
         </div>
     );
 }
