@@ -1,0 +1,16 @@
+.container{
+    display: flex;
+    width: 100vw;
+}
+
+.banner-side-color{
+    background-color: #D2D8E6;
+    height: auto;
+    flex-grow: 1;
+    min-width: 50px;
+}
+
+.center{
+    text-align: center;
+    font-size: xx-large;
+}
