@@ -5,16 +5,20 @@
     border-right: #000000 1px solid;
 }
 
+.dropdown-category {
+    margin-bottom: 20px;
+}
+
 .dropdown-title {
     cursor: pointer;
+    padding: 10px;
     color: black;
-    border-radius: 1px;
-    font-size: 18px;
+    border-radius: 4px;
 }
 
 .dropdown-content {
-    padding-left: 15px;
-    font-size: 18px;
+    margin-top: 5px;
+    padding-left: 10px;
 }
 
 .dropdown-content label {
