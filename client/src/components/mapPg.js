@@ -20,10 +20,15 @@ export default function MapPg() {
       attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
     }).addTo(map);
 
-    const stateGeoJsonUrlMaryland = 'marylandstateborder.geojson';
+    /*const stateGeoJsonUrlMaryland = 'marylandstateborder.geojson';
     const congressionalDistrictMaryland = 'maryland-congress-district.geojson';
     const stateGeoJsonUrlSouthCarolina = 'south-carolina-state.geojson';
-    const congressionalDistrictSouthCarolina = 'southcarolinacongressional.json';
+    const congressionalDistrictSouthCarolina = 'southcarolinacongressional.json';*/
+    const stateGeoJsonUrlMaryland = 'C:/Users/jackz/Downloads/cse416/marylandstate.geojson';
+    const congressionalDistrictMaryland = 'C:/Users/jackz/Downloads/cse416/maryland-congress-district.geojson';
+    const stateGeoJsonUrlSouthCarolina = 'C:/Users/jackz/Downloads/cse416/south-carolina-state.geojson';
+    const congressionalDistrictSouthCarolina = 'C:/Users/jackz/Downloads/cse416/southcarolinacongressional.json';
+    console.log("TESTTTT");
 
     function style(feature) {
       return {
@@ -161,7 +166,7 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '600px', width: '60%' }}></div>
+      <div id="map" style={{ height: '800px', width: '1000px' }}></div>
       <div id="info" style={{ height: '600px', width: '35%', padding: '10px', fontSize: '18px' }}>
         <h3>Selected Location</h3>
         <p>{districtName}</p>
