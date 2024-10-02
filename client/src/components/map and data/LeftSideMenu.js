@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../stylesheets/leftSideMenu.css";
+import "../../stylesheets/map and data/leftSideMenu.css";
 
 export default function LeftSideMenu(){
     const [ isStatesOpen, setStatesOpen ] = useState(false);
@@ -22,7 +22,7 @@ export default function LeftSideMenu(){
     return (
         <div className="side-nav-container">
             {/* States Dropdown Menu*/}
-            <div className="dropdown-category">
+            <div>
                 <p onClick={toggleStateDropdown} className="dropdown-title">{ isStatesOpen ? "v States" : ">States"}</p>
                 {isStatesOpen && (
                     <div className="dropdown-content">

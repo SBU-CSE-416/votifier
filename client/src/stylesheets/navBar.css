@@ -5,17 +5,17 @@
 
 .navbar {
     background-color: #283D71;
-    position: fixed;
+    position: sticky;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 1;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     display: flex;
     padding: 0 20px;
     box-sizing: border-box; 
-    height: 50px;
+    height: 5vh;
 }
 
 .text-btn {
