@@ -24,6 +24,7 @@ export default function Votifier() {
                     <MapPg></MapPg>
                 </>
             );
+
         } 
         // else if (pg === 'data') {
         //         <>
@@ -33,7 +34,7 @@ export default function Votifier() {
         else if (pg === 'credits'){
             return(
                 <>
-                    <DataPg></DataPg>
+                    <CreditPg></CreditPg>
                 </>
             );
         }

@@ -23,9 +23,13 @@ echo -e "${GREEN}Proceeding with the sync...${NC}"
 git checkout main
 git pull
 pwd
+echo -e "${GREEN}Syncing Client...${NC}\n"
+cd client/
+npm install
+cd ..
 echo -e "${GREEN}Syncing Server...${NC}\n"
 cd server/
 npm install
-
+cd ..
 echo -e "${GREEN}Switching back to the previous branch: $current_branch${NC}"
 git checkout "$current_branch"
