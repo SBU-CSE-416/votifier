@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../stylesheets/leftSideMenu.css";
+import "../../stylesheets/leftSideMenu.css";
 
 export default function LeftSideMenu(){
     const [ isStatesOpen, setStatesOpen ] = useState(false);
