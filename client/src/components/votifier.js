@@ -1,10 +1,9 @@
 import { useState } from "react";
 import NavBar from "./NavBar";
-import LeftSideMenu from "./leftSideMenu";
-import HomePg from "./homePg";
-import MapPg from "./mapPg";
-import DataPg from "./dataPg";
-import CreditPg from "./creditPg";
+import LeftSideMenu from "./LeftSideMenu";
+import HomePg from "./HomePg";
+import MapPg from "./MapPg";
+import CreditPg from "./CreditPg";
 
 
 export default function Votifier() {
