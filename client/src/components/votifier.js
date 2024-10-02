@@ -24,13 +24,13 @@ export default function Votifier() {
                     <MapPg></MapPg>
                 </>
             );
-        } else if (pg === 'data') {
-            return(
-                <>
-                   <DataPg></DataPg>
-                </>
-            )
-        }
+
+        } 
+        // else if (pg === 'data') {
+        //         <>
+        //            <DataPg></DataPg>
+        //         </>
+        // }
         else if (pg === 'credits'){
             return(
                 <>
