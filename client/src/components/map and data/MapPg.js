@@ -6,10 +6,16 @@ export default function MapPg() {
   const [districtName, setDistrictName] = useState('Click on a location to see its name.');
   const [population, setPopulation] = useState('Population: 0');
   const [income, setIncome] = useState('Median Income: 0');
+  const [political_lean, setpolitical] = useState('Political Lean: 0');
+  const [total_precinct, settotalprecinct] = useState('Total Precinct: 0');
   const [barData, setBarData] = useState({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+  const [mapInstance, setMapInstance] = useState(null);
+
 
   useEffect(() => {
     let map = L.map('map').setView([37.1, -95.7], 4);
+    setMapInstance(map);
+
     let geojsonStateMaryland, geojsonStateSouthCarolina;
     let geojsonCongressionalMaryland, geojsonCongressionalSouthCarolina;
     const marylandBounds = [[37.9116, -79.4870], [39.4623, -75.0410]];
@@ -71,6 +77,13 @@ export default function MapPg() {
       setIncome('Median Income: 0');
     }
 
+    /*
+    function resetcongressional(e){
+      geojsonStateMaryland && geojsonStateMaryland.resetStyle(e.target);
+      geojsonStateSouthCarolina && geojsonStateSouthCarolina.resetStyle(e.target);
+
+    }*/
+
     function zoomToFeature(e, state) {
       if (state === 'maryland') {
         map.fitBounds(marylandBounds);
@@ -104,12 +117,7 @@ export default function MapPg() {
 
     // Fetch only state boundaries first
     fetch(stateGeoJsonUrlMaryland)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
         geojsonStateMaryland = L.geoJSON(data, {
           style,
@@ -121,12 +129,7 @@ export default function MapPg() {
       .catch(error => console.error('Error loading GeoJSON:', error));
 
     fetch(stateGeoJsonUrlSouthCarolina)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        return response.json();
-      })
+      .then(response => response.json())
       .then(data => {
         geojsonStateSouthCarolina = L.geoJSON(data, {
           style,
@@ -167,11 +170,15 @@ export default function MapPg() {
     };
   }, []);
 
-  const resetMapView = () => {
+  const resetMapViewToDefault = () => {
+    if (mapInstance) {
+      mapInstance.setView([37.1, -95.7], 4);
+    }
     setDistrictName('Click on location to see its name.');
     setPopulation('Population: 0');
     setIncome('Median Income: 0');
     setBarData({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+
   };
 
   return (
@@ -182,13 +189,16 @@ export default function MapPg() {
         <p>{districtName}</p>
         <p>{population}</p>
         <p>{income}</p>
+        <p>{political_lean}</p>
+        <p>{total_precinct}</p>
+
         <div id="barGraphContainer">
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar1}%`, backgroundColor: '#3388ff' }}>{barData.bar1}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar2}%`, backgroundColor: '#3388ff' }}>{barData.bar2}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar3}%`, backgroundColor: '#3388ff' }}>{barData.bar3}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar4}%`, backgroundColor: '#3388ff' }}>{barData.bar4}%</div></div>
         </div>
-        <button onClick={resetMapView} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
+        <button onClick={resetMapViewToDefault} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
           Reset
         </button>
       </div>
