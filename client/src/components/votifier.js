@@ -1,11 +1,9 @@
 import { useState } from "react";
 import NavBar from "./NavBar";
-import LeftSideMenu from "./leftSideMenu";
-import HomePg from "./homePg";
-import MapPg from "./mapPg";
-import DataPg from "./dataPg";
-import CreditPg from "./creditPg";
-
+import LeftSideMenu from "./map and data/LeftSideMenu";
+import HomePg from "./HomePg";
+import MapPg from "./map and data/MapPg";
+import CreditPg from "./CreditsPg";
 
 export default function Votifier() {
     const [pg, setPage] = useState('home');
@@ -24,13 +22,9 @@ export default function Votifier() {
                     <MapPg></MapPg>
                 </>
             );
-        } else if (pg === 'data') {
-            return(
-                <>
-                   <DataPg></DataPg>
-                </>
-            )
-        }
+
+        } 
+
         else if (pg === 'credits'){
             return(
                 <>
@@ -41,7 +35,7 @@ export default function Votifier() {
     };
 
     return (
-        <section style={{marginTop: '50px' }}>
+        <section style={{display:"flex", flexDirection:"column"}}>
             <NavBar setPage={setPage}></NavBar>
             <div style={{display:"flex"}}>
                 {pg !== "home" && pg !== "credits" ? (<LeftSideMenu></LeftSideMenu>) : null}
