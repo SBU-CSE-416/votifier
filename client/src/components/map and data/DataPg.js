@@ -1,10 +1,12 @@
 import RacialBarChart from "./RacialChart";
 import HistogramChart from "./HistogramChart";
 import "../../stylesheets/dataPg.css"
+import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
+    const [activeTab, setActiveTab] = useState("demographics");
     return(
         
-    <div id="info" style={{ height: '600px', width: '35%', padding: '10px', fontSize: '18px' }}>
+    <div id="info" >
         {/* <h3>Selected Location</h3>
         <p>{districtName}</p>
         <p>{population}</p>
@@ -18,10 +20,48 @@ export default function DataPg({resetMapViewToDefault}) {
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar3}%`, backgroundColor: '#3388ff' }}>{barData.bar3}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar4}%`, backgroundColor: '#3388ff' }}>{barData.bar4}%</div></div>
         </div> */}
+        
         <div className="datapg-container">
+            {/* Navigation Bar */}
+              <div className="data-navbar">
+                <div
+                  className={`tab ${activeTab === "demographics" ? "active" : ""}`}
+                  onClick={() => setActiveTab("demographics")}
+                >
+                  Demographics
+                </div>
+                <div
+                  className={`tab ${activeTab === "racial" ? "active" : ""}`}
+                  onClick={() => setActiveTab("racial")}
+                >
+                  Racial Distribution
+                </div>
+                <div
+                  className={`tab ${activeTab === "economic" ? "active" : ""}`}
+                  onClick={() => setActiveTab("economic")}
+                >
+                  Ecological Inference
+                </div>
+              </div>
             <div className="charts">
-                <HistogramChart w = {300} h = {150}></HistogramChart>
-                <RacialBarChart w = {300} h = {150}></RacialBarChart>
+                {activeTab === "demographics" && (
+                  <div className="charts">
+                    <HistogramChart w = {350} h = {175}></HistogramChart>
+                    <RacialBarChart w = {350} h = {175}></RacialBarChart>
+                  </div>
+                )}
+                {activeTab === "racial" && (
+                  <div className="charts">
+                    <RacialBarChart w={300} h={150} />
+                  </div>
+                )}
+                {activeTab === "economic" && (
+                  <div className="charts">
+                    <RacialBarChart w={300} h={150} />
+                  </div>
+        )}
+                    
+                
             </div>
             <div className="data-genernal-info"> 
             <p> General data here</p>
@@ -32,7 +72,7 @@ export default function DataPg({resetMapViewToDefault}) {
         {/* <button onClick={resetMapViewToDefault} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
           Reset
         </button> */}
-      </div>
+    </div>
         
     );
 }
