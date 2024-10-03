@@ -1,4 +1,4 @@
-import Votifier from './components/votifier.js';
+import Votifier from './components/Votifier.js';
 import './stylesheets/App.css';
 
 function App() {
