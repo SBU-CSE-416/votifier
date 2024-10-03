@@ -1,9 +1,9 @@
-import Votifier from './components/Votifier';
+import Votifier from '.x`';
 import './stylesheets/App.css';
 
 function App() {
   return (
-    <div>
+    <div >
       <Votifier></Votifier>
     </div>
   );

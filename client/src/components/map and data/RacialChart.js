@@ -1,7 +1,7 @@
-/*import React from 'react';
+import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-const RacialBarChart = () => {
+const RacialBarChart = ({w, h}) => {
   const data = [
     { race: 'White', population: 600000 },
     { race: 'Black or African American', population: 400000 },
@@ -12,8 +12,8 @@ const RacialBarChart = () => {
 
   return (
     <BarChart
-      width={1000}
-      height={500}
+      width={w}
+      height={h}
       data={data}
       margin={{
         top: 20, right: 30, left: 20, bottom: 5,
@@ -29,4 +29,4 @@ const RacialBarChart = () => {
   );
 };
 
-export default RacialBarChart;*/
+export default RacialBarChart;
