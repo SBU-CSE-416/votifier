@@ -10,9 +10,9 @@ export default function NavBar(props) {
         props.setPage("map");
     };
 
-    const toData = () => {
-        props.setPage("data");
-    };
+    // const toData = () => {
+    //     props.setPage("data");
+    // };
 
     const toCredits = () => {
         props.setPage("credits");
@@ -27,7 +27,7 @@ export default function NavBar(props) {
                 </div>
                 <div style={{display:"flex", justifyContent:"flex-end"}}>
                     <p id="map-btn" className='text-btn' onClick={toMap}>Map</p>
-                    <p id="data-btn" className='text-btn' onClick={toData}>Data</p>
+                    {/* <p id="data-btn" className='text-btn' onClick={toData}>Data</p> */}
                     <p id="credits-btn" className='text-btn' onClick={toCredits}>Credits</p>
                 </div>
             </header>
