@@ -2,7 +2,9 @@
     display: flex;
     width: 100vw;
 }
-
+.page-container {
+    height: 100vh;
+  }
 .banner-side-color{
     background-color: #D2D8E6;
     height: auto;

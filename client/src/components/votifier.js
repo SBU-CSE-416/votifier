@@ -5,6 +5,7 @@ import HomePg from "./homePg";
 import MapPg from "./mapPg";
 import DataPg from "./dataPg";
 import CreditPg from "./creditPg";
+import '../stylesheets/App.css';
 
 
 export default function Votifier() {
@@ -43,7 +44,7 @@ export default function Votifier() {
     return (
         <section style={{marginTop: '50px' }}>
             <NavBar setPage={setPage}></NavBar>
-            <div style={{display:"flex"}}>
+            <div className="page-container" style={{display:"flex"}}>
                 {pg !== "home" && pg !== "credits" ? (<LeftSideMenu></LeftSideMenu>) : null}
                 {checkState()}
             </div>
