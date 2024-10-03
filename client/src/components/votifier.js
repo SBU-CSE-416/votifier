@@ -1,7 +1,7 @@
 import { useState } from "react";
 import NavBar from "./NavBar";
 import LeftSideMenu from "./map and data/LeftSideMenu";
-import HomePg from "./homePg";
+import HomePg from "./HomePg";
 import MapPg from "./map and data/MapPg";
 import CreditPg from "./CreditsPg";
 
