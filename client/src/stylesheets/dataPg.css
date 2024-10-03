@@ -11,6 +11,7 @@
     padding: 20px; 
     gap: 10px;
     box-sizing: border-box;
+    justify-items: center;
 }
 .data-genernal-info {
     display: flex;
