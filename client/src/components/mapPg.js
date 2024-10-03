@@ -20,15 +20,10 @@ export default function MapPg() {
       attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
     }).addTo(map);
 
-    /*const stateGeoJsonUrlMaryland = 'marylandstateborder.geojson';
-    const congressionalDistrictMaryland = 'maryland-congress-district.geojson';
-    const stateGeoJsonUrlSouthCarolina = 'south-carolina-state.geojson';
-    const congressionalDistrictSouthCarolina = 'southcarolinacongressional.json';*/
-    const stateGeoJsonUrlMaryland = 'C:/Users/jackz/Downloads/cse416/marylandstate.geojson';
-    const congressionalDistrictMaryland = 'C:/Users/jackz/Downloads/cse416/maryland-congress-district.geojson';
-    const stateGeoJsonUrlSouthCarolina = 'C:/Users/jackz/Downloads/cse416/south-carolina-state.geojson';
-    const congressionalDistrictSouthCarolina = 'C:/Users/jackz/Downloads/cse416/southcarolinacongressional.json';
-    console.log("TESTTTT");
+    const stateGeoJsonUrlMaryland = '/jack_mary_state.geojson';
+    const congressionalDistrictMaryland = '/jack_mary_congress.geojson';
+    const stateGeoJsonUrlSouthCarolina = '/jack_south_state.geojson';
+    const congressionalDistrictSouthCarolina = '/jack_south_congress.json';
 
     function style(feature) {
       return {
@@ -69,8 +64,8 @@ export default function MapPg() {
     }
 
     function resetHighlight(e) {
-      geojsonCongressionalMaryland.resetStyle(e.target);
-      geojsonCongressionalSouthCarolina.resetStyle(e.target);
+      geojsonStateMaryland && geojsonStateMaryland.resetStyle(e.target);
+      geojsonStateSouthCarolina && geojsonStateSouthCarolina.resetStyle(e.target);
       setDistrictName('Click on location to see its name.');
       setPopulation('Population: 0');
       setIncome('Median Income: 0');
@@ -107,9 +102,14 @@ export default function MapPg() {
       setBarData({ bar1, bar2, bar3, bar4 });
     }
 
-    // Fetching GeoJSON data
+    // Fetch only state boundaries first
     fetch(stateGeoJsonUrlMaryland)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then(data => {
         geojsonStateMaryland = L.geoJSON(data, {
           style,
@@ -117,10 +117,16 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'maryland');
           }
         }).addTo(map);
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
     fetch(stateGeoJsonUrlSouthCarolina)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        return response.json();
+      })
       .then(data => {
         geojsonStateSouthCarolina = L.geoJSON(data, {
           style,
@@ -128,8 +134,10 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'southCarolina');
           }
         }).addTo(map);
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
+    // Load congressional districts but do not add to the map until a state is clicked
     fetch(congressionalDistrictMaryland)
       .then(response => response.json())
       .then(data => {
@@ -139,7 +147,8 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'maryland');
           }
         });
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
     fetch(congressionalDistrictSouthCarolina)
       .then(response => response.json())
@@ -150,7 +159,8 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'southCarolina');
           }
         });
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
     return () => {
       map.remove();
@@ -178,8 +188,8 @@ export default function MapPg() {
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar3}%`, backgroundColor: '#3388ff' }}>{barData.bar3}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar4}%`, backgroundColor: '#3388ff' }}>{barData.bar4}%</div></div>
         </div>
-        <button onClick={resetMapView} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer', fontSize: '16px' }}>
-          Go Back
+        <button onClick={resetMapView} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
+          Reset
         </button>
       </div>
     </div>
