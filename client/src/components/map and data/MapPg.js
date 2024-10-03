@@ -136,7 +136,7 @@ export default function MapPg() {
       whiteBox.id = 'white-box'; // Give it an id to remove it later
       whiteBox.style.position = 'absolute';
       whiteBox.style.bottom = '100px';  // Position as needed
-      whiteBox.style.right = '700px';   // Position as needed
+      whiteBox.style.right = '1000px';   // Position as needed
       whiteBox.style.width = '200px';
       whiteBox.style.height = '100px';
       whiteBox.style.backgroundColor = 'white';
@@ -246,7 +246,9 @@ export default function MapPg() {
     function onEachFeature(feature, layer, state) {
       layer.on({
         click: (e) => {
-          click += 1;
+          if(state === 'maryland'){
+            click += 1;
+          }
           highlightFeature(e);
           zoomToFeature(e, state);
           
