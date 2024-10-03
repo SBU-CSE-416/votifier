@@ -183,7 +183,7 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '800px', width: '1000px' }}></div>
+      <div id="map" style={{ height: '95vh', width: '1000px' }}></div>
       <div id="info" style={{ height: '600px', width: '35%', padding: '10px', fontSize: '18px' }}>
         <h3>Selected Location</h3>
         <p>{districtName}</p>
