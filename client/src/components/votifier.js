@@ -3,8 +3,7 @@ import NavBar from "./NavBar";
 import LeftSideMenu from "./map and data/LeftSideMenu";
 import HomePg from "./HomePg";
 import MapPg from "./map and data/MapPg";
-import CreditPg from "./CreditPg";
-
+import CreditPg from "./CreditsPg";
 
 export default function Votifier() {
     const [pg, setPage] = useState('home');
@@ -25,11 +24,7 @@ export default function Votifier() {
             );
 
         } 
-        // else if (pg === 'data') {
-        //         <>
-        //            <DataPg></DataPg>
-        //         </>
-        // }
+
         else if (pg === 'credits'){
             return(
                 <>
