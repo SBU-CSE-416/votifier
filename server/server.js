@@ -21,6 +21,25 @@ app.use((req, res, next) => {
 });
 const server = app.listen(port, () => console.log(`Server listening on port ${port}`));
 
+
+
+
+const path = require('path');
+// Serve static files from the "data" directory
+app.use('/data', express.static(path.join(__dirname, 'data')));
+
+// Start the server
+/*
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});*/
+
+
+
+
+
+
 const shutdown = async () => {
     console.log('\nServer is shutting down...');
 
