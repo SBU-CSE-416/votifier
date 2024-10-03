@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
 import L from 'leaflet'; // Import Leaflet library
 import DataPg from './DataPg';
+import "../../stylesheets/map and data/map.css"
 
 export default function MapPg() {
   const [districtName, setDistrictName] = useState('Click on a location to see its name.');
@@ -10,8 +11,23 @@ export default function MapPg() {
   const [political_lean, setpolitical] = useState('Political Lean: 0');
   const [total_precinct, settotalprecinct] = useState('Total Precinct: 0');
   const [barData, setBarData] = useState({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+
   const [mapInstance, setMapInstance] = useState(null);
 
+  //const [geojsonStateMaryland, setgeojsonStateMaryland] = useState(null);
+  //const [geojsonStateSouthCarolina, setgeojsonStateSouthCarolina] = useState(null);
+  //const [geojsonCongressionalMaryland, setgeojsonCongressionalMaryland] = useState(null);
+  //const [geojsonCongressionalSouthCarolina, setgeojsonCongressionalSouthCarolina] = useState(null);
+
+  //total precinct in each district
+  var mary_district_precincts = [302,230,213,253,241,218,334,199];
+  var south_district_precincts = [172,150,114,156,130,153,100];
+
+  const defaultView = [37.1, -95.7];
+  const defaultZoom = 4;
+
+  var enteredstate = false;
+  var currentState = 'maryland';
 
   useEffect(() => {
     let map = L.map('map').setView([37.1, -95.7], 4);
@@ -59,13 +75,25 @@ export default function MapPg() {
         if (properties.name === "Maryland") {
           setPopulation('Population: 6.165 million (2022)');
           setIncome('Median Income: 47,513 USD (2022)');
+          setpolitical('Political lean: Democratic');
+          settotalprecinct('Total Precinct: 1,990');
+          currentState = "maryland";
         } else {
           setPopulation('Population: 5.283 million (2022)');
           setIncome('Median Income: 33,511 USD (2022)');
+          setpolitical('Political lean: Republican');
+          settotalprecinct('Total Precinct: 1,297');
+          currentState = "southcarolina";
         }
       } else {
         const congdistrictname1 = properties.NAMELSAD || properties.DISTRICT;
         setDistrictName(`Congressional District: ${congdistrictname1}`);
+        if(currentState == "maryland"){
+          settotalprecinct("Total Precinct: "+mary_district_precincts[congdistrictname1-1]);
+        }else{
+          let extractedNumber = parseInt(congdistrictname1.slice(-1)); 
+          settotalprecinct("Total Precinct: "+south_district_precincts[extractedNumber-1]);
+        }
       }
       updateBarGraph();
     }
@@ -76,14 +104,47 @@ export default function MapPg() {
       setDistrictName('Click on location to see its name.');
       setPopulation('Population: 0');
       setIncome('Median Income: 0');
+      setpolitical('Political lean: 0');
+      settotalprecinct('Total Precinct: 0');
     }
 
     /*
-    function resetcongressional(e){
-      geojsonStateMaryland && geojsonStateMaryland.resetStyle(e.target);
-      geojsonStateSouthCarolina && geojsonStateSouthCarolina.resetStyle(e.target);
-
+    const currentCenter = map.getCenter();
+    const currentZoom = map.getZoom();
+    const isDefaultView = currentCenter.lat === defaultView[0] && currentCenter.lng === defaultView[1] && currentZoom === defaultZoom;
+    if (isDefaultView) {
+      if (geojsonCongressionalMaryland) {
+        map.removeLayer(geojsonCongressionalMaryland);
+      }
+      if (geojsonCongressionalSouthCarolina) {
+        map.removeLayer(geojsonCongressionalSouthCarolina);
+      }
     }*/
+    const checkMapSize = () => {
+      const center = map.getCenter(); // Get the current center
+      const currentZoom = map.getZoom(); // Get the current zoom level
+      if (center.lat !== 37.1 || center.lng !== -95.7 || currentZoom !== 4) {
+        console.log("hello");
+        enteredstate = true;
+      }else{
+        if(enteredstate){
+          if(geojsonCongressionalMaryland){
+            resetHighlight(geojsonStateMaryland);
+            map.removeLayer(geojsonCongressionalMaryland);
+            geojsonStateMaryland.addTo(map);
+          }
+          if(geojsonCongressionalSouthCarolina){
+            resetHighlight(geojsonStateSouthCarolina);
+            map.removeLayer(geojsonCongressionalSouthCarolina);
+            geojsonStateSouthCarolina.addTo(map);
+          }
+          enteredstate = false;
+        }
+      }
+      
+    };
+    const intervalId = setInterval(checkMapSize, 1000);
+
 
     function zoomToFeature(e, state) {
       if (state === 'maryland') {
@@ -95,6 +156,8 @@ export default function MapPg() {
         geojsonStateSouthCarolina && map.removeLayer(geojsonStateSouthCarolina);
         geojsonCongressionalSouthCarolina.addTo(map);
       }
+
+
     }
 
     function onEachFeature(feature, layer, state) {
@@ -167,6 +230,7 @@ export default function MapPg() {
       .catch(error => console.error('Error loading GeoJSON:', error));
 
     return () => {
+      clearInterval(intervalId);
       map.remove();
     };
   }, []);
@@ -174,17 +238,21 @@ export default function MapPg() {
   const resetMapViewToDefault = () => {
     if (mapInstance) {
       mapInstance.setView([37.1, -95.7], 4);
+      //mapInstance.removeLayer(geojsonStateMaryland);
     }
+
     setDistrictName('Click on location to see its name.');
     setPopulation('Population: 0');
     setIncome('Median Income: 0');
+    setpolitical('Political lean: 0');
+    settotalprecinct('Total Precinct: 0');
     setBarData({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
 
   };
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '95vh', width: '1000px' }}></div>
+      <div id="map" style={{ height: '95vh', width: '50vw' }}></div>
       <DataPg resetMapViewToDefault={resetMapViewToDefault}></DataPg>
     </div>
   );
