@@ -187,11 +187,11 @@ export default function MapPg() {
         map.removeLayer(geojsonCongressionalSouthCarolina);
       }
     }*/
+   /*
     const checkMapSize = () => {
       const center = map.getCenter(); // Get the cdcurrent center
       const currentZoom = map.getZoom(); // Get the current zoom level
       if (center.lat !== 37.1 || center.lng !== -95.7 || currentZoom !== 4) {
-        console.log("hello");
         enteredstate = true;
       }else{
         if(enteredstate){
@@ -213,7 +213,7 @@ export default function MapPg() {
       }
       
     };
-    const intervalId = setInterval(checkMapSize, 1000);
+    const intervalId = setInterval(checkMapSize, 1000);*/
 
 
     function zoomToFeature(e, state) {
@@ -265,6 +265,45 @@ export default function MapPg() {
       const bar4 = Math.floor(Math.random() * 101);
       setBarData({ bar1, bar2, bar3, bar4 });
     }
+
+
+    //buttton variable
+    const goBackButton = document.createElement('button');
+    goBackButton.textContent = 'Go Back';
+    goBackButton.style.position = 'absolute';
+    goBackButton.style.top = '200px';
+    goBackButton.style.left = '10px';
+    goBackButton.style.zIndex = '1000';
+    // Event handler for the go back button
+    const handleGoBack = () => {
+      map.setView([37.1, -95.7], 4);
+        //mapInstance.removeLayer(geojsonStateMaryland);
+      console.log("Going back...");
+      // Example: Reset state or change view
+      // resetToDefaultView();
+      if(geojsonCongressionalMaryland){
+        resetHighlight(geojsonStateMaryland);
+        map.removeLayer(geojsonCongressionalMaryland);
+        map.removeLayer(geojsonPrecinctMaryland);
+        geojsonStateMaryland.addTo(map);
+        currentState = 'us';
+      }
+      if(geojsonCongressionalSouthCarolina){
+        resetHighlight(geojsonStateSouthCarolina);
+        map.removeLayer(geojsonCongressionalSouthCarolina);
+        geojsonStateSouthCarolina.addTo(map);
+        currentState = 'us';
+      }
+    };
+    // Attach the event listener
+    goBackButton.addEventListener('click', handleGoBack);
+    // Add the button to the map container or body
+    document.body.appendChild(goBackButton);
+
+
+
+
+
 
     // Fetch only state boundaries first
     fetch(stateGeoJsonUrlMaryland)
@@ -332,8 +371,10 @@ export default function MapPg() {
 
 
     return () => {
-      clearInterval(intervalId);
+      //clearInterval(intervalId);
       map.remove();
+      goBackButton.removeEventListener('click', handleGoBack);
+      document.body.removeChild(goBackButton);
     };
   }, []);
 
@@ -357,7 +398,8 @@ export default function MapPg() {
   return (
     <div style={{ display: 'flex' }}>
       <div id="map" style={{ height: '95vh', width: '50vw' }}></div>
-      <button 
+      
+{/* "      <button 
     onClick={resetMapViewToDefault} 
     style={{
         position: "absolute",
@@ -368,7 +410,7 @@ export default function MapPg() {
     }}>
       
     Go Back
-</button>
+</button>" */}
       <DataPg ></DataPg>
     </div>
   );
