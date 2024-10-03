@@ -21,8 +21,8 @@ app.use((req, res, next) => {
 });
 const server = app.listen(port, () => console.log(`Server listening on port ${port}`));
 
-
-
+//to use static file outside client server
+app.use('/votifier', express.static(path.join(__dirname,'votifier')));
 
 const path = require('path');
 // Serve static files from the "data" directory
