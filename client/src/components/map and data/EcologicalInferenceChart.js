@@ -1,48 +1,43 @@
-import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-// Example data for South Carolina with support for each candidate by demographic group
-const data = [
-  { demographic: 'Indian', Hardy: 0.15, Kolstad: 0.30, Nadeem: 0.55 },
-  { demographic: 'East Asian', Hardy: 0.10, Kolstad: 0.60, Nadeem: 0.30 },
-  { demographic: 'Non-Asian', Hardy: 0.50, Kolstad: 0.20, Nadeem: 0.30 },
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
+// Example data for density plot approximation
+const densityData = [
+  { demographic: '0.0', Indian: 0, 'East Asian': 2, 'Non-Asian': 3 },
+  { demographic: '0.1', Indian: 1, 'East Asian': 5, 'Non-Asian': 7 },
+  { demographic: '0.2', Indian: 3, 'East Asian': 10, 'Non-Asian': 13 },
+  { demographic: '0.3', Indian: 5, 'East Asian': 18, 'Non-Asian': 20 },
+  { demographic: '0.4', Indian: 7, 'East Asian': 23, 'Non-Asian': 25 },
+  { demographic: '0.5', Indian: 10, 'East Asian': 28, 'Non-Asian': 27 },
+  { demographic: '0.6', Indian: 6, 'East Asian': 20, 'Non-Asian': 23 },
+  { demographic: '0.7', Indian: 4, 'East Asian': 15, 'Non-Asian': 18 },
+  { demographic: '0.8', Indian: 2, 'East Asian': 10, 'Non-Asian': 12 },
+  { demographic: '0.9', Indian: 1, 'East Asian': 5, 'Non-Asian': 7 },
+  { demographic: '1.0', Indian: 0, 'East Asian': 2, 'Non-Asian': 3 },
 ];
 
-const renderCustomizedLabel = ({ x, y, width, value }) => {
-  return (
-    <text x={x + width / 2} y={y} dy={-6} fill="#666" textAnchor="middle" fontSize={12}>
-      {`${(value * 100).toFixed(0)}%`}
-    </text>
-  );
-};
-
-const CandidateSupportChart = ({ candidate }) => (
-  <ResponsiveContainer width="100%" height={250}>
-    <BarChart
-      data={data}
-      margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="demographic" />
-      <YAxis domain={[0, 1]} tickFormatter={(tick) => `${(tick * 100).toFixed(0)}%`} />
-      <Tooltip formatter={(value) => `${(value * 100).toFixed(2)}%`} />
-      <Legend />
-      <Bar dataKey={candidate} fill="#8884d8" label={renderCustomizedLabel} />
-    </BarChart>
-  </ResponsiveContainer>
-);
-
-const EcologicalInferenceChart = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-    <h2>Support for Hardy</h2>
-    <CandidateSupportChart candidate="Hardy" />
-
-    <h2>Support for Kolstad</h2>
-    <CandidateSupportChart candidate="Kolstad" />
-
-    <h2>Support for Nadeem</h2>
-    <CandidateSupportChart candidate="Nadeem" />
+const EcologicalInferenceChart = ({w,h, title}) => (
+  <div>
+    <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>
+      {title || "Title Needed"}
+    </h2>
+      <ResponsiveContainer width={w} height={h}>
+        <LineChart
+          data={densityData}
+          margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="demographic" label={{position: 'insideBottom', offset: -5 }} />
+          <YAxis label={{ angle: -90, position: 'insideLeft', offset: -5 }} />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="Indian" stroke="#82ca9d" strokeWidth={2} />
+          <Line type="monotone" dataKey="East Asian" stroke="#8884d8" strokeWidth={2} />
+          <Line type="monotone" dataKey="Non-Asian" stroke="#ffc658" strokeWidth={2} />
+        </LineChart>
+      </ResponsiveContainer>
   </div>
+  
 );
-
 export default EcologicalInferenceChart;
