@@ -184,7 +184,7 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '95vh', width: '1000px' }}></div>
+      <div id="map" style={{ height: '95vh', width: '67vw' }}></div>
       <DataPg resetMapViewToDefault={resetMapViewToDefault}></DataPg>
     </div>
   );
