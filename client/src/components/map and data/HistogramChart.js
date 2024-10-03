@@ -17,7 +17,7 @@ const HistogramChart = ({w, h}) => (
   <BarChart width={w} height={h} data={data} barCategoryGap="0%">
     <CartesianGrid strokeDasharray="3 3" />
     <XAxis dataKey="bin" label={{ value: "Age Ranges", position: 'insideBottom', offset: -5 }} />
-    <YAxis label={{ value: "Population", angle: -90, position: 'insideLeft' }} />
+    <YAxis label={{ angle: -90, position: 'insideLeft', offset: -7}} />
     <Tooltip />
     <Bar dataKey="population" fill="#46ACC2" />
   </BarChart>

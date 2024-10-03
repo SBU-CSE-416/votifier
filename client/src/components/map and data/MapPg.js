@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
 import L from 'leaflet'; // Import Leaflet library
 import DataPg from './DataPg';
+import "../../stylesheets/map and data/map.css"
 
 export default function MapPg() {
   const [districtName, setDistrictName] = useState('Click on a location to see its name.');
@@ -251,7 +252,7 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '95vh', width: '1000px' }}></div>
+      <div id="map" style={{ height: '95vh', width: '50vw' }}></div>
       <DataPg resetMapViewToDefault={resetMapViewToDefault}></DataPg>
     </div>
   );
