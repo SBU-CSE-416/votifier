@@ -1,5 +1,6 @@
 import RacialBarChart from "./RacialChart";
 import HistogramChart from "./HistogramChart";
+import EcologicalInferenceChart from "./EcologicalInferenceChart"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
@@ -57,7 +58,7 @@ export default function DataPg({resetMapViewToDefault}) {
                 )}
                 {activeTab === "economic" && (
                   <div className="charts">
-                    <RacialBarChart w={300} h={150} />
+                    <EcologicalInferenceChart w={300} h={150} />
                   </div>
         )}
                     
