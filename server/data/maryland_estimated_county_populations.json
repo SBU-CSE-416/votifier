@@ -1,0 +1,170 @@
+[
+    {
+        "State":"Allegany County, Maryland",
+        "Year":2022,
+        "Estimated Population":"68161",
+        "FIPS Code":"24",
+        "County Code":"001"
+    },
+    {
+        "State":"Anne Arundel County, Maryland",
+        "Year":2022,
+        "Estimated Population":"588109",
+        "FIPS Code":"24",
+        "County Code":"003"
+    },
+    {
+        "State":"Baltimore County, Maryland",
+        "Year":2022,
+        "Estimated Population":"850737",
+        "FIPS Code":"24",
+        "County Code":"005"
+    },
+    {
+        "State":"Calvert County, Maryland",
+        "Year":2022,
+        "Estimated Population":"93244",
+        "FIPS Code":"24",
+        "County Code":"009"
+    },
+    {
+        "State":"Caroline County, Maryland",
+        "Year":2022,
+        "Estimated Population":"33320",
+        "FIPS Code":"24",
+        "County Code":"011"
+    },
+    {
+        "State":"Carroll County, Maryland",
+        "Year":2022,
+        "Estimated Population":"173225",
+        "FIPS Code":"24",
+        "County Code":"013"
+    },
+    {
+        "State":"Cecil County, Maryland",
+        "Year":2022,
+        "Estimated Population":"103876",
+        "FIPS Code":"24",
+        "County Code":"015"
+    },
+    {
+        "State":"Charles County, Maryland",
+        "Year":2022,
+        "Estimated Population":"167035",
+        "FIPS Code":"24",
+        "County Code":"017"
+    },
+    {
+        "State":"Dorchester County, Maryland",
+        "Year":2022,
+        "Estimated Population":"32557",
+        "FIPS Code":"24",
+        "County Code":"019"
+    },
+    {
+        "State":"Frederick County, Maryland",
+        "Year":2022,
+        "Estimated Population":"273829",
+        "FIPS Code":"24",
+        "County Code":"021"
+    },
+    {
+        "State":"Garrett County, Maryland",
+        "Year":2022,
+        "Estimated Population":"28856",
+        "FIPS Code":"24",
+        "County Code":"023"
+    },
+    {
+        "State":"Harford County, Maryland",
+        "Year":2022,
+        "Estimated Population":"261059",
+        "FIPS Code":"24",
+        "County Code":"025"
+    },
+    {
+        "State":"Howard County, Maryland",
+        "Year":2022,
+        "Estimated Population":"332011",
+        "FIPS Code":"24",
+        "County Code":"027"
+    },
+    {
+        "State":"Kent County, Maryland",
+        "Year":2022,
+        "Estimated Population":"19289",
+        "FIPS Code":"24",
+        "County Code":"029"
+    },
+    {
+        "State":"Montgomery County, Maryland",
+        "Year":2022,
+        "Estimated Population":"1056910",
+        "FIPS Code":"24",
+        "County Code":"031"
+    },
+    {
+        "State":"Prince George's County, Maryland",
+        "Year":2022,
+        "Estimated Population":"957189",
+        "FIPS Code":"24",
+        "County Code":"033"
+    },
+    {
+        "State":"Queen Anne's County, Maryland",
+        "Year":2022,
+        "Estimated Population":"50316",
+        "FIPS Code":"24",
+        "County Code":"035"
+    },
+    {
+        "State":"St. Mary's County, Maryland",
+        "Year":2022,
+        "Estimated Population":"113814",
+        "FIPS Code":"24",
+        "County Code":"037"
+    },
+    {
+        "State":"Somerset County, Maryland",
+        "Year":2022,
+        "Estimated Population":"24672",
+        "FIPS Code":"24",
+        "County Code":"039"
+    },
+    {
+        "State":"Talbot County, Maryland",
+        "Year":2022,
+        "Estimated Population":"37663",
+        "FIPS Code":"24",
+        "County Code":"041"
+    },
+    {
+        "State":"Washington County, Maryland",
+        "Year":2022,
+        "Estimated Population":"154645",
+        "FIPS Code":"24",
+        "County Code":"043"
+    },
+    {
+        "State":"Wicomico County, Maryland",
+        "Year":2022,
+        "Estimated Population":"103815",
+        "FIPS Code":"24",
+        "County Code":"045"
+    },
+    {
+        "State":"Worcester County, Maryland",
+        "Year":2022,
+        "Estimated Population":"52827",
+        "FIPS Code":"24",
+        "County Code":"047"
+    },
+    {
+        "State":"Baltimore city, Maryland",
+        "Year":2022,
+        "Estimated Population":"584548",
+        "FIPS Code":"24",
+        "County Code":"510"
+    }
+]
