@@ -1,5 +1,5 @@
 .side-nav-container{
-    width: 300px;
+    width: 150px;
     height: 100vw;
     background-color: #EBECFF;
     border-right: #000000 1px solid;
@@ -7,13 +7,13 @@
 
 .dropdown-title {
     cursor: pointer;
-    padding: 10px;
     color: black;
+    padding-left: 7px;
     border-radius: 4px;
 }
 
 .dropdown-content {
-    padding-left: 10px;
+    padding-left: 15px;
 }
 
 .dropdown-content label {
