@@ -6,10 +6,16 @@ export default function MapPg() {
   const [districtName, setDistrictName] = useState('Click on a location to see its name.');
   const [population, setPopulation] = useState('Population: 0');
   const [income, setIncome] = useState('Median Income: 0');
+  const [political_lean, setpolitical] = useState('Political Lean: 0');
+  const [total_precinct, settotalprecinct] = useState('Total Precinct: 0');
   const [barData, setBarData] = useState({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+  const [mapInstance, setMapInstance] = useState(null);
+
 
   useEffect(() => {
     let map = L.map('map').setView([37.1, -95.7], 4);
+    setMapInstance(map);
+
     let geojsonStateMaryland, geojsonStateSouthCarolina;
     let geojsonCongressionalMaryland, geojsonCongressionalSouthCarolina;
     const marylandBounds = [[37.9116, -79.4870], [39.4623, -75.0410]];
@@ -20,15 +26,10 @@ export default function MapPg() {
       attribution: '&copy; <a href="https://carto.com/">CartoDB</a>'
     }).addTo(map);
 
-    /*const stateGeoJsonUrlMaryland = 'marylandstateborder.geojson';
-    const congressionalDistrictMaryland = 'maryland-congress-district.geojson';
-    const stateGeoJsonUrlSouthCarolina = 'south-carolina-state.geojson';
-    const congressionalDistrictSouthCarolina = 'southcarolinacongressional.json';*/
-    const stateGeoJsonUrlMaryland = 'C:/Users/jackz/Downloads/cse416/marylandstate.geojson';
-    const congressionalDistrictMaryland = 'C:/Users/jackz/Downloads/cse416/maryland-congress-district.geojson';
-    const stateGeoJsonUrlSouthCarolina = 'C:/Users/jackz/Downloads/cse416/south-carolina-state.geojson';
-    const congressionalDistrictSouthCarolina = 'C:/Users/jackz/Downloads/cse416/southcarolinacongressional.json';
-    console.log("TESTTTT");
+    const stateGeoJsonUrlMaryland = '/jack_mary_state.geojson';
+    const congressionalDistrictMaryland = '/jack_mary_congress.geojson';
+    const stateGeoJsonUrlSouthCarolina = '/jack_south_state.geojson';
+    const congressionalDistrictSouthCarolina = '/jack_south_congress.json';
 
     function style(feature) {
       return {
@@ -69,12 +70,19 @@ export default function MapPg() {
     }
 
     function resetHighlight(e) {
-      geojsonCongressionalMaryland.resetStyle(e.target);
-      geojsonCongressionalSouthCarolina.resetStyle(e.target);
+      geojsonStateMaryland && geojsonStateMaryland.resetStyle(e.target);
+      geojsonStateSouthCarolina && geojsonStateSouthCarolina.resetStyle(e.target);
       setDistrictName('Click on location to see its name.');
       setPopulation('Population: 0');
       setIncome('Median Income: 0');
     }
+
+    /*
+    function resetcongressional(e){
+      geojsonStateMaryland && geojsonStateMaryland.resetStyle(e.target);
+      geojsonStateSouthCarolina && geojsonStateSouthCarolina.resetStyle(e.target);
+
+    }*/
 
     function zoomToFeature(e, state) {
       if (state === 'maryland') {
@@ -107,7 +115,7 @@ export default function MapPg() {
       setBarData({ bar1, bar2, bar3, bar4 });
     }
 
-    // Fetching GeoJSON data
+    // Fetch only state boundaries first
     fetch(stateGeoJsonUrlMaryland)
       .then(response => response.json())
       .then(data => {
@@ -117,7 +125,8 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'maryland');
           }
         }).addTo(map);
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
     fetch(stateGeoJsonUrlSouthCarolina)
       .then(response => response.json())
@@ -128,8 +137,10 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'southCarolina');
           }
         }).addTo(map);
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
+    // Load congressional districts but do not add to the map until a state is clicked
     fetch(congressionalDistrictMaryland)
       .then(response => response.json())
       .then(data => {
@@ -139,7 +150,8 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'maryland');
           }
         });
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
     fetch(congressionalDistrictSouthCarolina)
       .then(response => response.json())
@@ -150,18 +162,23 @@ export default function MapPg() {
             onEachFeature(feature, layer, 'southCarolina');
           }
         });
-      });
+      })
+      .catch(error => console.error('Error loading GeoJSON:', error));
 
     return () => {
       map.remove();
     };
   }, []);
 
-  const resetMapView = () => {
+  const resetMapViewToDefault = () => {
+    if (mapInstance) {
+      mapInstance.setView([37.1, -95.7], 4);
+    }
     setDistrictName('Click on location to see its name.');
     setPopulation('Population: 0');
     setIncome('Median Income: 0');
     setBarData({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+
   };
 
   return (
@@ -172,14 +189,17 @@ export default function MapPg() {
         <p>{districtName}</p>
         <p>{population}</p>
         <p>{income}</p>
+        <p>{political_lean}</p>
+        <p>{total_precinct}</p>
+
         <div id="barGraphContainer">
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar1}%`, backgroundColor: '#3388ff' }}>{barData.bar1}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar2}%`, backgroundColor: '#3388ff' }}>{barData.bar2}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar3}%`, backgroundColor: '#3388ff' }}>{barData.bar3}%</div></div>
           <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar4}%`, backgroundColor: '#3388ff' }}>{barData.bar4}%</div></div>
         </div>
-        <button onClick={resetMapView} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer', fontSize: '16px' }}>
-          Go Back
+        <button onClick={resetMapViewToDefault} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
+          Reset
         </button>
       </div>
     </div>
