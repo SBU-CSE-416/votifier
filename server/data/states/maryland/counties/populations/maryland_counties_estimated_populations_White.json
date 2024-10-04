@@ -1,0 +1,170 @@
+[
+    {
+        "County Name":"Allegany County",
+        "Year":2022,
+        "Estimated Population":"49290",
+        "State FIPS Code":"24",
+        "County Number":"001"
+    },
+    {
+        "County Name":"Anne Arundel County",
+        "Year":2022,
+        "Estimated Population":"309678",
+        "State FIPS Code":"24",
+        "County Number":"003"
+    },
+    {
+        "County Name":"Baltimore County",
+        "Year":2022,
+        "Estimated Population":"392498",
+        "State FIPS Code":"24",
+        "County Number":"005"
+    },
+    {
+        "County Name":"Calvert County",
+        "Year":2022,
+        "Estimated Population":"55962",
+        "State FIPS Code":"24",
+        "County Number":"009"
+    },
+    {
+        "County Name":"Caroline County",
+        "Year":2022,
+        "Estimated Population":"19919",
+        "State FIPS Code":"24",
+        "County Number":"011"
+    },
+    {
+        "County Name":"Carroll County",
+        "Year":2022,
+        "Estimated Population":"121184",
+        "State FIPS Code":"24",
+        "County Number":"013"
+    },
+    {
+        "County Name":"Cecil County",
+        "Year":2022,
+        "Estimated Population":"69732",
+        "State FIPS Code":"24",
+        "County Number":"015"
+    },
+    {
+        "County Name":"Charles County",
+        "Year":2022,
+        "Estimated Population":"49613",
+        "State FIPS Code":"24",
+        "County Number":"017"
+    },
+    {
+        "County Name":"Dorchester County",
+        "Year":2022,
+        "Estimated Population":"17139",
+        "State FIPS Code":"24",
+        "County Number":"019"
+    },
+    {
+        "County Name":"Frederick County",
+        "Year":2022,
+        "Estimated Population":"160283",
+        "State FIPS Code":"24",
+        "County Number":"021"
+    },
+    {
+        "County Name":"Garrett County",
+        "Year":2022,
+        "Estimated Population":"22882",
+        "State FIPS Code":"24",
+        "County Number":"023"
+    },
+    {
+        "County Name":"Harford County",
+        "Year":2022,
+        "Estimated Population":"157042",
+        "State FIPS Code":"24",
+        "County Number":"025"
+    },
+    {
+        "County Name":"Howard County",
+        "Year":2022,
+        "Estimated Population":"134098",
+        "State FIPS Code":"24",
+        "County Number":"027"
+    },
+    {
+        "County Name":"Kent County",
+        "Year":2022,
+        "Estimated Population":"13126",
+        "State FIPS Code":"24",
+        "County Number":"029"
+    },
+    {
+        "County Name":"Montgomery County",
+        "Year":2022,
+        "Estimated Population":"396537",
+        "State FIPS Code":"24",
+        "County Number":"031"
+    },
+    {
+        "County Name":"Prince George's County",
+        "Year":2022,
+        "Estimated Population":"110089",
+        "State FIPS Code":"24",
+        "County Number":"033"
+    },
+    {
+        "County Name":"Queen Anne's County",
+        "Year":2022,
+        "Estimated Population":"34521",
+        "State FIPS Code":"24",
+        "County Number":"035"
+    },
+    {
+        "County Name":"St. Mary's County",
+        "Year":2022,
+        "Estimated Population":"63849",
+        "State FIPS Code":"24",
+        "County Number":"037"
+    },
+    {
+        "County Name":"Somerset County",
+        "Year":2022,
+        "Estimated Population":"11017",
+        "State FIPS Code":"24",
+        "County Number":"039"
+    },
+    {
+        "County Name":"Talbot County",
+        "Year":2022,
+        "Estimated Population":"25010",
+        "State FIPS Code":"24",
+        "County Number":"041"
+    },
+    {
+        "County Name":"Washington County",
+        "Year":2022,
+        "Estimated Population":"98086",
+        "State FIPS Code":"24",
+        "County Number":"043"
+    },
+    {
+        "County Name":"Wicomico County",
+        "Year":2022,
+        "Estimated Population":"53593",
+        "State FIPS Code":"24",
+        "County Number":"045"
+    },
+    {
+        "County Name":"Worcester County",
+        "Year":2022,
+        "Estimated Population":"36031",
+        "State FIPS Code":"24",
+        "County Number":"047"
+    },
+    {
+        "County Name":"Baltimore city",
+        "Year":2022,
+        "Estimated Population":"143252",
+        "State FIPS Code":"24",
+        "County Number":"510"
+    }
+]

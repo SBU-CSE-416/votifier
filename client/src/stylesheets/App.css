@@ -39,5 +39,5 @@
 
 .page-container {
   height: 100vh;
-  overflow-y: hidden;
+  overflow: hidden;
 }

@@ -1,55 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import 'leaflet/dist/leaflet.css'; // Import Leaflet CSS
-import L from 'leaflet'; // Import Leaflet library
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import DataPg from './DataPg';
-import "../../stylesheets/map and data/map.css"
+import PlaceholderMessage from './PlaceHolderMessage';
+import "../../stylesheets/map and data/map.css";
+import "../../stylesheets/BackButton.css"
 
-export default function MapPg() {
-  const [districtName, setDistrictName] = useState('Click on a location to see its name.');
-  const [population, setPopulation] = useState('Population: 0');
-  const [income, setIncome] = useState('Median Income: 0');
-  const [political_lean, setpolitical] = useState('Political Lean: 0');
-  const [total_precinct, settotalprecinct] = useState('Total Precinct: 0');
-  const [barData, setBarData] = useState({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+const initialState = {
+  districtName: '',
+  population: '0',
+  income: '0',
+  politicalLean: '0',
+  totalPrecinct: '0',
+  homeownershipRate: '0%',
+  unemploymentRate: '0%',
+  povertyRate: '0%',
+};
 
-  const [mapInstance, setMapInstance] = useState(null);
-  const [clickedFeature, setClickedFeature] = useState(null);
-
-  //const [geojsonStateMaryland, setgeojsonStateMaryland] = useState(null);
-  //const [geojsonStateSouthCarolina, setgeojsonStateSouthCarolina] = useState(null);
-  //const [geojsonCongressionalMaryland, setgeojsonCongressionalMaryland] = useState(null);
-  //const [geojsonCongressionalSouthCarolina, setgeojsonCongressionalSouthCarolina] = useState(null);
-
-  //total precinct in each district
-  var mary_district_precincts = [302,230,213,253,241,218,334,199];
-  var south_district_precincts = [172,150,114,156,130,153,100];
-
-  const defaultView = [37.1, -95.7];
-  const defaultZoom = 4;
-
-  var enteredstate = false;
-  var currentState = 'us';
-
-  var precinct_number = 0;
-  var hover_box = 0;
-  var click = 0;
-
-  const maryland_object = {
-    name: "maryland",
-    population: "6.165 million (2022)",
-    income: "47,513 USD (2022)",
-    political: "Democratic",
-    precinct: "1,990",
-  }
-
-  const southCarolina_object = {
-    name: "southcarolina",
-    population: "5.283 million (2022)",
-    income: "33,511 USD (2022)",
-    political: "Republican",
-    precinct: "1,297",
-  }
-
+function BackButtonControl({ resetView }) {
+  const map = useMap();
 
   useEffect(() => {
     //let map = L.map('map').setView([37.1, -95.7], 4);
@@ -268,13 +238,8 @@ export default function MapPg() {
           }
           highlightFeature(e);
           zoomToFeature(e, state);
-          if(state === 'maryland'){
-            setClickedFeature(maryland_object);
-          }else{
-            setClickedFeature(southCarolina_object);
-          }
-          
-          
+          setClickedFeature(feature.properties);
+          console.log("Passed feature: "+e);
         },
         mouseover: highlightFeature,
         mouseout: resetHighlight
@@ -404,42 +369,129 @@ export default function MapPg() {
       document.body.removeChild(goBackButton);
     };
   }, []);
+  console.log('GeojsonMaryland:', geojsonMaryland);
+    console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
+  console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
+    console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);
+  useEffect(() => {
+    console.log("State updated: ", state);
+  }, [state]);
 
-    
+  useEffect(() => {
+    console.log("Hover State updated: ", hoverState);
+  }, [hoverState]);
 
-  const resetMapViewToDefault = () => {
-    if (mapInstance) {
-      mapInstance.setView([37.1, -95.7], 4);
-      //mapInstance.removeLayer(geojsonStateMaryland);
+  const fetchGeojsonData = async (url, setState) => {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log("GeoJSON data loaded from: ", url, data);
+      setState(data);
+    } catch (error) {
+      console.error(`Error loading GeoJSON from ${url}:`, error);
     }
+  };
 
-    setDistrictName('Click on location to see its name.');
-    setPopulation('Population: 0');
-    setIncome('Median Income: 0');
-    setpolitical('Political lean: 0');
-    settotalprecinct('Total Precinct: 0');
-    setBarData({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
+  const handleResetView = (map) => {
+    map.setView(defaultView, defaultZoom);
+    setState(initialState); 
+    setHoverState({ districtName: '' });
+    setDataVisible(false);
+    setDisableNavigation(false);
+    setShowDistricts(false);
+  };
 
+  const onFeatureClick = (feature) => {
+    
+    const properties = feature.properties;
+    console.log('Feature clicked:', feature.properties);
+    let newState = { ...initialState };
+
+    if (properties.name === 'Maryland') {
+      newState = {
+        ...initialState,
+        districtName: 'Maryland',
+        population: '6.161 million',
+        income: '$94,991',
+        politicalLean: 'Democratic',
+        totalPrecinct: '1,990',
+        homeownershipRate: '68.7%',
+        unemploymentRate: '1.8%',
+        povertyRate: '8.6%',
+      };
+      setShowDistricts(true);
+    } else if (properties.name === 'South Carolina') {
+      newState = {
+        ...initialState,
+        districtName: 'South Carolina',
+        population: '5.142 million',
+        income: '$64,115',
+        politicalLean: 'Republican',
+        totalPrecinct: '1,297',
+        homeownershipRate: '69.5%',
+        unemploymentRate: '3.5%',
+        povertyRate: '13.2%',
+      };
+      setShowDistricts(true);
+    }
+    setState(newState);
+    setDataVisible(true);
+    setDisableNavigation(true);
   };
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '95vh', width: '60vw' }}></div>
-      
-      {/*}
-      <button 
-    onClick={resetMapViewToDefault} 
-    style={{
-        position: "absolute",
-        top: "100px",
-        left: "250px",
-        padding: "10px", // Optional: Adds some padding for better visibility
-        zIndex: 1000      // Optional: Ensures the button appears above other elements
-    }}>
-      
-    Go Back
-</button>" */}
-      <DataPg resetMapViewToDefault={clickedFeature}></DataPg>
+      <MapContainer center={defaultView} zoom={defaultZoom} style={{ height: '95vh', width: '60vw' }}>
+        <TileLayer
+          url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+          attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
+        />
+
+        {/* State Boundaries */}
+        <FeatureInteraction
+          geojsonData={geojsonMaryland}
+          onFeatureClick={onFeatureClick}
+          disableNavigation={disableNavigation}
+          setHoverState={setHoverState}
+          setState={setState}
+          featureType="state"
+        />
+
+        <FeatureInteraction
+          geojsonData={geojsonSouthCarolina}
+          onFeatureClick={onFeatureClick}
+          disableNavigation={disableNavigation}
+          setHoverState={setHoverState}
+          setState={setState}
+          featureType="state"
+        />
+
+        {showDistricts && geojsonMarylandCongress && (
+          <FeatureInteraction
+            geojsonData={geojsonMarylandCongress}
+            onFeatureClick={onFeatureClick}
+            disableNavigation={disableNavigation}
+            setHoverState={setHoverState}
+            setState={setState}
+            featureType="district"
+          />
+        )}
+
+        {showDistricts && geojsonSouthCarolinaCongress && (
+          <FeatureInteraction
+            geojsonData={geojsonSouthCarolinaCongress}
+            onFeatureClick={onFeatureClick}
+            disableNavigation={disableNavigation}
+            setHoverState={setHoverState}
+            setState={setState}
+            featureType="district"
+          />
+        )}
+
+        <BackButtonControl resetView={handleResetView} />
+      </MapContainer>
+
+      {dataVisible ? <DataPg state={state} /> : <PlaceholderMessage />}
     </div>
   );
 }

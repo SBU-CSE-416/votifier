@@ -1,42 +1,25 @@
 import RacialBarChart from "./RacialChart";
 import HistogramChart from "./HistogramChart";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
-import EcologicalInferenceChartD3 from "./EcologicalInferenceChartD3"
+import VotingGraph from "./VotingGraph";
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
 import GeneralInfoBox from "./GeneralInfoBox"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
-export default function DataPg({resetMapViewToDefault}) {
+export default function DataPg({state}) {
     const [activeTab, setActiveTab] = useState("demographics");
-    console.log("data page: "+resetMapViewToDefault);
+    console.log("State Data: ", state);
     return(
         
     <div id="info" >
-        {/* <h3>Selected Location</h3>
-        <p>{districtName}</p>
-        <p>{population}</p>
-        <p>{income}</p>
-        <p>{political_lean}</p>
-        <p>{total_precinct}</p>
-
-        <div id="barGraphContainer">
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar1}%`, backgroundColor: '#3388ff' }}>{barData.bar1}%</div></div>
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar2}%`, backgroundColor: '#3388ff' }}>{barData.bar2}%</div></div>
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar3}%`, backgroundColor: '#3388ff' }}>{barData.bar3}%</div></div>
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar4}%`, backgroundColor: '#3388ff' }}>{barData.bar4}%</div></div>
-        </div> */}
         
         <div className="datapg-container">
             <div className="data-genernal-info"> 
             <GeneralInfoBox 
-                title="Total Population"
-                value="6.165 million "
-                subtitle="from 2022"
+                state = {state}
             />
-            
             </div>
-            {/* Navigation Bar */}
               <div className="data-navbar">
                 <div
                   className={`tab ${activeTab === "demographics" ? "active" : ""}`}
@@ -48,7 +31,7 @@ export default function DataPg({resetMapViewToDefault}) {
                   className={`tab ${activeTab === "racial" ? "active" : ""}`}
                   onClick={() => setActiveTab("racial")}
                 >
-                  Racial Distribution
+                  Precinct Analysis
                 </div>
                 <div
                   className={`tab ${activeTab === "economic" ? "active" : ""}`}
@@ -67,7 +50,7 @@ export default function DataPg({resetMapViewToDefault}) {
                 )}
                 {activeTab === "racial" && (
                   <div className="data-charts">
-                    <RacialBarChart w={300} h={150} />
+                    <VotingGraph w={300} h={150} />
                   </div>
                 )}
                 {activeTab === "economic" && (
@@ -79,9 +62,6 @@ export default function DataPg({resetMapViewToDefault}) {
             </div>
             
         </div>
-        {/* <button onClick={resetMapViewToDefault} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Reset
-        </button> */}
     </div>
         
     );
