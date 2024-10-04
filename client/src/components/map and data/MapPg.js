@@ -214,8 +214,8 @@ export default function MapPg() {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <MapContainer key = {mapWidth} center={defaultView} zoom={defaultZoom} style={{ height: '95vh', width: mapWidth }}>
+    <div style={{ display: 'flex'}}>
+      <MapContainer key = {mapWidth} center={defaultView} zoom={defaultZoom} style={{height: '95vh', width: mapWidth }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
           attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
