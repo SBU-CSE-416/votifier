@@ -25,7 +25,7 @@ const VotingGraph = () => {
   const data = {
     datasets: [
       {
-        label: 'Cantwell',
+        label: 'Candiate A',
         data: [
           { x: 0, y: 55 },
           { x: 10, y: 50 },
@@ -40,7 +40,7 @@ const VotingGraph = () => {
         tension: 0.4,
       },
       {
-        label: 'Baumgartner',
+        label: 'Candidate B',
         data: [
           { x: 0, y: 45 },
           { x: 10, y: 50 },
