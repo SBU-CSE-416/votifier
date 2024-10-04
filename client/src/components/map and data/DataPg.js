@@ -23,6 +23,10 @@ export default function DataPg({resetMapViewToDefault}) {
         </div> */}
         
         <div className="datapg-container">
+            <div className="data-genernal-info"> 
+            <p> General data here</p>
+            
+            </div>
             {/* Navigation Bar */}
               <div className="data-navbar">
                 <div
@@ -63,10 +67,6 @@ export default function DataPg({resetMapViewToDefault}) {
         )}
                     
                 
-            </div>
-            <div className="data-genernal-info"> 
-            <p> General data here</p>
-            
             </div>
             
         </div>
