@@ -1,0 +1,51 @@
+[
+    {
+        "District Name":"Congressional District 1",
+        "Congress":118,
+        "Estimated Population":"734138",
+        "State":"45",
+        "District Number":"01"
+    },
+    {
+        "District Name":"Congressional District 2",
+        "Congress":118,
+        "Estimated Population":"735646",
+        "State":"45",
+        "District Number":"02"
+    },
+    {
+        "District Name":"Congressional District 3",
+        "Congress":118,
+        "Estimated Population":"731595",
+        "State":"45",
+        "District Number":"03"
+    },
+    {
+        "District Name":"Congressional District 4",
+        "Congress":118,
+        "Estimated Population":"737328",
+        "State":"45",
+        "District Number":"04"
+    },
+    {
+        "District Name":"Congressional District 5",
+        "Congress":118,
+        "Estimated Population":"733429",
+        "State":"45",
+        "District Number":"05"
+    },
+    {
+        "District Name":"Congressional District 6",
+        "Congress":118,
+        "Estimated Population":"732601",
+        "State":"45",
+        "District Number":"06"
+    },
+    {
+        "District Name":"Congressional District 7",
+        "Congress":118,
+        "Estimated Population":"738013",
+        "State":"45",
+        "District Number":"07"
+    }
+]
