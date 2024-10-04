@@ -3,7 +3,7 @@
         "District Name":"Congressional District 1",
         "Year":2022,
         "Congress":118,
-        "Household Income":"307810",
+        "Estimated Population":"307810",
         "State":"45",
         "District Number":"01"
     },
@@ -11,7 +11,7 @@
         "District Name":"Congressional District 2",
         "Year":2022,
         "Congress":118,
-        "Household Income":"301013",
+        "Estimated Population":"301013",
         "State":"45",
         "District Number":"02"
     },
@@ -19,7 +19,7 @@
         "District Name":"Congressional District 3",
         "Year":2022,
         "Congress":118,
-        "Household Income":"302371",
+        "Estimated Population":"302371",
         "State":"45",
         "District Number":"03"
     },
@@ -27,7 +27,7 @@
         "District Name":"Congressional District 4",
         "Year":2022,
         "Congress":118,
-        "Household Income":"304004",
+        "Estimated Population":"304004",
         "State":"45",
         "District Number":"04"
     },
@@ -35,7 +35,7 @@
         "District Name":"Congressional District 5",
         "Year":2022,
         "Congress":118,
-        "Household Income":"296809",
+        "Estimated Population":"296809",
         "State":"45",
         "District Number":"05"
     },
@@ -43,7 +43,7 @@
         "District Name":"Congressional District 6",
         "Year":2022,
         "Congress":118,
-        "Household Income":"306808",
+        "Estimated Population":"306808",
         "State":"45",
         "District Number":"06"
     },
@@ -51,7 +51,7 @@
         "District Name":"Congressional District 7",
         "Year":2022,
         "Congress":118,
-        "Household Income":"317265",
+        "Estimated Population":"317265",
         "State":"45",
         "District Number":"07"
     }
