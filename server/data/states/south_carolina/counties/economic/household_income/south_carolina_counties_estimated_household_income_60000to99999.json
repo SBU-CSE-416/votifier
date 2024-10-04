@@ -1,0 +1,275 @@
+[
+    {
+        "County Name":"Abbeville County",
+        "Year":2022,
+        "Estimated Population":"1573",
+        "State FIPS Code":"45",
+        "County Number":"001"
+    },
+    {
+        "County Name":"Aiken County",
+        "Year":2022,
+        "Estimated Population":"17692",
+        "State FIPS Code":"45",
+        "County Number":"003"
+    },
+    {
+        "County Name":"Anderson County",
+        "Year":2022,
+        "Estimated Population":"21510",
+        "State FIPS Code":"45",
+        "County Number":"007"
+    },
+    {
+        "County Name":"Barnwell County",
+        "Year":2022,
+        "Estimated Population":"1674",
+        "State FIPS Code":"45",
+        "County Number":"011"
+    },
+    {
+        "County Name":"Beaufort County",
+        "Year":2022,
+        "Estimated Population":"21614",
+        "State FIPS Code":"45",
+        "County Number":"013"
+    },
+    {
+        "County Name":"Berkeley County",
+        "Year":2022,
+        "Estimated Population":"27292",
+        "State FIPS Code":"45",
+        "County Number":"015"
+    },
+    {
+        "County Name":"Charleston County",
+        "Year":2022,
+        "Estimated Population":"38140",
+        "State FIPS Code":"45",
+        "County Number":"019"
+    },
+    {
+        "County Name":"Cherokee County",
+        "Year":2022,
+        "Estimated Population":"4426",
+        "State FIPS Code":"45",
+        "County Number":"021"
+    },
+    {
+        "County Name":"Chester County",
+        "Year":2022,
+        "Estimated Population":"3997",
+        "State FIPS Code":"45",
+        "County Number":"023"
+    },
+    {
+        "County Name":"Chesterfield County",
+        "Year":2022,
+        "Estimated Population":"3159",
+        "State FIPS Code":"45",
+        "County Number":"025"
+    },
+    {
+        "County Name":"Clarendon County",
+        "Year":2022,
+        "Estimated Population":"3223",
+        "State FIPS Code":"45",
+        "County Number":"027"
+    },
+    {
+        "County Name":"Colleton County",
+        "Year":2022,
+        "Estimated Population":"3737",
+        "State FIPS Code":"45",
+        "County Number":"029"
+    },
+    {
+        "County Name":"Darlington County",
+        "Year":2022,
+        "Estimated Population":"5284",
+        "State FIPS Code":"45",
+        "County Number":"031"
+    },
+    {
+        "County Name":"Dillon County",
+        "Year":2022,
+        "Estimated Population":"1030",
+        "State FIPS Code":"45",
+        "County Number":"033"
+    },
+    {
+        "County Name":"Dorchester County",
+        "Year":2022,
+        "Estimated Population":"17196",
+        "State FIPS Code":"45",
+        "County Number":"035"
+    },
+    {
+        "County Name":"Edgefield County",
+        "Year":2022,
+        "Estimated Population":"2569",
+        "State FIPS Code":"45",
+        "County Number":"037"
+    },
+    {
+        "County Name":"Fairfield County",
+        "Year":2022,
+        "Estimated Population":"1583",
+        "State FIPS Code":"45",
+        "County Number":"039"
+    },
+    {
+        "County Name":"Florence County",
+        "Year":2022,
+        "Estimated Population":"10027",
+        "State FIPS Code":"45",
+        "County Number":"041"
+    },
+    {
+        "County Name":"Georgetown County",
+        "Year":2022,
+        "Estimated Population":"5958",
+        "State FIPS Code":"45",
+        "County Number":"043"
+    },
+    {
+        "County Name":"Greenville County",
+        "Year":2022,
+        "Estimated Population":"55852",
+        "State FIPS Code":"45",
+        "County Number":"045"
+    },
+    {
+        "County Name":"Greenwood County",
+        "Year":2022,
+        "Estimated Population":"4845",
+        "State FIPS Code":"45",
+        "County Number":"047"
+    },
+    {
+        "County Name":"Horry County",
+        "Year":2022,
+        "Estimated Population":"38301",
+        "State FIPS Code":"45",
+        "County Number":"051"
+    },
+    {
+        "County Name":"Jasper County",
+        "Year":2022,
+        "Estimated Population":"3213",
+        "State FIPS Code":"45",
+        "County Number":"053"
+    },
+    {
+        "County Name":"Kershaw County",
+        "Year":2022,
+        "Estimated Population":"6347",
+        "State FIPS Code":"45",
+        "County Number":"055"
+    },
+    {
+        "County Name":"Lancaster County",
+        "Year":2022,
+        "Estimated Population":"9713",
+        "State FIPS Code":"45",
+        "County Number":"057"
+    },
+    {
+        "County Name":"Laurens County",
+        "Year":2022,
+        "Estimated Population":"6616",
+        "State FIPS Code":"45",
+        "County Number":"059"
+    },
+    {
+        "County Name":"Lexington County",
+        "Year":2022,
+        "Estimated Population":"33272",
+        "State FIPS Code":"45",
+        "County Number":"063"
+    },
+    {
+        "County Name":"Marion County",
+        "Year":2022,
+        "Estimated Population":"2037",
+        "State FIPS Code":"45",
+        "County Number":"067"
+    },
+    {
+        "County Name":"Marlboro County",
+        "Year":2022,
+        "Estimated Population":"1800",
+        "State FIPS Code":"45",
+        "County Number":"069"
+    },
+    {
+        "County Name":"Pickens County",
+        "Year":2022,
+        "Estimated Population":"12528",
+        "State FIPS Code":"45",
+        "County Number":"077"
+    },
+    {
+        "County Name":"Newberry County",
+        "Year":2022,
+        "Estimated Population":"3234",
+        "State FIPS Code":"45",
+        "County Number":"071"
+    },
+    {
+        "County Name":"Oconee County",
+        "Year":2022,
+        "Estimated Population":"7507",
+        "State FIPS Code":"45",
+        "County Number":"073"
+    },
+    {
+        "County Name":"Orangeburg County",
+        "Year":2022,
+        "Estimated Population":"4252",
+        "State FIPS Code":"45",
+        "County Number":"075"
+    },
+    {
+        "County Name":"Richland County",
+        "Year":2022,
+        "Estimated Population":"37732",
+        "State FIPS Code":"45",
+        "County Number":"079"
+    },
+    {
+        "County Name":"Spartanburg County",
+        "Year":2022,
+        "Estimated Population":"30133",
+        "State FIPS Code":"45",
+        "County Number":"083"
+    },
+    {
+        "County Name":"Sumter County",
+        "Year":2022,
+        "Estimated Population":"9052",
+        "State FIPS Code":"45",
+        "County Number":"085"
+    },
+    {
+        "County Name":"Union County",
+        "Year":2022,
+        "Estimated Population":"2555",
+        "State FIPS Code":"45",
+        "County Number":"087"
+    },
+    {
+        "County Name":"Williamsburg County",
+        "Year":2022,
+        "Estimated Population":"2058",
+        "State FIPS Code":"45",
+        "County Number":"089"
+    },
+    {
+        "County Name":"York County",
+        "Year":2022,
+        "Estimated Population":"28008",
+        "State FIPS Code":"45",
+        "County Number":"091"
+    }
+]
