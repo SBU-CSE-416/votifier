@@ -397,6 +397,7 @@ export default function MapPg() {
     <div style={{ display: 'flex' }}>
       <div id="map" style={{ height: '95vh', width: '60vw' }}></div>
       
+      {/*}
       <button 
     onClick={resetMapViewToDefault} 
     style={{
