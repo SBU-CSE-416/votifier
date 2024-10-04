@@ -26,9 +26,7 @@
 }
 .data-navbar {
     display: flex;
-    justify-content: space-around;
-    background-color: #EBECFF;
-    /* padding: 10px; */
+    justify-content: flex-start;
     color: black;
     font-size: 18px;
     cursor: pointer;
@@ -37,19 +35,22 @@
   }
   .tab {
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0;
+    border: 0.5px solid #000;
     transition: background-color 0.3s ease;
+    background-color: #EBECFF;
   }
   
   /* Hover Effect for Tabs */
   .tab:hover {
-    background-color: #BCBDCC;
+    background-color: #94aae4;
     padding: 10px 20px;
   }
   
   /* Active Tab Styles */
   .tab.active {
-    background-color: #BCBDCC;
+    background-color: #283D71;
+    color: aliceblue;
     font-weight: bold;
   }
   
