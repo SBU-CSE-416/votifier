@@ -1,7 +1,7 @@
 import RacialBarChart from "./RacialChart";
 import HistogramChart from "./HistogramChart";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
-import EcologicalInferenceChartD3 from "./EcologicalInferenceChartD3"
+import VotingGraph from "./VotingGraph";
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
 import GeneralInfoBox from "./GeneralInfoBox"
@@ -50,7 +50,7 @@ export default function DataPg({state}) {
                 )}
                 {activeTab === "racial" && (
                   <div className="data-charts">
-                    <RacialBarChart w={300} h={150} />
+                    <VotingGraph w={300} h={150} />
                   </div>
                 )}
                 {activeTab === "economic" && (
