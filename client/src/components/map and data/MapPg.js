@@ -179,7 +179,6 @@ export default function MapPg() {
     const properties = feature.properties;
     let newState = { ...initialState };
 
-    // Update state based on the clicked feature
     if (properties.name === 'Maryland') {
       newState = {
         ...initialState,
