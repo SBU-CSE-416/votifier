@@ -34,6 +34,23 @@ export default function MapPg() {
   var hover_box = 0;
   var click = 0;
 
+  const maryland_object = {
+    name: "maryland",
+    population: "6.165 million (2022)",
+    income: "47,513 USD (2022)",
+    political: "Democratic",
+    precinct: "1,990",
+  }
+
+  const southCarolina_object = {
+    name: "southcarolina",
+    population: "5.283 million (2022)",
+    income: "33,511 USD (2022)",
+    political: "Republican",
+    precinct: "1,297",
+  }
+
+
   useEffect(() => {
     //let map = L.map('map').setView([37.1, -95.7], 4);
     let map = L.map('map', {
@@ -251,8 +268,13 @@ export default function MapPg() {
           }
           highlightFeature(e);
           zoomToFeature(e, state);
-          setClickedFeature(feature.properties);
-          console.log("Passed feature: "+e);
+          if(state === 'maryland'){
+            setClickedFeature(maryland_object);
+          }else{
+            setClickedFeature(southCarolina_object);
+          }
+          
+          
         },
         mouseover: highlightFeature,
         mouseout: resetHighlight
