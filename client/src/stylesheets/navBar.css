@@ -28,6 +28,10 @@
     margin: 0 10px;
 }
 
+.text-btn:hover {
+    color: #bbc7eb;
+}
+
 #sbu-logo-img{
     cursor: pointer;
     height: 30px;
