@@ -7,7 +7,7 @@ import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
 import GeneralInfoBox from "./GeneralInfoBox"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
-export default function DataPg({resetMapViewToDefault}) {
+export default function DataPg() {
     const [activeTab, setActiveTab] = useState("demographics");
     // console.log("data page: "+resetMapViewToDefault.name);
     return(
