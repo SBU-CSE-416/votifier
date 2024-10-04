@@ -4,7 +4,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"773966",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"01"
     },
     {
@@ -12,7 +12,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"769431",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"02"
     },
     {
@@ -20,7 +20,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"770623",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"03"
     },
     {
@@ -28,7 +28,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"764378",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"04"
     },
     {
@@ -36,7 +36,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"774011",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"05"
     },
     {
@@ -44,7 +44,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"777191",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"06"
     },
     {
@@ -52,7 +52,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"764705",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"07"
     },
     {
@@ -60,7 +60,7 @@
         "Year":2022,
         "Congress":118,
         "Estimated Population":"767402",
-        "State":"24",
+        "State FIPS Code":"24",
         "District Number":"08"
     }
 ]
