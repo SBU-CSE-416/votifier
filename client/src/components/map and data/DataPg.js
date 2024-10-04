@@ -1,6 +1,8 @@
 import RacialBarChart from "./RacialChart";
 import HistogramChart from "./HistogramChart";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
+import EcologicalInferenceChartD3 from "./EcologicalInferenceChartD3"
+import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
@@ -44,25 +46,25 @@ export default function DataPg({resetMapViewToDefault}) {
                   Ecological Inference
                 </div>
               </div>
-            <div className="charts">
+            <div className="data-charts-container">
                 {activeTab === "demographics" && (
-                  <div className="charts">
-                    <HistogramChart w = {350} h = {175}></HistogramChart>
-                    <RacialBarChart w = {350} h = {175}></RacialBarChart>
+                  <div className="data-charts">
+                    <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
+                    <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart>
+                    <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot>
                   </div>
                 )}
                 {activeTab === "racial" && (
-                  <div className="charts">
+                  <div className="data-charts">
                     <RacialBarChart w={300} h={150} />
                   </div>
                 )}
                 {activeTab === "economic" && (
-                  <div className="charts">
-                    <EcologicalInferenceChart w={300} h={150} />
+                  <div className="data-charts">
+                    <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Demographic Group"} />
+                    <EcologicalInferenceChartD3 w={400} h={200} title={"Support for Candidates by Demographic Group"}/>
                   </div>
-        )}
-                    
-                
+        )}  
             </div>
             <div className="data-genernal-info"> 
             <p> General data here</p>

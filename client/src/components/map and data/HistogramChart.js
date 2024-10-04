@@ -13,14 +13,20 @@ const data = [
   { bin: '80+', population: 2000 }
 ];
 
-const HistogramChart = ({w, h}) => (
-  <BarChart width={w} height={h} data={data} barCategoryGap="0%">
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="bin" label={{ value: "Age Ranges", position: 'insideBottom', offset: -5 }} />
-    <YAxis label={{ angle: -90, position: 'insideLeft', offset: -7}} />
-    <Tooltip />
-    <Bar dataKey="population" fill="#46ACC2" />
-  </BarChart>
+const HistogramChart = ({w, h, title}) => (
+  <div>
+    <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>
+      {title || "Title Needed"}
+    </h2>
+      <BarChart width={w} height={h} data={data} barCategoryGap="0%">
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="bin" label={{ value: "Age Ranges", position: 'insideBottom', offset: -5 }} />
+      <YAxis label={{ angle: -90, position: 'insideLeft', offset: -7}} />
+      <Tooltip />
+      <Bar dataKey="population" fill="#46ACC2" />
+    </BarChart>
+  </div>
+  
 );
 
 export default HistogramChart;

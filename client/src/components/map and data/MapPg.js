@@ -98,8 +98,6 @@ export default function MapPg() {
         dashArray: '',
         fillOpacity: 0.7,
       });
-
-
       const properties = layer.feature.properties;
       if (properties.name === "Maryland" || properties.name === "South Carolina") {
         setDistrictName(`State: ${properties.name}`);
@@ -397,9 +395,9 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '95vh', width: '50vw' }}></div>
+      <div id="map" style={{ height: '95vh', width: '60vw' }}></div>
       
-{/* "      <button 
+      <button 
     onClick={resetMapViewToDefault} 
     style={{
         position: "absolute",
