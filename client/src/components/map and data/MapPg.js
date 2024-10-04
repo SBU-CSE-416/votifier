@@ -13,6 +13,7 @@ export default function MapPg() {
   const [barData, setBarData] = useState({ bar1: 0, bar2: 0, bar3: 0, bar4: 0 });
 
   const [mapInstance, setMapInstance] = useState(null);
+  const [clickedFeature, setClickedFeature] = useState(null);
 
   //const [geojsonStateMaryland, setgeojsonStateMaryland] = useState(null);
   //const [geojsonStateSouthCarolina, setgeojsonStateSouthCarolina] = useState(null);
@@ -36,10 +37,6 @@ export default function MapPg() {
   useEffect(() => {
     //let map = L.map('map').setView([37.1, -95.7], 4);
     let map = L.map('map', {
-      dragging: false,            // Disable dragging
-      scrollWheelZoom: false,     // Disable scroll to zoom
-      doubleClickZoom: false,     // Disable double-click zoom
-      zoomControl: false          // Hide zoom control
     }).setView([37.1, -95.7], 4);
     setMapInstance(map);
 
@@ -238,6 +235,11 @@ export default function MapPg() {
         click = 0;
       }
 
+      map.dragging.disable();          // Disable dragging
+      map.scrollWheelZoom.disable();   // Disable scroll to zoom
+      map.doubleClickZoom.disable();   // Disable double-click zoom
+      map.zoomControl.remove();
+
 
     }
 
@@ -249,7 +251,8 @@ export default function MapPg() {
           }
           highlightFeature(e);
           zoomToFeature(e, state);
-          
+          setClickedFeature(feature.properties);
+          console.log("Passed feature: "+e);
         },
         mouseover: highlightFeature,
         mouseout: resetHighlight
@@ -276,7 +279,6 @@ export default function MapPg() {
     const handleGoBack = () => {
       map.setView([37.1, -95.7], 4);
         //mapInstance.removeLayer(geojsonStateMaryland);
-      console.log("Going back...");
       // Example: Reset state or change view
       // resetToDefaultView();
       if(geojsonCongressionalMaryland){
@@ -292,6 +294,11 @@ export default function MapPg() {
         geojsonStateSouthCarolina.addTo(map);
         currentState = 'us';
       }
+
+      map.dragging.enable();          
+      map.scrollWheelZoom.enable();   
+      map.doubleClickZoom.enable();   
+      L.control.zoom().addTo(map); 
     };
     // Attach the event listener
     goBackButton.addEventListener('click', handleGoBack);
@@ -410,7 +417,7 @@ export default function MapPg() {
       
     Go Back
 </button>" */}
-      <DataPg ></DataPg>
+      <DataPg resetMapViewToDefault={clickedFeature}></DataPg>
     </div>
   );
 }
