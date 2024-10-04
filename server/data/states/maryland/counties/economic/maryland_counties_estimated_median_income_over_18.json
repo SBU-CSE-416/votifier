@@ -1,0 +1,170 @@
+[
+    {
+        "County Name":"Allegany County",
+        "Year":2022,
+        "Median Income":"28128",
+        "State FIPS Code":"24",
+        "County Number":"001"
+    },
+    {
+        "County Name":"Anne Arundel County",
+        "Year":2022,
+        "Median Income":"55298",
+        "State FIPS Code":"24",
+        "County Number":"003"
+    },
+    {
+        "County Name":"Baltimore County",
+        "Year":2022,
+        "Median Income":"45671",
+        "State FIPS Code":"24",
+        "County Number":"005"
+    },
+    {
+        "County Name":"Calvert County",
+        "Year":2022,
+        "Median Income":"56241",
+        "State FIPS Code":"24",
+        "County Number":"009"
+    },
+    {
+        "County Name":"Caroline County",
+        "Year":2022,
+        "Median Income":"32831",
+        "State FIPS Code":"24",
+        "County Number":"011"
+    },
+    {
+        "County Name":"Carroll County",
+        "Year":2022,
+        "Median Income":"50419",
+        "State FIPS Code":"24",
+        "County Number":"013"
+    },
+    {
+        "County Name":"Cecil County",
+        "Year":2022,
+        "Median Income":"41748",
+        "State FIPS Code":"24",
+        "County Number":"015"
+    },
+    {
+        "County Name":"Charles County",
+        "Year":2022,
+        "Median Income":"51331",
+        "State FIPS Code":"24",
+        "County Number":"017"
+    },
+    {
+        "County Name":"Dorchester County",
+        "Year":2022,
+        "Median Income":"31924",
+        "State FIPS Code":"24",
+        "County Number":"019"
+    },
+    {
+        "County Name":"Frederick County",
+        "Year":2022,
+        "Median Income":"51868",
+        "State FIPS Code":"24",
+        "County Number":"021"
+    },
+    {
+        "County Name":"Garrett County",
+        "Year":2022,
+        "Median Income":"34830",
+        "State FIPS Code":"24",
+        "County Number":"023"
+    },
+    {
+        "County Name":"Harford County",
+        "Year":2022,
+        "Median Income":"48910",
+        "State FIPS Code":"24",
+        "County Number":"025"
+    },
+    {
+        "County Name":"Howard County",
+        "Year":2022,
+        "Median Income":"65953",
+        "State FIPS Code":"24",
+        "County Number":"027"
+    },
+    {
+        "County Name":"Kent County",
+        "Year":2022,
+        "Median Income":"38380",
+        "State FIPS Code":"24",
+        "County Number":"029"
+    },
+    {
+        "County Name":"Montgomery County",
+        "Year":2022,
+        "Median Income":"56940",
+        "State FIPS Code":"24",
+        "County Number":"031"
+    },
+    {
+        "County Name":"Prince George's County",
+        "Year":2022,
+        "Median Income":"46062",
+        "State FIPS Code":"24",
+        "County Number":"033"
+    },
+    {
+        "County Name":"Queen Anne's County",
+        "Year":2022,
+        "Median Income":"50682",
+        "State FIPS Code":"24",
+        "County Number":"035"
+    },
+    {
+        "County Name":"St. Mary's County",
+        "Year":2022,
+        "Median Income":"46643",
+        "State FIPS Code":"24",
+        "County Number":"037"
+    },
+    {
+        "County Name":"Somerset County",
+        "Year":2022,
+        "Median Income":"25659",
+        "State FIPS Code":"24",
+        "County Number":"039"
+    },
+    {
+        "County Name":"Talbot County",
+        "Year":2022,
+        "Median Income":"40771",
+        "State FIPS Code":"24",
+        "County Number":"041"
+    },
+    {
+        "County Name":"Washington County",
+        "Year":2022,
+        "Median Income":"35860",
+        "State FIPS Code":"24",
+        "County Number":"043"
+    },
+    {
+        "County Name":"Wicomico County",
+        "Year":2022,
+        "Median Income":"33970",
+        "State FIPS Code":"24",
+        "County Number":"045"
+    },
+    {
+        "County Name":"Worcester County",
+        "Year":2022,
+        "Median Income":"39486",
+        "State FIPS Code":"24",
+        "County Number":"047"
+    },
+    {
+        "County Name":"Baltimore city",
+        "Year":2022,
+        "Median Income":"35904",
+        "State FIPS Code":"24",
+        "County Number":"510"
+    }
+]

@@ -9,7 +9,7 @@ import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
     const [activeTab, setActiveTab] = useState("demographics");
-    console.log("data page: "+resetMapViewToDefault.name);
+    // console.log("data page: "+resetMapViewToDefault.name);
     return(
         
     <div id="info" >
