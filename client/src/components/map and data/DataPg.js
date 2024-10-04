@@ -4,6 +4,7 @@ import EcologicalInferenceChart from "./EcologicalInferenceChart"
 import EcologicalInferenceChartD3 from "./EcologicalInferenceChartD3"
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
+import GeneralInfoBox from "./GeneralInfoBox"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
@@ -27,7 +28,11 @@ export default function DataPg({resetMapViewToDefault}) {
         
         <div className="datapg-container">
             <div className="data-genernal-info"> 
-            <p> General data here</p>
+            <GeneralInfoBox 
+                title="Total Population"
+                value="6.165 million "
+                subtitle="from 2022"
+            />
             
             </div>
             {/* Navigation Bar */}

@@ -11,7 +11,7 @@
 .data-charts {
     display: grid; 
     width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    /* grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); */
     padding: 20px; 
     gap: 10px;
     box-sizing: border-box;
@@ -21,8 +21,9 @@
 .data-genernal-info {
     display: flex;
     width: 100%;
-    height: 29vh;
+    height: 30vh;
     border-top: #000000 1px solid;
+    justify-content: center;
 }
 .data-navbar {
     display: flex;
@@ -41,13 +42,11 @@
     background-color: #EBECFF;
   }
   
-  /* Hover Effect for Tabs */
   .tab:hover {
     background-color: #94aae4;
     padding: 10px 20px;
   }
   
-  /* Active Tab Styles */
   .tab.active {
     background-color: #283D71;
     color: aliceblue;
