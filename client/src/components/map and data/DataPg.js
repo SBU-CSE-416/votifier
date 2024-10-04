@@ -9,7 +9,7 @@ import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
     const [activeTab, setActiveTab] = useState("demographics");
-    console.log("data page: "+resetMapViewToDefault.name);
+    //console.log("data page: "+resetMapViewToDefault.name);
     return(
         
     <div id="info" >
@@ -29,12 +29,11 @@ export default function DataPg({resetMapViewToDefault}) {
         
         <div className="datapg-container">
             <div className="data-genernal-info"> 
-            <GeneralInfoBox 
-                title="Total Population"
-                value="6.165 million "
-                subtitle="from 2022"
-            />
-            
+              <GeneralInfoBox 
+                  title="Total Population"
+                  value="6.165 million "
+                  subtitle="from 2022"
+              />
             </div>
             {/* Navigation Bar */}
               <div className="data-navbar">

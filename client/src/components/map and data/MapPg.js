@@ -402,7 +402,7 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <div id="map" style={{ height: '95vh', width: '60vw' }}></div>
+      <div id="map" style={{ height: '95vh', width: '59vw' }}></div>
       
       {/*}
       <button 
