@@ -31,7 +31,7 @@ function BackButtonControl({ resetView }) {
       button.style.cursor = 'pointer';
       button.style.padding = '8px';
       button.title = 'Go back to default view';
-      
+
       button.onclick = () => {
         resetView(map);
       };
@@ -46,7 +46,7 @@ function BackButtonControl({ resetView }) {
   return null;
 }
 
-function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, setHoverState, setState }) {
+function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, setHoverState, setState, featureType }) {
   const map = useMap();
 
   useEffect(() => {
@@ -66,7 +66,7 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
   }, [disableNavigation, map]);
 
   const geojsonStyle = {
-    fillColor: '#3388ff',
+    fillColor: featureType === 'district' ? '#FF5733' : '#3388ff', 
     weight: 2,
     opacity: 1,
     color: 'white',
@@ -104,24 +104,27 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
             const properties = feature.properties;
 
             layer.unbindTooltip();
-            layer.bindTooltip(`State: ${properties.name}`, {
+            layer.bindTooltip(`${properties.name || properties.NAMELSAD || "Congressional District " + properties.DISTRICT  }`, {
               permanent: false,
               direction: 'auto',
               sticky: true,
             });
 
+          
             layer.on('mouseover', () => {
               highlightFeature(layer);
-              setHoverState({ districtName: `State: ${properties.name}` });
+              setHoverState({ districtName: `${properties.name || properties.NAMELSAD ||  "Congressional District " + properties.DISTRICT }` });
               layer.openTooltip();
             });
 
+    
             layer.on('mouseout', () => {
               resetHighlight(layer);
-              setHoverState({ districtName: '' });
+              setHoverState({ districtName: '' }); 
               layer.closeTooltip();
             });
 
+          
             layer.on('click', () => handleFeatureClick(feature, layer));
           }}
         />
@@ -135,9 +138,12 @@ export default function MapPg() {
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: '' });
   const [dataVisible, setDataVisible] = useState(false);
+  const [showDistricts, setShowDistricts] = useState(false);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
+  const [geojsonMarylandCongress, setGeojsonMarylandCongress] = useState(null);
+  const [geojsonSouthCarolinaCongress, setGeojsonSouthCarolinaCongress] = useState(null);
   const [disableNavigation, setDisableNavigation] = useState(false);
 
   const defaultView = [37.1, -95.7];
@@ -146,8 +152,14 @@ export default function MapPg() {
   useEffect(() => {
     fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
     fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
+    fetchGeojsonData('/jack_mary_congress.geojson', setGeojsonMarylandCongress);
+    fetchGeojsonData('/jack_south_congress.geojson', setGeojsonSouthCarolinaCongress);
+    
   }, []);
-
+  console.log('GeojsonMaryland:', geojsonMaryland);
+    console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
+  console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
+    console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);
   useEffect(() => {
     console.log("State updated: ", state);
   }, [state]);
@@ -160,7 +172,7 @@ export default function MapPg() {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      console.log("GeoJSON data loaded from: ", url);
+      console.log("GeoJSON data loaded from: ", url, data);
       setState(data);
     } catch (error) {
       console.error(`Error loading GeoJSON from ${url}:`, error);
@@ -169,14 +181,17 @@ export default function MapPg() {
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
-    setState(initialState);
+    setState(initialState); 
     setHoverState({ districtName: '' });
     setDataVisible(false);
     setDisableNavigation(false);
+    setShowDistricts(false);
   };
 
   const onFeatureClick = (feature) => {
+    
     const properties = feature.properties;
+    console.log('Feature clicked:', feature.properties);
     let newState = { ...initialState };
 
     if (properties.name === 'Maryland') {
@@ -191,6 +206,7 @@ export default function MapPg() {
         unemploymentRate: '1.8%',
         povertyRate: '8.6%',
       };
+      setShowDistricts(true);
     } else if (properties.name === 'South Carolina') {
       newState = {
         ...initialState,
@@ -203,6 +219,7 @@ export default function MapPg() {
         unemploymentRate: '3.5%',
         povertyRate: '13.2%',
       };
+      setShowDistricts(true);
     }
     setState(newState);
     setDataVisible(true);
@@ -211,18 +228,20 @@ export default function MapPg() {
 
   return (
     <div style={{ display: 'flex' }}>
-      <MapContainer center={defaultView} zoom={defaultZoom} style={{height: '95vh', width: '60vw' }}>
+      <MapContainer center={defaultView} zoom={defaultZoom} style={{ height: '95vh', width: '60vw' }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
           attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
         />
 
+        {/* State Boundaries */}
         <FeatureInteraction
           geojsonData={geojsonMaryland}
           onFeatureClick={onFeatureClick}
           disableNavigation={disableNavigation}
           setHoverState={setHoverState}
           setState={setState}
+          featureType="state"
         />
 
         <FeatureInteraction
@@ -231,7 +250,30 @@ export default function MapPg() {
           disableNavigation={disableNavigation}
           setHoverState={setHoverState}
           setState={setState}
+          featureType="state"
         />
+
+        {showDistricts && geojsonMarylandCongress && (
+          <FeatureInteraction
+            geojsonData={geojsonMarylandCongress}
+            onFeatureClick={onFeatureClick}
+            disableNavigation={disableNavigation}
+            setHoverState={setHoverState}
+            setState={setState}
+            featureType="district"
+          />
+        )}
+
+        {showDistricts && geojsonSouthCarolinaCongress && (
+          <FeatureInteraction
+            geojsonData={geojsonSouthCarolinaCongress}
+            onFeatureClick={onFeatureClick}
+            disableNavigation={disableNavigation}
+            setHoverState={setHoverState}
+            setState={setState}
+            featureType="district"
+          />
+        )}
 
         <BackButtonControl resetView={handleResetView} />
       </MapContainer>
