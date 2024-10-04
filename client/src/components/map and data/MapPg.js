@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import DataPg from './DataPg';
 import PlaceholderMessage from './PlaceHolderMessage';
 import "../../stylesheets/map and data/map.css";
+import "../../stylesheets/BackButton.css"
 
 const initialState = {
   districtName: '',
@@ -22,14 +23,32 @@ function BackButtonControl({ resetView }) {
 
   useEffect(() => {
     const backButton = L.control({ position: 'topright' });
+    const ensembleButton = L.control({ position: 'topright' });
 
-    backButton.onAdd = () => {
+    ensembleButton.onAdd = () => {
       const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
-      button.innerText = 'Back';
+      button.innerText = 'Compare with Ensemble Data';
+      button.style.fontSize = "15px";
       button.style.backgroundColor = '#fff';
       button.style.border = '2px solid #3388ff';
       button.style.cursor = 'pointer';
       button.style.padding = '8px';
+      button.style.width = "150px";
+      button.style.height = "50px";
+      button.title = 'Go back to default view';
+      return button;
+    }
+    
+    backButton.onAdd = () => {
+      const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
+      button.innerText = 'Go Back';
+      button.style.fontSize = "15px";
+      button.style.backgroundColor = '#fff';
+      button.style.border = '2px solid #3388ff';
+      button.style.cursor = 'pointer';
+      button.style.padding = '8px';
+      button.style.width = "150px";
+      button.style.height = "50px";
       button.title = 'Go back to default view';
 
       button.onclick = () => {
@@ -38,8 +57,10 @@ function BackButtonControl({ resetView }) {
       return button;
     };
     backButton.addTo(map);
+    ensembleButton.addTo(map);
     return () => {
       map.removeControl(backButton);
+      map.removeControl(ensembleButton);
     };
   }, [map, resetView]);
 
@@ -198,8 +219,8 @@ export default function MapPg() {
       newState = {
         ...initialState,
         districtName: 'Maryland',
-        population: '6.165 million',
-        income: '$94,790',
+        population: '6.161 million',
+        income: '$94,991',
         politicalLean: 'Democratic',
         totalPrecinct: '1,990',
         homeownershipRate: '68.7%',
@@ -211,8 +232,8 @@ export default function MapPg() {
       newState = {
         ...initialState,
         districtName: 'South Carolina',
-        population: '5.283 million',
-        income: '$54,864',
+        population: '5.142 million',
+        income: '$64,115',
         politicalLean: 'Republican',
         totalPrecinct: '1,297',
         homeownershipRate: '69.5%',

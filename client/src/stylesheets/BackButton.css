@@ -1,4 +1,4 @@
-.back-button {
+.back-button  {
     position: absolute;
     top: 200px;
     left: 10px;
@@ -11,8 +11,9 @@
     cursor: pointer;
     font-size: 16px;
   }
-  
-  .back-button:hover {
+
+
+.back-button:hover {
     background-color: #45a049; 
   }
   
