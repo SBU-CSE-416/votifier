@@ -45,7 +45,7 @@ export default function DataPg({state}) {
                   <div className="data-charts">
                     <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
                     <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart>
-                    {/* <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot> */}
+                    <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot>
                   </div>
                 )}
                 {activeTab === "racial" && (

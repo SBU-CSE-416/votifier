@@ -2,23 +2,29 @@ import React from 'react';
 import { VictoryChart, VictoryBoxPlot, VictoryTheme } from 'victory';
 
 const medianIncomeData = [
-  { x: 'District A', y: [30000, 40000, 50000, 60000, 70000] }, 
-  { x: 'District B', y: [20000, 30000, 45000, 50000, 65000] },
-  { x: 'District C', y: [35000, 40000, 50000, 70000, 80000] },
-  { x: 'District D', y: [10000, 20000, 30000, 40000, 50000] },
-  { x: 'District E', y: [25000, 35000, 40000, 55000, 60000] }
+  { x: 'Asian', y: [30000, 40000, 50000, 60000, 70000] }, 
+  { x: 'Hispanic', y: [20000, 30000, 45000, 50000, 65000] },
+  { x: 'Indian', y: [35000, 40000, 50000, 70000, 80000] },
+  { x: 'White', y: [10000, 20000, 30000, 40000, 50000] },
+  { x: 'African American', y: [25000, 35000, 40000, 55000, 60000] }
 ];
 
-const MedianIncomeBoxPlot = () => (
-  <VictoryChart
+const MedianIncomeBoxPlot = ({w, h, title}) => (
+  <div>
+    <h2 style={{ textAlign: 'center', marginBottom: '0px' }}>
+      {title || "Median Income Distribution"}
+    </h2>
+    <VictoryChart
     theme={VictoryTheme.material}
     domainPadding={20}
+    width={w}  
+    height={h} 
   >
     <VictoryBoxPlot
       data={medianIncomeData}
       x="x"
       y="y"
-      boxWidth={20}
+      boxWidth={10}
       style={{
         min: { stroke: "#c43a31" },   
         max: { stroke: "#c43a31" },
@@ -28,6 +34,8 @@ const MedianIncomeBoxPlot = () => (
       }}
     />
   </VictoryChart>
+  </div>
+  
 );
 
 export default MedianIncomeBoxPlot;

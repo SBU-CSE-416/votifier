@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import DataPg from './DataPg';
+import PlaceholderMessage from './PlaceHolderMessage';
 import "../../stylesheets/map and data/map.css";
 
 const initialState = {
@@ -129,9 +130,9 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
   );
 }
 
+
 export default function MapPg() {
   const [state, setState] = useState(initialState);
-  const [mapWidth, setMapWidth] = useState('100vw'); 
   const [hoverState, setHoverState] = useState({ districtName: '' });
   const [dataVisible, setDataVisible] = useState(false);
 
@@ -172,7 +173,6 @@ export default function MapPg() {
     setHoverState({ districtName: '' });
     setDataVisible(false);
     setDisableNavigation(false);
-    setMapWidth('100vw');
   };
 
   const onFeatureClick = (feature) => {
@@ -204,17 +204,14 @@ export default function MapPg() {
         povertyRate: '13.2%',
       };
     }
-
     setState(newState);
     setDataVisible(true);
     setDisableNavigation(true);
-    setMapWidth('60vw');
-    console.log("Map width updated to: ", mapWidth); 
   };
 
   return (
-    <div style={{ display: 'flex'}}>
-      <MapContainer key = {mapWidth} center={defaultView} zoom={defaultZoom} style={{height: '95vh', width: mapWidth }}>
+    <div style={{ display: 'flex' }}>
+      <MapContainer center={defaultView} zoom={defaultZoom} style={{height: '95vh', width: '60vw' }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
           attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
@@ -239,7 +236,7 @@ export default function MapPg() {
         <BackButtonControl resetView={handleResetView} />
       </MapContainer>
 
-      {dataVisible && <DataPg state={state} />}
+      {dataVisible ? <DataPg state={state} /> : <PlaceholderMessage />}
     </div>
   );
 }
