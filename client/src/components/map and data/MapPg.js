@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, GeoJSON, Tooltip, useMap } from 'react-leaflet';
-import L from 'leaflet'; // Import Leaflet to access L.Control
+import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import DataPg from './DataPg';
 import "../../stylesheets/map and data/map.css";
 
-// Custom Leaflet control component for the "Back" button
+const initialState = {
+  districtName: '',
+  population: '0',
+  income: '0',
+  politicalLean: '0',
+  totalPrecinct: '0',
+  homeownershipRate: '0%',
+  unemploymentRate: '0%',
+  povertyRate: '0%',
+};
+
 function BackButtonControl({ resetView }) {
-  const map = useMap(); // Get access to the map instance
+  const map = useMap();
 
   useEffect(() => {
-    // Create a new Leaflet control
     const backButton = L.control({ position: 'topright' });
 
-    // Define the onAdd function to create and attach the button element
     backButton.onAdd = () => {
       const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
       button.innerText = 'Back';
@@ -23,31 +31,23 @@ function BackButtonControl({ resetView }) {
       button.style.padding = '8px';
       button.title = 'Go back to default view';
       
-      // Attach click handler to reset the view
       button.onclick = () => {
-        // Use the map object to set the view directly
-        resetView(map); // Call the resetView function with the map object
+        resetView(map);
       };
       return button;
     };
-
-    // Add the control to the map
     backButton.addTo(map);
-
-    // Cleanup: Remove the control when the component is unmounted
     return () => {
       map.removeControl(backButton);
     };
   }, [map, resetView]);
 
-  return null; // This component does not render anything directly
+  return null;
 }
 
-// Custom component to handle feature interactions and map zoom
-function FeatureInteraction({ geojsonData, onFeatureClick, districtName, disableNavigation }) {
-  const map = useMap(); // Get the map instance from the context
+function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, setHoverState, setState }) {
+  const map = useMap();
 
-  // Handle enabling and disabling map navigation
   useEffect(() => {
     if (disableNavigation) {
       map.dragging.disable();
@@ -73,27 +73,24 @@ function FeatureInteraction({ geojsonData, onFeatureClick, districtName, disable
     fillOpacity: 0.7,
   };
 
-  // Function to highlight a feature when hovered
   const highlightFeature = (layer) => {
     layer.setStyle({
-      weight: 5,
+      weight: 3,
       color: '#000000',
       dashArray: '',
-      fillOpacity: 0.7,
+      fillOpacity: 0.9,
     });
   };
 
-  // Function to reset highlight when not hovered
   const resetHighlight = (layer) => {
     layer.setStyle(geojsonStyle);
   };
 
-  // Handle feature click and zoom into the clicked feature
   const handleFeatureClick = (feature, layer) => {
     highlightFeature(layer);
     const bounds = layer.getBounds();
     map.fitBounds(bounds);
-    onFeatureClick(feature); // Call the parent function to handle the feature click
+    onFeatureClick(feature);
   };
 
   return (
@@ -103,27 +100,41 @@ function FeatureInteraction({ geojsonData, onFeatureClick, districtName, disable
           data={geojsonData}
           style={geojsonStyle}
           onEachFeature={(feature, layer) => {
-            layer.on({
-              mouseover: () => highlightFeature(layer),
-              mouseout: () => resetHighlight(layer),
-              click: () => handleFeatureClick(feature, layer),
+            const properties = feature.properties;
+
+            layer.unbindTooltip();
+            layer.bindTooltip(`State: ${properties.name}`, {
+              permanent: false,
+              direction: 'auto',
+              sticky: true,
             });
+
+            layer.on('mouseover', () => {
+              highlightFeature(layer);
+              setHoverState({ districtName: `State: ${properties.name}` });
+              layer.openTooltip();
+            });
+
+            layer.on('mouseout', () => {
+              resetHighlight(layer);
+              setHoverState({ districtName: '' });
+              layer.closeTooltip();
+            });
+
+            layer.on('click', () => handleFeatureClick(feature, layer));
           }}
-        >
-          <Tooltip sticky>{districtName}</Tooltip>
-        </GeoJSON>
+        />
       )}
     </>
   );
 }
 
-// Main component to render the Map and GeoJSON features
 export default function MapPg() {
-  const [districtName, setDistrictName] = useState('Click on a location to see its name.');
-  const [population, setPopulation] = useState('Population: 0');
-  const [income, setIncome] = useState('Median Income: 0');
-  const [politicalLean, setPoliticalLean] = useState('Political Lean: 0');
-  const [totalPrecinct, setTotalPrecinct] = useState('Total Precinct: 0');
+  const [state, setState] = useState(initialState);
+  const [mapWidth, setMapWidth] = useState('100vw'); 
+  const [hoverState, setHoverState] = useState({ districtName: '' });
+  const [dataVisible, setDataVisible] = useState(false);
+
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
   const [disableNavigation, setDisableNavigation] = useState(false);
@@ -131,55 +142,80 @@ export default function MapPg() {
   const defaultView = [37.1, -95.7];
   const defaultZoom = 4;
 
-  // Load GeoJSON data on component mount using useEffect
   useEffect(() => {
     fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
     fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
   }, []);
 
+  useEffect(() => {
+    console.log("State updated: ", state);
+  }, [state]);
+
+  useEffect(() => {
+    console.log("Hover State updated: ", hoverState);
+  }, [hoverState]);
+
   const fetchGeojsonData = async (url, setState) => {
     try {
       const response = await fetch(url);
       const data = await response.json();
+      console.log("GeoJSON data loaded from: ", url);
       setState(data);
     } catch (error) {
       console.error(`Error loading GeoJSON from ${url}:`, error);
     }
   };
 
-  // Event handler for resetting map view to default
   const handleResetView = (map) => {
-    map.setView(defaultView, defaultZoom); 
-    setDistrictName('Click on a location to see its name.');
-    setPopulation('Population: 0');
-    setIncome('Median Income: 0');
-    setPoliticalLean('Political Lean: 0');
-    setTotalPrecinct('Total Precinct: 0');
-    setDisableNavigation(false); 
+    map.setView(defaultView, defaultZoom);
+    setState(initialState);
+    setHoverState({ districtName: '' });
+    setDataVisible(false);
+    setDisableNavigation(false);
+    setMapWidth('100vw');
   };
 
   const onFeatureClick = (feature) => {
     const properties = feature.properties;
+    let newState = { ...initialState };
+
+    // Update state based on the clicked feature
     if (properties.name === 'Maryland') {
-      setDistrictName('State: Maryland');
-      setPopulation('Population: 6.165 million (2022)');
-      setIncome('Median Income: 47,513 USD (2022)');
-      setPoliticalLean('Political lean: Democratic');
-      setTotalPrecinct('Total Precinct: 1,990');
+      newState = {
+        ...initialState,
+        districtName: 'Maryland',
+        population: '6.165 million',
+        income: '$94,790',
+        politicalLean: 'Democratic',
+        totalPrecinct: '1,990',
+        homeownershipRate: '68.7%',
+        unemploymentRate: '1.8%',
+        povertyRate: '8.6%',
+      };
     } else if (properties.name === 'South Carolina') {
-      setDistrictName('State: South Carolina');
-      setPopulation('Population: 5.283 million (2022)');
-      setIncome('Median Income: 33,511 USD (2022)');
-      setPoliticalLean('Political lean: Republican');
-      setTotalPrecinct('Total Precinct: 1,297');
+      newState = {
+        ...initialState,
+        districtName: 'South Carolina',
+        population: '5.283 million',
+        income: '$54,864',
+        politicalLean: 'Republican',
+        totalPrecinct: '1,297',
+        homeownershipRate: '69.5%',
+        unemploymentRate: '3.5%',
+        povertyRate: '13.2%',
+      };
     }
 
+    setState(newState);
+    setDataVisible(true);
     setDisableNavigation(true);
+    setMapWidth('60vw');
+    console.log("Map width updated to: ", mapWidth); 
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <MapContainer center={defaultView} zoom={defaultZoom} style={{ height: '95vh', width: '60vw' }}>
+    <div style={{ display: 'flex' }}>
+      <MapContainer key = {mapWidth} center={defaultView} zoom={defaultZoom} style={{ height: '95vh', width: mapWidth }}>
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
           attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
@@ -188,21 +224,23 @@ export default function MapPg() {
         <FeatureInteraction
           geojsonData={geojsonMaryland}
           onFeatureClick={onFeatureClick}
-          districtName={districtName}
           disableNavigation={disableNavigation}
+          setHoverState={setHoverState}
+          setState={setState}
         />
 
         <FeatureInteraction
           geojsonData={geojsonSouthCarolina}
           onFeatureClick={onFeatureClick}
-          districtName={districtName}
           disableNavigation={disableNavigation}
+          setHoverState={setHoverState}
+          setState={setState}
         />
 
         <BackButtonControl resetView={handleResetView} />
       </MapContainer>
 
-      <DataPg resetMapViewToDefault={districtName} />
+      {dataVisible && <DataPg state={state} />}
     </div>
   );
 }

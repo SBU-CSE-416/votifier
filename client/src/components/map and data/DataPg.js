@@ -7,36 +7,19 @@ import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
 import GeneralInfoBox from "./GeneralInfoBox"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
-export default function DataPg() {
+export default function DataPg({state}) {
     const [activeTab, setActiveTab] = useState("demographics");
-    // console.log("data page: "+resetMapViewToDefault.name);
+    console.log("State Data: ", state);
     return(
         
     <div id="info" >
-        {/* <h3>Selected Location</h3>
-        <p>{districtName}</p>
-        <p>{population}</p>
-        <p>{income}</p>
-        <p>{political_lean}</p>
-        <p>{total_precinct}</p>
-
-        <div id="barGraphContainer">
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar1}%`, backgroundColor: '#3388ff' }}>{barData.bar1}%</div></div>
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar2}%`, backgroundColor: '#3388ff' }}>{barData.bar2}%</div></div>
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar3}%`, backgroundColor: '#3388ff' }}>{barData.bar3}%</div></div>
-          <div className="bar"><div className="bar-fill" style={{ width: `${barData.bar4}%`, backgroundColor: '#3388ff' }}>{barData.bar4}%</div></div>
-        </div> */}
         
         <div className="datapg-container">
             <div className="data-genernal-info"> 
             <GeneralInfoBox 
-                title="Total Population"
-                value="6.165 million "
-                subtitle="from 2022"
+                state = {state}
             />
-            
             </div>
-            {/* Navigation Bar */}
               <div className="data-navbar">
                 <div
                   className={`tab ${activeTab === "demographics" ? "active" : ""}`}
@@ -62,7 +45,7 @@ export default function DataPg() {
                   <div className="data-charts">
                     <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
                     <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart>
-                    <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot>
+                    {/* <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot> */}
                   </div>
                 )}
                 {activeTab === "racial" && (
@@ -79,9 +62,6 @@ export default function DataPg() {
             </div>
             
         </div>
-        {/* <button onClick={resetMapViewToDefault} style={{ marginTop: '10px', padding: '10px', backgroundColor: '#3388ff', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Reset
-        </button> */}
     </div>
         
     );
