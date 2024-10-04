@@ -66,7 +66,7 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
   }, [disableNavigation, map]);
 
   const geojsonStyle = {
-    fillColor: featureType === 'district' ? '#FF5733' : '#3388ff', // Different colors for states and districts
+    fillColor: featureType === 'district' ? '#FF5733' : '#3388ff', 
     weight: 2,
     opacity: 1,
     color: 'white',
@@ -103,29 +103,28 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
           onEachFeature={(feature, layer) => {
             const properties = feature.properties;
 
-            // Update the tooltip text based on the feature's property that stores the name
             layer.unbindTooltip();
-            layer.bindTooltip(`${properties.name || properties.district}`, {
+            layer.bindTooltip(`${properties.name || properties.NAMELSAD || "Congressional District " + properties.DISTRICT  }`, {
               permanent: false,
               direction: 'auto',
               sticky: true,
             });
 
-            // Capture hover state when mouse enters the district
+          
             layer.on('mouseover', () => {
               highlightFeature(layer);
-              setHoverState({ districtName: `${properties.name || properties.district}` }); // Set hover state with district name
+              setHoverState({ districtName: `${properties.name || properties.NAMELSAD ||  "Congressional District " + properties.DISTRICT }` });
               layer.openTooltip();
             });
 
-            // Reset hover state when mouse leaves the district
+    
             layer.on('mouseout', () => {
               resetHighlight(layer);
-              setHoverState({ districtName: '' }); // Clear hover state
+              setHoverState({ districtName: '' }); 
               layer.closeTooltip();
             });
 
-            // Set click interaction for the feature
+          
             layer.on('click', () => handleFeatureClick(feature, layer));
           }}
         />
