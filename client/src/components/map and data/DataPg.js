@@ -3,6 +3,7 @@ import HistogramChart from "./HistogramChart";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
 import EcologicalInferenceChartD3 from "./EcologicalInferenceChartD3"
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
+import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({resetMapViewToDefault}) {
@@ -61,8 +62,8 @@ export default function DataPg({resetMapViewToDefault}) {
                 )}
                 {activeTab === "economic" && (
                   <div className="data-charts">
-                    <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Demographic Group"} />
-                    <EcologicalInferenceChartD3 w={400} h={200} title={"Support for Candidates by Demographic Group"}/>
+                    <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Racial Group"} />
+                    <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/>
                   </div>
         )}  
             </div>

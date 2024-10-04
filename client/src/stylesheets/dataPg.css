@@ -2,6 +2,7 @@
     width: 40vw;
     position: absolute;
     right: 0;
+    /* border-left: #000000 1px solid; */
 }
 .data-charts-container {
     height: 60vh;

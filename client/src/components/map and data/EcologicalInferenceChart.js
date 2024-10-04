@@ -2,7 +2,6 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-// Example data for density plot approximation
 const densityData = [
   { demographic: '0.0', Indian: 0, 'East Asian': 2, 'Non-Asian': 3 },
   { demographic: '0.1', Indian: 1, 'East Asian': 5, 'Non-Asian': 7 },
