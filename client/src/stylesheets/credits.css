@@ -7,3 +7,13 @@
 .content-area{
     flex-grow: 1;
 }
+
+.center {
+    margin-top: 20px;
+    text-align: center;
+    font-size: xx-large;
+}
+
+.fix {
+    color: #FFFFFF;
+}
