@@ -10,17 +10,37 @@ const InfoBoxFrame = ({ title, value, subtitle }) => {
     </div>
   );
 };
-const GeneralInfoBox = () => {
+const GeneralInfoBox = ({state}) => {
+  console.log("Info State Data", state)
   return (
     <div className="info-box-grid">
-      <InfoBoxFrame title="Total Population" value="5.37 M" subtitle="+1.7% from 2022" />
-      <InfoBoxFrame title="Median Household Income" value="$54,864" subtitle="+2% from last year" />
-      <InfoBoxFrame title="Homeownership Rate" value="69.5%" subtitle="+0.5% from last year" />
-      <InfoBoxFrame title="Unemployment Rate" value="3.5%" subtitle="-0.2% from last year" />
-      <InfoBoxFrame title="Poverty Rate" value="13.2%" subtitle="-0.3% from last year" />
-      <InfoBoxFrame title="Education Attainment" value="28.2%" subtitle="+1% from last year" />
+      <InfoBoxFrame 
+        title={`Name`} 
+        value={state.districtName}
+      />
+      <InfoBoxFrame 
+        title="Total Population" 
+        value={state.population} 
+      />
+      <InfoBoxFrame 
+        title="Median Household Income" 
+        value={state.income} 
+      />
+      <InfoBoxFrame 
+        title="Homeownership Rate" 
+        value={state.homeownershipRate} 
+      />
+      <InfoBoxFrame 
+        title="Unemployment Rate" 
+        value={state.unemploymentRate} 
+      />
+      <InfoBoxFrame 
+        title="Poverty Rate" 
+        value={state.povertyRate} 
+      />
     </div>
   );
+  
 };
 
 export default GeneralInfoBox;

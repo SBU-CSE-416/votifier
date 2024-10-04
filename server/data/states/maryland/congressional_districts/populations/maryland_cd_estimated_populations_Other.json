@@ -1,0 +1,66 @@
+[
+    {
+        "District Name":"Congressional District 1",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"10527",
+        "State FIPS Code":"24",
+        "District Number":"01"
+    },
+    {
+        "District Name":"Congressional District 2",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"9515",
+        "State FIPS Code":"24",
+        "District Number":"02"
+    },
+    {
+        "District Name":"Congressional District 3",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"17551",
+        "State FIPS Code":"24",
+        "District Number":"03"
+    },
+    {
+        "District Name":"Congressional District 4",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"88052",
+        "State FIPS Code":"24",
+        "District Number":"04"
+    },
+    {
+        "District Name":"Congressional District 5",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"13398",
+        "State FIPS Code":"24",
+        "District Number":"05"
+    },
+    {
+        "District Name":"Congressional District 6",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"22937",
+        "State FIPS Code":"24",
+        "District Number":"06"
+    },
+    {
+        "District Name":"Congressional District 7",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"15206",
+        "State FIPS Code":"24",
+        "District Number":"07"
+    },
+    {
+        "District Name":"Congressional District 8",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"57809",
+        "State FIPS Code":"24",
+        "District Number":"08"
+    }
+]

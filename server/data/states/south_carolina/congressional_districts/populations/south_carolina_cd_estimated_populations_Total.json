@@ -1,0 +1,58 @@
+[
+    {
+        "District Name":"Congressional District 1",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"734138",
+        "State FIPS Code":"45",
+        "District Number":"01"
+    },
+    {
+        "District Name":"Congressional District 2",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"735646",
+        "State FIPS Code":"45",
+        "District Number":"02"
+    },
+    {
+        "District Name":"Congressional District 3",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"731595",
+        "State FIPS Code":"45",
+        "District Number":"03"
+    },
+    {
+        "District Name":"Congressional District 4",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"737328",
+        "State FIPS Code":"45",
+        "District Number":"04"
+    },
+    {
+        "District Name":"Congressional District 5",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"733429",
+        "State FIPS Code":"45",
+        "District Number":"05"
+    },
+    {
+        "District Name":"Congressional District 6",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"732601",
+        "State FIPS Code":"45",
+        "District Number":"06"
+    },
+    {
+        "District Name":"Congressional District 7",
+        "Year":2022,
+        "Congress":118,
+        "Estimated Population":"738013",
+        "State FIPS Code":"45",
+        "District Number":"07"
+    }
+]
