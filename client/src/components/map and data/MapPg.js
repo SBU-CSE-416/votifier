@@ -6,7 +6,7 @@ import DataPg from './DataPg';
 import PlaceholderMessage from './PlaceHolderMessage';
 import "../../stylesheets/map and data/map.css";
 import "../../stylesheets/BackButton.css"
-
+import axios from 'axios';
 //initial state
 const initialState = {
   districtName: '',
@@ -184,6 +184,7 @@ export default function MapPg() {
   const defaultZoom = 4;
 
   //calls the fetch function with link 
+  /*
   useEffect(() => {
     fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
     fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
@@ -194,7 +195,60 @@ export default function MapPg() {
   console.log('GeojsonMaryland:', geojsonMaryland);
   console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
   console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
-  console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);
+  console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);*/
+
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //45 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/45");
+        setGeojsonSouthCarolina(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //24 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/24");
+        setGeojsonMaryland(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //45 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/24/districts");
+        setGeojsonMarylandCongress(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //24 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/45/districts");
+        setGeojsonSouthCarolinaCongress(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
 
   
   useEffect(() => {
