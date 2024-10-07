@@ -3,7 +3,7 @@
         "District Name":"Congressional District 1",
         "Year":2022,
         "Congress":118,
-        "Household Income":"307941",
+        "Estimated Population":"307941",
         "State":"24",
         "District Number":"01"
     },
@@ -11,7 +11,7 @@
         "District Name":"Congressional District 2",
         "Year":2022,
         "Congress":118,
-        "Household Income":"307296",
+        "Estimated Population":"307296",
         "State":"24",
         "District Number":"02"
     },
@@ -19,7 +19,7 @@
         "District Name":"Congressional District 3",
         "Year":2022,
         "Congress":118,
-        "Household Income":"292501",
+        "Estimated Population":"292501",
         "State":"24",
         "District Number":"03"
     },
@@ -27,7 +27,7 @@
         "District Name":"Congressional District 4",
         "Year":2022,
         "Congress":118,
-        "Household Income":"274361",
+        "Estimated Population":"274361",
         "State":"24",
         "District Number":"04"
     },
@@ -35,7 +35,7 @@
         "District Name":"Congressional District 5",
         "Year":2022,
         "Congress":118,
-        "Household Income":"289772",
+        "Estimated Population":"289772",
         "State":"24",
         "District Number":"05"
     },
@@ -43,7 +43,7 @@
         "District Name":"Congressional District 6",
         "Year":2022,
         "Congress":118,
-        "Household Income":"296431",
+        "Estimated Population":"296431",
         "State":"24",
         "District Number":"06"
     },
@@ -51,7 +51,7 @@
         "District Name":"Congressional District 7",
         "Year":2022,
         "Congress":118,
-        "Household Income":"322400",
+        "Estimated Population":"322400",
         "State":"24",
         "District Number":"07"
     },
@@ -59,7 +59,7 @@
         "District Name":"Congressional District 8",
         "Year":2022,
         "Congress":118,
-        "Household Income":"285282",
+        "Estimated Population":"285282",
         "State":"24",
         "District Number":"08"
     }
