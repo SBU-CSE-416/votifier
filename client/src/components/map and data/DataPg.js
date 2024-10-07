@@ -31,7 +31,7 @@ export default function DataPg({state}) {
                   className={`tab ${activeTab === "racial" ? "active" : ""}`}
                   onClick={() => setActiveTab("racial")}
                 >
-                  Racial Distribution
+                  Precinct Analysis
                 </div>
                 <div
                   className={`tab ${activeTab === "economic" ? "active" : ""}`}

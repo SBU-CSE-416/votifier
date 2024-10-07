@@ -11,6 +11,7 @@ export default function CreditPg() {
                 </div>
                 <h3 class="center">Votifier - Developed by Team Huskies</h3>
                 <ProfileRound></ProfileRound>
+                <h1 class="fix">Text</h1>
             </div>
             <div className="side-panel"></div>
         </div>
