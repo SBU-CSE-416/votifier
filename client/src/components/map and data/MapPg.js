@@ -6,7 +6,8 @@ import DataPg from './DataPg';
 import PlaceholderMessage from './PlaceHolderMessage';
 import "../../stylesheets/map and data/map.css";
 import "../../stylesheets/BackButton.css"
-
+import axios from 'axios';
+//initial state
 const initialState = {
   districtName: '',
   population: '0',
@@ -18,6 +19,7 @@ const initialState = {
   povertyRate: '0%',
 };
 
+//go back button
 function BackButtonControl({ resetView }) {
   const map = useMap();
 
@@ -25,6 +27,7 @@ function BackButtonControl({ resetView }) {
     const backButton = L.control({ position: 'topright' });
     const ensembleButton = L.control({ position: 'topright' });
 
+    //create the ensemble button
     ensembleButton.onAdd = () => {
       const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
       button.innerText = 'Compare with Ensemble Data';
@@ -39,6 +42,7 @@ function BackButtonControl({ resetView }) {
       return button;
     }
     
+    //create the back button
     backButton.onAdd = () => {
       const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
       button.innerText = 'Go Back';
@@ -51,14 +55,19 @@ function BackButtonControl({ resetView }) {
       button.style.height = "50px";
       button.title = 'Go back to default view';
 
+      //calls the reset map view function
       button.onclick = () => {
         resetView(map);
       };
       return button;
     };
+
+    //adds the buttons to the map
     backButton.addTo(map);
     ensembleButton.addTo(map);
+
     return () => {
+      //remove the button from the map or else the button will be created over and over again
       map.removeControl(backButton);
       map.removeControl(ensembleButton);
     };
@@ -67,9 +76,11 @@ function BackButtonControl({ resetView }) {
   return null;
 }
 
+//controls the feature
 function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, setHoverState, setState, featureType }) {
   const map = useMap();
 
+  //disables the moving function of map
   useEffect(() => {
     if (disableNavigation) {
       map.dragging.disable();
@@ -86,6 +97,7 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
     }
   }, [disableNavigation, map]);
 
+
   const geojsonStyle = {
     fillColor: featureType === 'district' ? '#FF5733' : '#3388ff', 
     weight: 2,
@@ -94,6 +106,7 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
     dashArray: '3',
     fillOpacity: 0.7,
   };
+
 
   const highlightFeature = (layer) => {
     layer.setStyle({
@@ -170,6 +183,8 @@ export default function MapPg() {
   const defaultView = [37.1, -95.7];
   const defaultZoom = 4;
 
+  //calls the fetch function with link 
+  /*
   useEffect(() => {
     fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
     fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
@@ -178,9 +193,64 @@ export default function MapPg() {
     
   }, []);
   console.log('GeojsonMaryland:', geojsonMaryland);
-    console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
+  console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
   console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
-    console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);
+  console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);*/
+
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //45 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/45");
+        setGeojsonSouthCarolina(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //24 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/24");
+        setGeojsonMaryland(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //45 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/24/districts");
+        setGeojsonMarylandCongress(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        //24 is state id for south carolina
+        const response = await axios.get("http://localhost:8000/45/districts");
+        setGeojsonSouthCarolinaCongress(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  
   useEffect(() => {
     console.log("State updated: ", state);
   }, [state]);
@@ -189,6 +259,7 @@ export default function MapPg() {
     console.log("Hover State updated: ", hoverState);
   }, [hoverState]);
 
+  //fetchs the data given the url
   const fetchGeojsonData = async (url, setState) => {
     try {
       const response = await fetch(url);
