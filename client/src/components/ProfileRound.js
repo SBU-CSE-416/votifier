@@ -52,24 +52,6 @@ export default function ProfileRound() {
             </div>
             <h1 className="centered-text-h1">Vitaliy Stusalitus</h1>
           </div>
-          <div className="card">
-            <div className="roundel-border">
-              <VscAccount size={250} style={{"margin":"4px"}}></VscAccount>
-              {/* <img
-                src="/jack.png"
-                alt="Jack Zhang"
-                style={{
-                  width: "250px",  // Same as the size of VscAccount
-                  height: "250px",
-                  borderRadius: "50%", // Makes the image circular
-                  objectFit: "cover", // Ensures the image covers the area without distortion
-                  margin: "4px"
-                }}
-                /> */}
-            </div>
-            <h1 className="centered-text-h1">Jack Zhang</h1>
-          </div>
-
         </div>
     );
 }

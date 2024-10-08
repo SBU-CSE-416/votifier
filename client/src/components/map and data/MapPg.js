@@ -203,6 +203,7 @@ export default function MapPg() {
       try {
         //45 is state id for south carolina
         const response = await axios.get("http://localhost:8000/45");
+        console.log("SC boundary data sent from server:", response.data);
         setGeojsonSouthCarolina(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -216,6 +217,7 @@ export default function MapPg() {
       try {
         //24 is state id for south carolina
         const response = await axios.get("http://localhost:8000/24");
+        console.log("MD boundary data sent from server:", response.data);
         setGeojsonMaryland(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -229,6 +231,7 @@ export default function MapPg() {
       try {
         //45 is state id for south carolina
         const response = await axios.get("http://localhost:8000/24/districts");
+        console.log("MD district boundary data sent from server:", response.data);
         setGeojsonMarylandCongress(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -242,6 +245,7 @@ export default function MapPg() {
       try {
         //24 is state id for south carolina
         const response = await axios.get("http://localhost:8000/45/districts");
+        console.log("SC district boundary data sent from server:", response.data);
         setGeojsonSouthCarolinaCongress(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -252,11 +256,11 @@ export default function MapPg() {
 
   
   useEffect(() => {
-    console.log("State updated: ", state);
+    //console.log("State updated: ", state);
   }, [state]);
 
   useEffect(() => {
-    console.log("Hover State updated: ", hoverState);
+    //console.log("Hover State updated: ", hoverState);
   }, [hoverState]);
 
   //fetchs the data given the url
@@ -264,10 +268,10 @@ export default function MapPg() {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      console.log("GeoJSON data loaded from: ", url, data);
+      //console.log("GeoJSON data loaded from: ", url, data);
       setState(data);
     } catch (error) {
-      console.error(`Error loading GeoJSON from ${url}:`, error);
+      //console.error(`Error loading GeoJSON from ${url}:`, error);
     }
   };
 
@@ -283,7 +287,7 @@ export default function MapPg() {
   const onFeatureClick = (feature) => {
     
     const properties = feature.properties;
-    console.log('Feature clicked:', feature.properties);
+    //console.log('Feature clicked:', feature.properties);
     let newState = { ...initialState };
 
     if (properties.name === 'Maryland') {
