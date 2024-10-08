@@ -202,15 +202,19 @@ export default function MapPg() {
     async function fetchData() {
       try {
         const response1 = await axios.get("http://localhost:8000/45");
+        console.log("SC boundary data from server:", response1.data);
         setGeojsonSouthCarolina(response1.data);
         
         const response2 = await axios.get("http://localhost:8000/24");
+        console.log("MD boundary data from server:", response2.data);
         setGeojsonMaryland(response2.data);
         
         const response3 = await axios.get("http://localhost:8000/24/districts");
+        console.log("SC districts boundary data from server:", response3.data);
         setGeojsonMarylandCongress(response3.data);
         
         const response4 = await axios.get("http://localhost:8000/45/districts");
+        console.log("MD districts boundary data from server:", response4.data);
         setGeojsonSouthCarolinaCongress(response4.data);
       } catch (error) {
         console.error('Error fetching data:', error);
