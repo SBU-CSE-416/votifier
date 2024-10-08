@@ -1,14 +1,15 @@
 const express = require('express');
 const cors = require("cors");
 const connectDB = require("./config/db");
-const mongoose = require("mongoose");
+const mapRouter = require("./routes/mapRoutes");
+//const mongoose = require("mongoose");
 const port = 8000;
 const corsOptions = {
     origin: 'http://localhost:3000', 
     credentials: true, 
   };
   
-connectDB();
+//connectDB();
 
 const app = express();
 app.use(cors(corsOptions));
@@ -22,11 +23,13 @@ app.use((req, res, next) => {
 const server = app.listen(port, () => console.log(`Server listening on port ${port}`));
 
 //to use static file outside client server
-app.use('/votifier', express.static(path.join(__dirname,'votifier')));
+//app.use('/votifier', express.static(path.join(__dirname,'votifier')));
 
 const path = require('path');
 // Serve static files from the "data" directory
-app.use('/data', express.static(path.join(__dirname, 'data')));
+//app.use('/data', express.static(path.join(__dirname, 'data')));
+
+app.use("/", mapRouter);
 
 // Start the server
 /*
