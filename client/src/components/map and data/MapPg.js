@@ -220,7 +220,7 @@ export default function MapPg() {
         console.error('Error fetching data:', error);
       }
     }
-    ;
+    fetchData();
   }, []);
 
   
