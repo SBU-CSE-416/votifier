@@ -201,62 +201,35 @@ export default function MapPg() {
   useEffect(() => {
     async function fetchData() {
       try {
-        //45 is state id for south carolina
-        const response = await axios.get("http://localhost:8000/45");
-        setGeojsonSouthCarolina(response.data);
+        const response1 = await axios.get("http://localhost:8000/45");
+        console.log("SC boundary data from server:", response1.data);
+        setGeojsonSouthCarolina(response1.data);
+        
+        const response2 = await axios.get("http://localhost:8000/24");
+        console.log("MD boundary data from server:", response2.data);
+        setGeojsonMaryland(response2.data);
+        
+        const response3 = await axios.get("http://localhost:8000/24/districts");
+        console.log("SC districts boundary data from server:", response3.data);
+        setGeojsonMarylandCongress(response3.data);
+        
+        const response4 = await axios.get("http://localhost:8000/45/districts");
+        console.log("MD districts boundary data from server:", response4.data);
+        setGeojsonSouthCarolinaCongress(response4.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        //24 is state id for south carolina
-        const response = await axios.get("http://localhost:8000/24");
-        setGeojsonMaryland(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        //45 is state id for south carolina
-        const response = await axios.get("http://localhost:8000/24/districts");
-        setGeojsonMarylandCongress(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        //24 is state id for south carolina
-        const response = await axios.get("http://localhost:8000/45/districts");
-        setGeojsonSouthCarolinaCongress(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-    fetchData();
+    ;
   }, []);
 
   
   useEffect(() => {
-    console.log("State updated: ", state);
+    //console.log("State updated: ", state);
   }, [state]);
 
   useEffect(() => {
-    console.log("Hover State updated: ", hoverState);
+    //console.log("Hover State updated: ", hoverState);
   }, [hoverState]);
 
   //fetchs the data given the url
@@ -264,10 +237,10 @@ export default function MapPg() {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      console.log("GeoJSON data loaded from: ", url, data);
+      //console.log("GeoJSON data loaded from: ", url, data);
       setState(data);
     } catch (error) {
-      console.error(`Error loading GeoJSON from ${url}:`, error);
+      //console.error(`Error loading GeoJSON from ${url}:`, error);
     }
   };
 
@@ -283,7 +256,7 @@ export default function MapPg() {
   const onFeatureClick = (feature) => {
     
     const properties = feature.properties;
-    console.log('Feature clicked:', feature.properties);
+    //console.log('Feature clicked:', feature.properties);
     let newState = { ...initialState };
 
     if (properties.name === 'Maryland') {
