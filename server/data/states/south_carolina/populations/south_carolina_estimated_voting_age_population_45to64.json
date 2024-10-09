@@ -1,8 +1,3 @@
-[
-    {
-        "State":"South Carolina",
-        "Year":2022,
-        "Estimated Voting Age Population 45-64":"1284978",
-        "State FIPS Code":"45"
-    }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:e7743aa33de4ca05ba357c94893926da13d416850ac69fc9d27d060c60d2add9
+size 160
