@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, GeoJSON, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import DataPg from './DataPg';
-import PlaceholderMessage from './PlaceHolderMessage';
+import React, { useEffect, useState } from "react";
+import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import DataPg from "./DataPg";
+import PlaceholderMessage from "./PlaceHolderMessage";
 import "../../stylesheets/map and data/map.css";
-import "../../stylesheets/BackButton.css"
-import axios from 'axios';
+import "../../stylesheets/BackButton.css";
+import axios from "axios";
 //initial state
 const initialState = {
-  districtName: '',
-  population: '0',
-  income: '0',
-  politicalLean: '0',
-  totalPrecinct: '0',
-  homeownershipRate: '0%',
-  unemploymentRate: '0%',
-  povertyRate: '0%',
+  districtName: "",
+  population: "0",
+  income: "0",
+  politicalLean: "0",
+  totalPrecinct: "0",
+  homeownershipRate: "0%",
+  unemploymentRate: "0%",
+  povertyRate: "0%",
 };
 
 //go back button
@@ -24,36 +24,42 @@ function BackButtonControl({ resetView }) {
   const map = useMap();
 
   useEffect(() => {
-    const backButton = L.control({ position: 'topright' });
-    const ensembleButton = L.control({ position: 'topright' });
+    const backButton = L.control({ position: "topright" });
+    const ensembleButton = L.control({ position: "topright" });
 
     //create the ensemble button
     ensembleButton.onAdd = () => {
-      const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
-      button.innerText = 'Compare with Ensemble Data';
+      const button = L.DomUtil.create(
+        "button",
+        "leaflet-bar leaflet-control leaflet-control-custom"
+      );
+      button.innerText = "Compare with Ensemble Data";
       button.style.fontSize = "15px";
-      button.style.backgroundColor = '#fff';
-      button.style.border = '2px solid #3388ff';
-      button.style.cursor = 'pointer';
-      button.style.padding = '8px';
+      button.style.backgroundColor = "#fff";
+      button.style.border = "2px solid #3388ff";
+      button.style.cursor = "pointer";
+      button.style.padding = "8px";
       button.style.width = "150px";
       button.style.height = "50px";
-      button.title = 'Go back to default view';
+      button.title = "Go back to default view";
       return button;
-    }
-    
+    };
+
     //create the back button
     backButton.onAdd = () => {
-      const button = L.DomUtil.create('button', 'leaflet-bar leaflet-control leaflet-control-custom');
-      button.innerText = 'Go Back';
+      const button = L.DomUtil.create(
+        "button",
+        "leaflet-bar leaflet-control leaflet-control-custom"
+      );
+      button.innerText = "Go Back";
       button.style.fontSize = "15px";
-      button.style.backgroundColor = '#fff';
-      button.style.border = '2px solid #3388ff';
-      button.style.cursor = 'pointer';
-      button.style.padding = '8px';
+      button.style.backgroundColor = "#fff";
+      button.style.border = "2px solid #3388ff";
+      button.style.cursor = "pointer";
+      button.style.padding = "8px";
       button.style.width = "150px";
       button.style.height = "50px";
-      button.title = 'Go back to default view';
+      button.title = "Go back to default view";
 
       //calls the reset map view function
       button.onclick = () => {
@@ -77,7 +83,14 @@ function BackButtonControl({ resetView }) {
 }
 
 //controls the feature
-function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, setHoverState, setState, featureType }) {
+function FeatureInteraction({
+  geojsonData,
+  onFeatureClick,
+  disableNavigation,
+  setHoverState,
+  setState,
+  featureType,
+}) {
   const map = useMap();
 
   //disables the moving function of map
@@ -97,22 +110,20 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
     }
   }, [disableNavigation, map]);
 
-
   const geojsonStyle = {
-    fillColor: featureType === 'district' ? '#FF5733' : '#3388ff', 
+    fillColor: featureType === "district" ? "#FF5733" : "#3388ff",
     weight: 2,
     opacity: 1,
-    color: 'white',
-    dashArray: '3',
+    color: "white",
+    dashArray: "3",
     fillOpacity: 0.7,
   };
-
 
   const highlightFeature = (layer) => {
     layer.setStyle({
       weight: 3,
-      color: '#000000',
-      dashArray: '',
+      color: "#000000",
+      dashArray: "",
       fillOpacity: 0.9,
     });
   };
@@ -138,28 +149,38 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
             const properties = feature.properties;
 
             layer.unbindTooltip();
-            layer.bindTooltip(`${properties.name || properties.NAMELSAD || "Congressional District " + properties.DISTRICT  }`, {
-              permanent: false,
-              direction: 'auto',
-              sticky: true,
-            });
+            layer.bindTooltip(
+              `${
+                properties.name ||
+                properties.NAMELSAD ||
+                "Congressional District " + properties.DISTRICT
+              }`,
+              {
+                permanent: false,
+                direction: "auto",
+                sticky: true,
+              }
+            );
 
-          
-            layer.on('mouseover', () => {
+            layer.on("mouseover", () => {
               highlightFeature(layer);
-              setHoverState({ districtName: `${properties.name || properties.NAMELSAD ||  "Congressional District " + properties.DISTRICT }` });
+              setHoverState({
+                districtName: `${
+                  properties.name ||
+                  properties.NAMELSAD ||
+                  "Congressional District " + properties.DISTRICT
+                }`,
+              });
               layer.openTooltip();
             });
 
-    
-            layer.on('mouseout', () => {
+            layer.on("mouseout", () => {
               resetHighlight(layer);
-              setHoverState({ districtName: '' }); 
+              setHoverState({ districtName: "" });
               layer.closeTooltip();
             });
 
-          
-            layer.on('click', () => handleFeatureClick(feature, layer));
+            layer.on("click", () => handleFeatureClick(feature, layer));
           }}
         />
       )}
@@ -167,23 +188,23 @@ function FeatureInteraction({ geojsonData, onFeatureClick, disableNavigation, se
   );
 }
 
-
 export default function MapPg() {
   const [state, setState] = useState(initialState);
-  const [hoverState, setHoverState] = useState({ districtName: '' });
+  const [hoverState, setHoverState] = useState({ districtName: "" });
   const [dataVisible, setDataVisible] = useState(false);
   const [showDistricts, setShowDistricts] = useState(false);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
   const [geojsonMarylandCongress, setGeojsonMarylandCongress] = useState(null);
-  const [geojsonSouthCarolinaCongress, setGeojsonSouthCarolinaCongress] = useState(null);
+  const [geojsonSouthCarolinaCongress, setGeojsonSouthCarolinaCongress] =
+    useState(null);
   const [disableNavigation, setDisableNavigation] = useState(false);
 
   const defaultView = [37.1, -95.7];
   const defaultZoom = 4;
 
-  //calls the fetch function with link 
+  //calls the fetch function with link
   /*
   useEffect(() => {
     fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
@@ -197,33 +218,32 @@ export default function MapPg() {
   console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
   console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);*/
 
-
   useEffect(() => {
     async function fetchData() {
       try {
         const response1 = await axios.get("http://localhost:8000/45");
         console.log("SC boundary data from server:", response1.data);
         setGeojsonSouthCarolina(response1.data);
-        
+
         const response2 = await axios.get("http://localhost:8000/24");
         console.log("MD boundary data from server:", response2.data);
         setGeojsonMaryland(response2.data);
-        
-        const response3 = await axios.get("http://localhost:8000/24/districts");
-        console.log("SC districts boundary data from server:", response3.data);
-        setGeojsonMarylandCongress(response3.data);
-        
-        const response4 = await axios.get("http://localhost:8000/45/districts");
-        console.log("MD districts boundary data from server:", response4.data);
-        setGeojsonSouthCarolinaCongress(response4.data);
+
+        //
+        // const response3 = await axios.get("http://localhost:8000/24/districts");
+        // console.log("SC districts boundary data from server:", response3.data);
+        // setGeojsonMarylandCongress(response3.data);
+
+        // const response4 = await axios.get("http://localhost:8000/45/districts");
+        // console.log("MD districts boundary data from server:", response4.data);
+        // setGeojsonSouthCarolinaCongress(response4.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     }
     fetchData();
   }, []);
 
-  
   useEffect(() => {
     //console.log("State updated: ", state);
   }, [state]);
@@ -246,44 +266,34 @@ export default function MapPg() {
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
-    setState(initialState); 
-    setHoverState({ districtName: '' });
+    setState(initialState);
+    setHoverState({ districtName: "" });
     setDataVisible(false);
     setDisableNavigation(false);
     setShowDistricts(false);
   };
 
+  const fetch_district_boundary = async (state_code) => {
+    const res = await axios.get(
+      `http://localhost:8000/${state_code}/districts`
+    );
+    return res;
+  };
+
   const onFeatureClick = (feature) => {
-    
     const properties = feature.properties;
     //console.log('Feature clicked:', feature.properties);
     let newState = { ...initialState };
 
-    if (properties.name === 'Maryland') {
-      newState = {
-        ...initialState,
-        districtName: 'Maryland',
-        population: '6.161 million',
-        income: '$94,991',
-        politicalLean: 'Democratic',
-        totalPrecinct: '1,990',
-        homeownershipRate: '68.7%',
-        unemploymentRate: '1.8%',
-        povertyRate: '8.6%',
-      };
+    if (properties.name === "Maryland") {
+      const response3 = fetch_district_boundary(24);
+      console.log("SC districts boundary data from server:", response3.data);
+      setGeojsonMarylandCongress(response3.data);
       setShowDistricts(true);
-    } else if (properties.name === 'South Carolina') {
-      newState = {
-        ...initialState,
-        districtName: 'South Carolina',
-        population: '5.142 million',
-        income: '$64,115',
-        politicalLean: 'Republican',
-        totalPrecinct: '1,297',
-        homeownershipRate: '69.5%',
-        unemploymentRate: '3.5%',
-        povertyRate: '13.2%',
-      };
+    } else if (properties.name === "South Carolina") {
+      const response4 = fetch_district_boundary(45);
+      console.log("MD districts boundary data from server:", response4.data);
+      setGeojsonSouthCarolinaCongress(response4.data);
       setShowDistricts(true);
     }
     setState(newState);
@@ -292,8 +302,12 @@ export default function MapPg() {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <MapContainer center={defaultView} zoom={defaultZoom} style={{ height: '95vh', width: '60vw' }}>
+    <div style={{ display: "flex" }}>
+      <MapContainer
+        center={defaultView}
+        zoom={defaultZoom}
+        style={{ height: "95vh", width: "60vw" }}
+      >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
           attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
