@@ -1,8 +1,3 @@
-[
-    {
-        "State":"Maryland",
-        "Year":2022,
-        "Estimated Population":"2282",
-        "State FIPS Code":"24"
-    }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:125837c696a4812b006ddb6fd843913583dceaf825dd03dcd2c7806a922bcf6f
+size 134
