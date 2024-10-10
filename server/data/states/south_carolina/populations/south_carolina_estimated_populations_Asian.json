@@ -1,8 +1,3 @@
-[
-    {
-        "State":"South Carolina",
-        "Year":2022,
-        "Estimated Population":"67346",
-        "State FIPS Code":"45"
-    }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:eaf63cc43471290da62601f326f13a10aa33dacbc01392406b0d34ae4abf4872
+size 141
