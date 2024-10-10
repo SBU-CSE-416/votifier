@@ -1,6 +1,5 @@
 package me.Votifier.server;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
