@@ -285,20 +285,20 @@ export default function MapPg() {
     
   };
 
-  const onFeatureClick = (feature) => {
+  const onFeatureClick = async (feature) => {
     const properties = feature.properties;
     console.log('Feature clicked:', feature.properties);
     let newState = { ...initialState };
 
     if (properties.name === "Maryland") {
-      const response3 = fetch_district_boundary(24);
-      console.log("SC districts boundary data from server:", response3.data);
-      setGeojsonMarylandCongress(response3.data);
+      const response = await fetch_district_boundary(24);
+      console.log("MD districts boundary data from server:", response.data);
+      setGeojsonMarylandCongress(response.data);
       setShowDistricts(true);
     } else if (properties.name === "South Carolina") {
-      const response4 = fetch_district_boundary(45);
-      console.log("MD districts boundary data from server:", response4.data);
-      setGeojsonSouthCarolinaCongress(response4.data);
+      const response = await fetch_district_boundary(45);
+      console.log("SC districts boundary data from server:", response.data);
+      setGeojsonSouthCarolinaCongress(response.data);
       setShowDistricts(true);
     }
     setState(newState);
