@@ -274,15 +274,20 @@ export default function MapPg() {
   };
 
   const fetch_district_boundary = async (state_code) => {
-    const res = await axios.get(
-      `http://localhost:8000/${state_code}/districts`
-    );
-    return res;
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/${state_code}/districts`
+      );
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    
   };
 
   const onFeatureClick = (feature) => {
     const properties = feature.properties;
-    //console.log('Feature clicked:', feature.properties);
+    console.log('Feature clicked:', feature.properties);
     let newState = { ...initialState };
 
     if (properties.name === "Maryland") {
