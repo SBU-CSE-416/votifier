@@ -19,9 +19,7 @@ public class MapController {
             24, "maryland",
             45, "south_carolina"
     );
-    // @RequestMapping(value = "/hello", method = RequestMethod.GET)
-    @RequestMapping(value = "/{stateid}", method = RequestMethod.GET)
-    // @GetMapping("")
+    @GetMapping("/{stateid}")
     public ResponseEntity<Resource> getState(@PathVariable("stateid") int stateId) {
         String stateName = stateIdToName.get(stateId);
         if (stateName == null) {
