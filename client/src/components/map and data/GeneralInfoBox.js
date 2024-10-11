@@ -10,37 +10,22 @@ const InfoBoxFrame = ({ title, value, subtitle }) => {
     </div>
   );
 };
-const GeneralInfoBox = ({state}) => {
-  console.log("Info State Data", state)
+
+const GeneralInfoBox = ({ state }) => {
+  // array of state boxes
+  const stateBoxes = Object.values(state);
+
   return (
     <div className="info-box-grid">
-      <InfoBoxFrame 
-        title={`Name`} 
-        value={state.districtName}
-      />
-      <InfoBoxFrame 
-        title="Total Population" 
-        value={state.population} 
-      />
-      <InfoBoxFrame 
-        title="Median Household Income" 
-        value={state.income} 
-      />
-      <InfoBoxFrame 
-        title="Homeownership Rate" 
-        value={state.homeownershipRate} 
-      />
-      <InfoBoxFrame 
-        title="Unemployment Rate" 
-        value={state.unemploymentRate} 
-      />
-      <InfoBoxFrame 
-        title="Poverty Rate" 
-        value={state.povertyRate} 
-      />
+      {stateBoxes.map((box, index) => (
+        <InfoBoxFrame 
+          key={index}
+          title={box.title} 
+          value={box.value} 
+        />
+      ))}
     </div>
   );
-  
 };
 
 export default GeneralInfoBox;
