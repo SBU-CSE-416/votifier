@@ -99,13 +99,10 @@ function FeatureInteraction({
   geojsonData,
   onFeatureClick,
   disableNavigation,
-  setHoverState,
-  setState,
   featureType,
 }) {
   const map = useMap();
 
-  //disables the moving function of map
   useEffect(() => {
     if (disableNavigation) {
       map.dragging.disable();
@@ -173,22 +170,18 @@ function FeatureInteraction({
                 sticky: true,
               }
             );
+          //   layer.bindPopup(
+          //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
+          //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
+          // );
 
             layer.on("mouseover", () => {
               highlightFeature(layer);
-              setHoverState({
-                districtName: `${
-                  properties.name ||
-                  properties.NAMELSAD ||
-                  "Congressional District " + properties.DISTRICT
-                }`,
-              });
               layer.openTooltip();
             });
 
             layer.on("mouseout", () => {
               resetHighlight(layer);
-              setHoverState({ districtName: "" });
               layer.closeTooltip();
             });
 
@@ -249,10 +242,6 @@ export default function MapPg() {
     
     fetchData();
   }, []);
-
-  useEffect(() => {
-    //console.log("State updated: ", state);
-  }, [state]);
 
   useEffect(() => {
   }, [hoverState]);
