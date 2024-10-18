@@ -7,27 +7,39 @@ import PlaceholderMessage from "./PlaceHolderMessage";
 import "../../stylesheets/map and data/map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
-//initial state
 const initialState = {
-  districtName: "",
-  population: "0",
-  income: "0",
-  politicalLean: "0",
-  totalPrecinct: "0",
-  homeownershipRate: "0%",
-  unemploymentRate: "0%",
-  povertyRate: "0%",
+  box1: {
+      title: "State Name",
+      value: ""
+  },
+  box2: {
+      title: "Population",
+      value: "0"
+  },
+  box3: {
+      title: "Median Household Income",
+      value: "0"
+  },
+  box4: {
+      title: "Political Lean",
+      value: "NaN"
+  },
+  box5: {
+      title: "Total Precinct",
+      value: "0"
+  },
+  box6: {
+      title: "Voting Population",
+      value: "0"
+  }
 };
 
-//go back button
 function BackButtonControl({ resetView }) {
   const map = useMap();
 
   useEffect(() => {
     const backButton = L.control({ position: "topright" });
     const ensembleButton = L.control({ position: "topright" });
-
-    //create the ensemble button
     ensembleButton.onAdd = () => {
       const button = L.DomUtil.create(
         "button",
@@ -87,13 +99,10 @@ function FeatureInteraction({
   geojsonData,
   onFeatureClick,
   disableNavigation,
-  setHoverState,
-  setState,
   featureType,
 }) {
   const map = useMap();
 
-  //disables the moving function of map
   useEffect(() => {
     if (disableNavigation) {
       map.dragging.disable();
@@ -161,22 +170,18 @@ function FeatureInteraction({
                 sticky: true,
               }
             );
+          //   layer.bindPopup(
+          //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
+          //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
+          // );
 
             layer.on("mouseover", () => {
               highlightFeature(layer);
-              setHoverState({
-                districtName: `${
-                  properties.name ||
-                  properties.NAMELSAD ||
-                  "Congressional District " + properties.DISTRICT
-                }`,
-              });
               layer.openTooltip();
             });
 
             layer.on("mouseout", () => {
               resetHighlight(layer);
-              setHoverState({ districtName: "" });
               layer.closeTooltip();
             });
 
@@ -222,47 +227,24 @@ export default function MapPg() {
     async function fetchData() {
       try {
         const response1 = await axios.get("http://localhost:8000/45");
-        console.log("SC boundary data from server:", response1.data);
+       
         setGeojsonSouthCarolina(response1.data);
+        console.log("SC boundary data from server:", response1.data);
 
         const response2 = await axios.get("http://localhost:8000/24");
-        console.log("MD boundary data from server:", response2.data);
+        
         setGeojsonMaryland(response2.data);
-
-        //
-        // const response3 = await axios.get("http://localhost:8000/24/districts");
-        // console.log("SC districts boundary data from server:", response3.data);
-        // setGeojsonMarylandCongress(response3.data);
-
-        // const response4 = await axios.get("http://localhost:8000/45/districts");
-        // console.log("MD districts boundary data from server:", response4.data);
-        // setGeojsonSouthCarolinaCongress(response4.data);
+        console.log("MD boundary data from server:", response2.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
+    
     fetchData();
   }, []);
 
   useEffect(() => {
-    //console.log("State updated: ", state);
-  }, [state]);
-
-  useEffect(() => {
-    //console.log("Hover State updated: ", hoverState);
   }, [hoverState]);
-
-  //fetchs the data given the url
-  const fetchGeojsonData = async (url, setState) => {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      //console.log("GeoJSON data loaded from: ", url, data);
-      setState(data);
-    } catch (error) {
-      //console.error(`Error loading GeoJSON from ${url}:`, error);
-    }
-  };
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
@@ -274,32 +256,54 @@ export default function MapPg() {
   };
 
   const fetch_district_boundary = async (state_code) => {
-    const res = await axios.get(
-      `http://localhost:8000/${state_code}/districts`
-    );
-    return res;
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/${state_code}/districts`
+      );
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    
   };
+  const fetch_state_deomographics = async (state_code) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/${state_code}/demographics`
+      );
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
-    //console.log('Feature clicked:', feature.properties);
-    let newState = { ...initialState };
-
+  
     if (properties.name === "Maryland") {
-      const response = await fetch_district_boundary(24);
-      console.log("MD districts boundary data from server:", response.data);
-      setGeojsonMarylandCongress(response.data);
+      const response3 = await fetch_district_boundary(24);
+      console.log("MD districts boundary data from server:", response3.data);
+      setGeojsonMarylandCongress(response3.data);
+  
+      const state_data = await fetch_state_deomographics(24);
+      console.log("Maryland demographics data:", state_data.data);
+      setState(state_data.data); 
       setShowDistricts(true);
     } else if (properties.name === "South Carolina") {
-      const response = await fetch_district_boundary(45);
-      console.log("SC districts boundary data from server:", response.data);
-      setGeojsonSouthCarolinaCongress(response.data);
+      const response4 = await fetch_district_boundary(45);
+      console.log("SC districts boundary data from server:", response4.data);
+      setGeojsonSouthCarolinaCongress(response4.data);
+  
+      const state_data = await fetch_state_deomographics(45);
+      console.log("South Carolina demographics data:", state_data.data);
+      setState(state_data.data);
       setShowDistricts(true);
     }
-    setState(newState);
+  
     setDataVisible(true);
     setDisableNavigation(true);
   };
+  
 
   return (
     <div style={{ display: "flex" }}>

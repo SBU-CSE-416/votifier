@@ -42,7 +42,7 @@ public class MapController {
     }
 
     @GetMapping("/{stateid}/districts")
-    public ResponseEntity<Resource> getDistrictsForState(@PathVariable("stateid") int stateId) {
+    public ResponseEntity<Resource> getDistricts(@PathVariable("stateid") int stateId) {
         String stateName = stateIdToName.get(stateId);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -63,7 +63,7 @@ public class MapController {
     }
 
     @GetMapping("/{stateid}/demographics")
-    public ResponseEntity<Resource> getState(@PathVariable("stateid") int stateId) {
+    public ResponseEntity<Resource> getDemographics(@PathVariable("stateid") int stateId) {
         String stateName = stateIdToName.get(stateId);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
