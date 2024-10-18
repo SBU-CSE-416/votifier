@@ -1,8 +1,3 @@
-[
-    {
-        "State":"Maryland",
-        "Year":2022,
-        "Estimated Voting Age Population 30-44":"1072818",
-        "State FIPS Code":"24"
-    }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:e1c7cfd57ca741f408bb67cbefbddca4ba4878f920f8e0765b703976947f8f57
+size 154

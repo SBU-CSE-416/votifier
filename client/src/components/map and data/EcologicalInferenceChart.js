@@ -30,7 +30,6 @@ const EcologicalInferenceChart = ({w,h, title}) => (
           <XAxis dataKey="demographic" label={{position: 'insideBottom', offset: -5 }} />
           <YAxis label={{ angle: -90, position: 'insideLeft', offset: -5 }} />
           <Tooltip />
-          <Legend />
           <Line type="monotone" dataKey="Indian" stroke="#82ca9d" strokeWidth={2} />
           <Line type="monotone" dataKey="East Asian" stroke="#8884d8" strokeWidth={2} />
           <Line type="monotone" dataKey="Non-Asian" stroke="#ffc658" strokeWidth={2} />

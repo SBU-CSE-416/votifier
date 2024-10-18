@@ -5,8 +5,8 @@ const PlaceholderMessage = () => {
   return (
     <div className="placeholder-container">
       <div>
-        <h2 style={{"font-size":"34px"}}>No details are available.</h2>
-        <p style={{"font-size":"20px"}}>Please click a highlighted state on the map to view its details.</p>
+        <h2 style={{"fontSize":"34px"}}>No details are available.</h2>
+        <p style={{"fontSize":"20px"}}>Please click a highlighted state on the map to view its details.</p>
       </div>
     </div>
   );
