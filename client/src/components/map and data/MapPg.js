@@ -209,20 +209,6 @@ export default function MapPg() {
   const defaultView = [37.1, -95.7];
   const defaultZoom = 4;
 
-  //calls the fetch function with link
-  /*
-  useEffect(() => {
-    fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
-    fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
-    fetchGeojsonData('/jack_mary_congress.geojson', setGeojsonMarylandCongress);
-    fetchGeojsonData('/jack_south_congress.geojson', setGeojsonSouthCarolinaCongress);
-    
-  }, []);
-  console.log('GeojsonMaryland:', geojsonMaryland);
-  console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
-  console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
-  console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);*/
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -242,18 +228,6 @@ export default function MapPg() {
     
     fetchData();
   }, []);
-
-  useEffect(() => {
-  }, [hoverState]);
-
-  const handleResetView = (map) => {
-    map.setView(defaultView, defaultZoom);
-    setState(initialState);
-    setHoverState({ districtName: "" });
-    setDataVisible(false);
-    setDisableNavigation(false);
-    setShowDistricts(false);
-  };
 
   const fetch_district_boundary = async (state_code) => {
     try{
@@ -276,7 +250,17 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   }
+  useEffect(() => {
+  }, [hoverState]);
 
+  const handleResetView = (map) => {
+    map.setView(defaultView, defaultZoom);
+    setState(initialState);
+    setHoverState({ districtName: "" });
+    setDataVisible(false);
+    setDisableNavigation(false);
+    setShowDistricts(false);
+  };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
   
