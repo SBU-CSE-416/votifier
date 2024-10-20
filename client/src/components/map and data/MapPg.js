@@ -310,7 +310,7 @@ export default function MapPg() {
       <MapContainer
         center={defaultView}
         zoom={defaultZoom}
-        style={{ height: "95vh", width: "60vw" }}
+        style={{ height: "95vh", width: "50vw" }}
       >
         <TileLayer
           url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
