@@ -9,7 +9,6 @@ import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({state}) {
     const [activeTab, setActiveTab] = useState("demographics");
-    // console.log("State Data: ", state);
     return(
         
     <div id="info" >
