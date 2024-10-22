@@ -135,6 +135,7 @@ function FeatureInteraction({
       dashArray: "",
       fillOpacity: 0.9,
     });
+    layer.bringToFront(); 
   };
 
   const resetHighlight = (layer) => {
