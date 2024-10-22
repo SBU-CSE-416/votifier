@@ -49,7 +49,7 @@ public class MapController {
         }
         try {
             // Retrieve JSON file
-            Path filePath = Paths.get("data/states/" + stateName + "/geodata/" + stateName + "_cds.geojson");
+            Path filePath = Paths.get("data/states/" + stateName + "/geodata/" + stateName + "_cd.geojson");
             Resource resource = new UrlResource(filePath.toUri());
             if (resource.exists()) {
                 return ResponseEntity.ok(resource);

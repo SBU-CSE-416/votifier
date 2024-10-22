@@ -161,7 +161,7 @@ function FeatureInteraction({
             layer.bindTooltip(
               `${
                 properties.name ||
-                properties.NAMELSAD ||
+                properties.NAME ||
                 "Congressional District " + properties.DISTRICT
               }`,
               {
@@ -229,20 +229,8 @@ export default function MapPg() {
     fetchData();
   }, []);
 
-<<<<<<< HEAD
-=======
   useEffect(() => {}, [hoverState]);
 
-  const handleResetView = (map) => {
-    map.setView(defaultView, defaultZoom);
-    setState(initialState);
-    setHoverState({ districtName: "" });
-    setDataVisible(false);
-    setDisableNavigation(false);
-    setShowDistricts(false);
-  };
-
->>>>>>> 59b794211bb1cb215b6e108294019ef260bad2d7
   const fetch_district_boundary = async (state_code) => {
     try {
       const res = await axios.get(
@@ -262,13 +250,7 @@ export default function MapPg() {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-<<<<<<< HEAD
-  }
-  useEffect(() => {
-  }, [hoverState]);
-=======
   };
->>>>>>> 59b794211bb1cb215b6e108294019ef260bad2d7
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
