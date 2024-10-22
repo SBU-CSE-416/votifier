@@ -263,7 +263,7 @@ export default function MapPg() {
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
 
-    if (properties.name === "Maryland") {
+    if (properties.NAME === "Maryland") {
       const response3 = await fetch_district_boundary(24);
       console.log("MD districts boundary data from server:", response3.data);
       setGeojsonMarylandCongress(response3.data);
@@ -272,7 +272,7 @@ export default function MapPg() {
       console.log("Maryland demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
-    } else if (properties.name === "South Carolina") {
+    } else if (properties.NAME === "South Carolina") {
       const response4 = await fetch_district_boundary(45);
       console.log("SC districts boundary data from server:", response4.data);
       setGeojsonSouthCarolinaCongress(response4.data);
