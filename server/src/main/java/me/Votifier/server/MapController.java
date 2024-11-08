@@ -5,11 +5,11 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/")
@@ -82,4 +82,25 @@ public class MapController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @GetMapping("/{stateid}/precincts")
+public ResponseEntity<Resource> getPrecincts(@PathVariable("stateid") int stateId) {
+    String stateName = stateIdToName.get(stateId);
+        if (stateName == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        try {
+            // Retrieve JSON file
+            Path filePath = Paths.get("data/states/" + stateName + "/geodata/" + stateName + "_precincts.geojson");
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return ResponseEntity.ok(resource);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } 
+        catch (MalformedURLException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+}
+
 }
