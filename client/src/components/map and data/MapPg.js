@@ -9,29 +9,29 @@ import "../../stylesheets/BackButton.css";
 import axios from "axios";
 const initialState = {
   box1: {
-      title: "State Name",
-      value: ""
+    title: "State Name",
+    value: "",
   },
   box2: {
-      title: "Population",
-      value: "0"
+    title: "Population",
+    value: "0",
   },
   box3: {
-      title: "Median Household Income",
-      value: "0"
+    title: "Median Household Income",
+    value: "0",
   },
   box4: {
-      title: "Political Lean",
-      value: "NaN"
+    title: "Political Lean",
+    value: "NaN",
   },
   box5: {
-      title: "Total Precinct",
-      value: "0"
+    title: "Total Precinct",
+    value: "0",
   },
   box6: {
-      title: "Voting Population",
-      value: "0"
-  }
+    title: "Voting Population",
+    value: "0",
+  },
 };
 
 function BackButtonControl({ resetView }) {
@@ -135,6 +135,7 @@ function FeatureInteraction({
       dashArray: "",
       fillOpacity: 0.9,
     });
+    layer.bringToFront(); 
   };
 
   const resetHighlight = (layer) => {
@@ -161,7 +162,7 @@ function FeatureInteraction({
             layer.bindTooltip(
               `${
                 properties.name ||
-                properties.NAMELSAD ||
+                properties.NAME ||
                 "Congressional District " + properties.DISTRICT
               }`,
               {
@@ -170,10 +171,10 @@ function FeatureInteraction({
                 sticky: true,
               }
             );
-          //   layer.bindPopup(
-          //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
-          //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
-          // );
+            //   layer.bindPopup(
+            //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
+            //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
+            // );
 
             layer.on("mouseover", () => {
               highlightFeature(layer);
@@ -209,42 +210,48 @@ export default function MapPg() {
   const defaultView = [37.1, -95.7];
   const defaultZoom = 4;
 
-  //calls the fetch function with link
-  /*
-  useEffect(() => {
-    fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
-    fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
-    fetchGeojsonData('/jack_mary_congress.geojson', setGeojsonMarylandCongress);
-    fetchGeojsonData('/jack_south_congress.geojson', setGeojsonSouthCarolinaCongress);
-    
-  }, []);
-  console.log('GeojsonMaryland:', geojsonMaryland);
-  console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
-  console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
-  console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);*/
-
   useEffect(() => {
     async function fetchData() {
       try {
         const response1 = await axios.get("http://localhost:8000/45");
-       
+
         setGeojsonSouthCarolina(response1.data);
         console.log("SC boundary data from server:", response1.data);
 
         const response2 = await axios.get("http://localhost:8000/24");
-        
+
         setGeojsonMaryland(response2.data);
         console.log("MD boundary data from server:", response2.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    
+
     fetchData();
   }, []);
 
-  useEffect(() => {
-  }, [hoverState]);
+  useEffect(() => {}, [hoverState]);
+
+  const fetch_district_boundary = async (state_code) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/${state_code}/districts`
+      );
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const fetch_state_deomographics = async (state_code) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/${state_code}/demographics`
+      );
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
@@ -254,62 +261,39 @@ export default function MapPg() {
     setDisableNavigation(false);
     setShowDistricts(false);
   };
-
-  const fetch_district_boundary = async (state_code) => {
-    try{
-      const res = await axios.get(
-        `http://localhost:8000/${state_code}/districts`
-      );
-      return res;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-    
-  };
-  const fetch_state_deomographics = async (state_code) => {
-    try{
-      const res = await axios.get(
-        `http://localhost:8000/${state_code}/demographics`
-      );
-      return res;
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
-  
-    if (properties.name === "Maryland") {
+
+    if (properties.NAME === "Maryland") {
       const response3 = await fetch_district_boundary(24);
       console.log("MD districts boundary data from server:", response3.data);
       setGeojsonMarylandCongress(response3.data);
-  
+
       const state_data = await fetch_state_deomographics(24);
       console.log("Maryland demographics data:", state_data.data);
-      setState(state_data.data); 
+      setState(state_data.data);
       setShowDistricts(true);
-    } else if (properties.name === "South Carolina") {
+    } else if (properties.NAME === "South Carolina") {
       const response4 = await fetch_district_boundary(45);
       console.log("SC districts boundary data from server:", response4.data);
       setGeojsonSouthCarolinaCongress(response4.data);
-  
+
       const state_data = await fetch_state_deomographics(45);
       console.log("South Carolina demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
     }
-  
+
     setDataVisible(true);
     setDisableNavigation(true);
   };
-  
 
   return (
     <div style={{ display: "flex" }}>
       <MapContainer
         center={defaultView}
         zoom={defaultZoom}
+        zoomControl={false}
         style={{ height: "95vh", width: "50vw" }}
       >
         <TileLayer
