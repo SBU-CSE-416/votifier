@@ -254,20 +254,20 @@ export default function MapPg() {
     setShowDistricts(false);
   };
 
-  const fetch_district_boundary = async (state_code) => {
+  const fetch_district_boundary = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${state_code}/districts`
+        `http://localhost:8000/${fips_code}/districts`
       );
       return res;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_state_demographics = async (state_code) => {
+  const fetch_state_demographics = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${state_code}/demographics`
+        `http://localhost:8000/${fips_code}/demographics`
       );
       return res;
     } catch (error) {
