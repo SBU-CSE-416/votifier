@@ -307,7 +307,7 @@ export default function MapPg() {
       <MapContainer
         center={defaultView}
         zoom={defaultZoom}
-        zoomControl={false}
+        zoomControl={false} //Removes + - Zoom btns in top left
         style={{ height: "95vh", width: "50vw" }}
       >
         <TileLayer
