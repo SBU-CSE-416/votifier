@@ -1,14 +1,14 @@
 const path = require("path");
 
-const stateIdToName = {
+const fipsCodeToName = {
   24: "maryland",
   45: "south_carolina",
 };
 
 function getState(req, res) {
-  const stateId = req.params.stateid;
+  const fips_code = req.params.fips_code;
   try {
-    const stateName = stateIdToName[stateId];
+    const stateName = fipsCodeToName[fips_code];
     const filePath = `../data/states/${stateName}/geodata/${stateName}_state.geojson`;
     newPath = path.join(__dirname, filePath);
 
