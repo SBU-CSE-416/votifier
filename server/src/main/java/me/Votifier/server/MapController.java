@@ -82,9 +82,9 @@ public class MapController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/{stateid}/precincts")
-public ResponseEntity<Resource> getPrecincts(@PathVariable("stateid") int stateId) {
-    String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fips_code}/precincts")
+public ResponseEntity<Resource> getPrecincts(@PathVariable("fips_code") int fips_code) {
+    String stateName = fipsCodeToName.get(fips_code);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
