@@ -20,9 +20,9 @@ public class MapController {
             45, "south_carolina"
     );
 
-    @GetMapping("/{fips_code}")
-    public ResponseEntity<Resource> getState(@PathVariable("fips_code") int fips_code) {
-        String stateName = fipsCodeToName.get(fips_code);
+    @GetMapping("/{fipsCode}")
+    public ResponseEntity<Resource> getState(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -41,9 +41,9 @@ public class MapController {
         }
     }
 
-    @GetMapping("/{fips_code}/districts")
-    public ResponseEntity<Resource> getDistricts(@PathVariable("fips_code") int fips_code) {
-        String stateName = fipsCodeToName.get(fips_code);
+    @GetMapping("/{fipsCode}/districts")
+    public ResponseEntity<Resource> getDistricts(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -62,9 +62,9 @@ public class MapController {
         }
     }
 
-    @GetMapping("/{fips_code}/demographics")
-    public ResponseEntity<Resource> getDemographics(@PathVariable("fips_code") int fips_code) {
-        String stateName = fipsCodeToName.get(fips_code);
+    @GetMapping("/{fipsCode}/demographics")
+    public ResponseEntity<Resource> getDemographics(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -82,9 +82,9 @@ public class MapController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/{fips_code}/precincts")
-public ResponseEntity<Resource> getPrecincts(@PathVariable("fips_code") int fips_code) {
-    String stateName = fipsCodeToName.get(fips_code);
+    @GetMapping("/{fipsCode}/precincts")
+public ResponseEntity<Resource> getPrecincts(@PathVariable("fipsCode") int fipsCode) {
+    String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
