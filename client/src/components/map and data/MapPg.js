@@ -135,7 +135,7 @@ function FeatureInteraction({
       dashArray: "",
       fillOpacity: 0.9,
     });
-    layer.bringToFront(); 
+    layer.bringToFront();
   };
 
   const resetHighlight = (layer) => {
@@ -232,20 +232,20 @@ export default function MapPg() {
 
   useEffect(() => {}, [hoverState]);
 
-  const fetch_district_boundary = async (state_code) => {
+  const fetch_district_boundary = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${state_code}/districts`
+        `http://localhost:8000/${fips_code}/districts`
       );
       return res;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_state_deomographics = async (state_code) => {
+  const fetch_state_demographics = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${state_code}/demographics`
+        `http://localhost:8000/${fips_code}/demographics`
       );
       return res;
     } catch (error) {
@@ -269,7 +269,7 @@ export default function MapPg() {
       console.log("MD districts boundary data from server:", response3.data);
       setGeojsonMarylandCongress(response3.data);
 
-      const state_data = await fetch_state_deomographics(24);
+      const state_data = await fetch_state_demographics(24);
       console.log("Maryland demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
@@ -278,7 +278,7 @@ export default function MapPg() {
       console.log("SC districts boundary data from server:", response4.data);
       setGeojsonSouthCarolinaCongress(response4.data);
 
-      const state_data = await fetch_state_deomographics(45);
+      const state_data = await fetch_state_demographics(45);
       console.log("South Carolina demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
@@ -293,7 +293,7 @@ export default function MapPg() {
       <MapContainer
         center={defaultView}
         zoom={defaultZoom}
-        zoomControl={false}
+        zoomControl={false} //Removes + - Zoom btns in top left
         style={{ height: "95vh", width: "50vw" }}
       >
         <TileLayer

@@ -15,14 +15,14 @@ import java.util.Map;
 @RequestMapping("/")
 public class MapController {
 
-    private static final Map<Integer, String> stateIdToName = Map.of(
+    private static final Map<Integer, String> fipsCodeToName = Map.of(
             24, "maryland",
             45, "south_carolina"
     );
 
-    @GetMapping("/{stateid}")
-    public ResponseEntity<Resource> getState(@PathVariable("stateid") int stateId) {
-        String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fips_code}")
+    public ResponseEntity<Resource> getState(@PathVariable("fips_code") int fips_code) {
+        String stateName = fipsCodeToName.get(fips_code);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -41,9 +41,9 @@ public class MapController {
         }
     }
 
-    @GetMapping("/{stateid}/districts")
-    public ResponseEntity<Resource> getDistricts(@PathVariable("stateid") int stateId) {
-        String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fips_code}/districts")
+    public ResponseEntity<Resource> getDistricts(@PathVariable("fips_code") int fips_code) {
+        String stateName = fipsCodeToName.get(fips_code);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -62,9 +62,9 @@ public class MapController {
         }
     }
 
-    @GetMapping("/{stateid}/demographics")
-    public ResponseEntity<Resource> getDemographics(@PathVariable("stateid") int stateId) {
-        String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fips_code}/demographics")
+    public ResponseEntity<Resource> getDemographics(@PathVariable("fips_code") int fips_code) {
+        String stateName = fipsCodeToName.get(fips_code);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
