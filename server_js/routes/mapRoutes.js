@@ -1,10 +1,10 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const { getState, getDistricts } = require('../controllers/mapController');
+const { getState, getDistricts } = require("../controllers/mapController");
 
-router.get('/:stateid/', getState)
+router.get("/:fips_code/", getState);
 
-router.get('/:stateid/districts', getDistricts)
+router.get("/:fips_code/districts", getDistricts);
 
-module.exports = router
+module.exports = router;
