@@ -135,6 +135,7 @@ function FeatureInteraction({
       dashArray: "",
       fillOpacity: 0.9,
     });
+    layer.bringToFront();
   };
 
   const resetHighlight = (layer) => {
@@ -161,7 +162,7 @@ function FeatureInteraction({
             layer.bindTooltip(
               `${
                 properties.name ||
-                properties.NAMELSAD ||
+                properties.NAME ||
                 "Congressional District " + properties.DISTRICT
               }`,
               {
@@ -209,20 +210,6 @@ export default function MapPg() {
   const defaultView = [37.1, -95.7];
   const defaultZoom = 4;
 
-  //calls the fetch function with link
-  /*
-  useEffect(() => {
-    fetchGeojsonData('/jack_mary_state.geojson', setGeojsonMaryland);
-    fetchGeojsonData('/jack_south_state.geojson', setGeojsonSouthCarolina);
-    fetchGeojsonData('/jack_mary_congress.geojson', setGeojsonMarylandCongress);
-    fetchGeojsonData('/jack_south_congress.geojson', setGeojsonSouthCarolinaCongress);
-    
-  }, []);
-  console.log('GeojsonMaryland:', geojsonMaryland);
-  console.log('GeojsonSouthCarolina:', geojsonSouthCarolina);
-  console.log('GeojsonSouthCarolinaCongress:', geojsonSouthCarolinaCongress);
-  console.log('GeojsonMarylandCongress:', geojsonMarylandCongress);*/
-
   useEffect(() => {
     async function fetchData() {
       try {
@@ -245,15 +232,6 @@ export default function MapPg() {
 
   useEffect(() => {}, [hoverState]);
 
-  const handleResetView = (map) => {
-    map.setView(defaultView, defaultZoom);
-    setState(initialState);
-    setHoverState({ districtName: "" });
-    setDataVisible(false);
-    setDisableNavigation(false);
-    setShowDistricts(false);
-  };
-
   const fetch_district_boundary = async (fips_code) => {
     try {
       const res = await axios.get(
@@ -275,10 +253,18 @@ export default function MapPg() {
     }
   };
 
+  const handleResetView = (map) => {
+    map.setView(defaultView, defaultZoom);
+    setState(initialState);
+    setHoverState({ districtName: "" });
+    setDataVisible(false);
+    setDisableNavigation(false);
+    setShowDistricts(false);
+  };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
 
-    if (properties.name === "Maryland") {
+    if (properties.NAME === "Maryland") {
       const response3 = await fetch_district_boundary(24);
       console.log("MD districts boundary data from server:", response3.data);
       setGeojsonMarylandCongress(response3.data);
@@ -287,7 +273,7 @@ export default function MapPg() {
       console.log("Maryland demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
-    } else if (properties.name === "South Carolina") {
+    } else if (properties.NAME === "South Carolina") {
       const response4 = await fetch_district_boundary(45);
       console.log("SC districts boundary data from server:", response4.data);
       setGeojsonSouthCarolinaCongress(response4.data);
