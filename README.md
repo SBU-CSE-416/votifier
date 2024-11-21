@@ -14,5 +14,7 @@ SERVER SIDE
 - (note for Kaitlyn, the above cmd works in powershell, not git bash for laptop)
 
 -----
-###Languages & Tools used on the Project
-React, Java, Python
+### Languages & Tools used on the Project
+Client: React, Leaflet, Axios, Recharts,
+Server: Java, MongoDB, 
+Proprocessing: Python (Pandas, GeoPandas
