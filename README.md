@@ -12,3 +12,7 @@ CLIENT SIDE
 SERVER SIDE
 - cd into the server, run the cmd `./mvnw spring-boot:run`
 - (note for Kaitlyn, the above cmd works in powershell, not git bash for laptop)
+
+-----
+###Languages & Tools used on the Project
+React, Java, Python
