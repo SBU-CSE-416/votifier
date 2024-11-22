@@ -7,6 +7,7 @@ import PlaceholderMessage from "./PlaceHolderMessage";
 import "../../stylesheets/map and data/map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
+import LeftSideMenu from "./LeftSideMenu";
 const initialState = {
   box1: {
     title: "State Name",
@@ -290,62 +291,75 @@ export default function MapPg() {
 
   return (
     <div style={{ display: "flex" }}>
-      <MapContainer
-        center={defaultView}
-        zoom={defaultZoom}
-        zoomControl={false} //Removes + - Zoom btns in top left
-        style={{ height: "95vh", width: "50vw" }}
+      {<LeftSideMenu dataVisible={dataVisible} />}
+      
+      <div
+        style={{
+          position: "relative",
+          width: dataVisible ? '40vw' : '90vw',
+        }}
       >
-        <TileLayer
-          url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
-          attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
-        />
+        <MapContainer
+          center={defaultView}
+          zoom={defaultZoom}
+          zoomControl={false} //Removes + - Zoom btns in top left
+          style={{
+            height: "95vh", 
+            width: "100%",
+            transition: "width 0.3s ease",
+          }}
+        >
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
+            attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
+          />
 
-        {/* State Boundaries */}
-        <FeatureInteraction
-          geojsonData={geojsonMaryland}
-          onFeatureClick={onFeatureClick}
-          disableNavigation={disableNavigation}
-          setHoverState={setHoverState}
-          setState={setState}
-          featureType="state"
-        />
-
-        <FeatureInteraction
-          geojsonData={geojsonSouthCarolina}
-          onFeatureClick={onFeatureClick}
-          disableNavigation={disableNavigation}
-          setHoverState={setHoverState}
-          setState={setState}
-          featureType="state"
-        />
-
-        {showDistricts && geojsonMarylandCongress && (
+          {/* State Boundaries */}
           <FeatureInteraction
-            geojsonData={geojsonMarylandCongress}
+            geojsonData={geojsonMaryland}
             onFeatureClick={onFeatureClick}
             disableNavigation={disableNavigation}
             setHoverState={setHoverState}
             setState={setState}
-            featureType="district"
+            featureType="state"
           />
-        )}
 
-        {showDistricts && geojsonSouthCarolinaCongress && (
           <FeatureInteraction
-            geojsonData={geojsonSouthCarolinaCongress}
+            geojsonData={geojsonSouthCarolina}
             onFeatureClick={onFeatureClick}
             disableNavigation={disableNavigation}
             setHoverState={setHoverState}
             setState={setState}
-            featureType="district"
+            featureType="state"
           />
-        )}
 
-        <BackButtonControl resetView={handleResetView} />
-      </MapContainer>
+          {showDistricts && geojsonMarylandCongress && (
+            <FeatureInteraction
+              geojsonData={geojsonMarylandCongress}
+              onFeatureClick={onFeatureClick}
+              disableNavigation={disableNavigation}
+              setHoverState={setHoverState}
+              setState={setState}
+              featureType="district"
+            />
+          )}
 
-      {dataVisible ? <DataPg state={state} /> : <PlaceholderMessage />}
+          {showDistricts && geojsonSouthCarolinaCongress && (
+            <FeatureInteraction
+              geojsonData={geojsonSouthCarolinaCongress}
+              onFeatureClick={onFeatureClick}
+              disableNavigation={disableNavigation}
+              setHoverState={setHoverState}
+              setState={setState}
+              featureType="district"
+            />
+          )}
+
+          <BackButtonControl resetView={handleResetView} />
+        </MapContainer>
+      </div>
+
+      {dataVisible && <DataPg state={state} />}
     </div>
   );
 }
