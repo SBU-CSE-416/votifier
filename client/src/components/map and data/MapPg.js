@@ -3,7 +3,6 @@ import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import DataPg from "./DataPg";
-import PlaceholderMessage from "./PlaceHolderMessage";
 import "../../stylesheets/map and data/map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
@@ -200,12 +199,18 @@ export default function MapPg() {
   const [hoverState, setHoverState] = useState({ districtName: "" });
   const [dataVisible, setDataVisible] = useState(false);
   const [showDistricts, setShowDistricts] = useState(false);
+  const [showPrecincts, setShowPrecincts] = useState(false);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
   const [geojsonMarylandCongress, setGeojsonMarylandCongress] = useState(null);
   const [geojsonSouthCarolinaCongress, setGeojsonSouthCarolinaCongress] =
     useState(null);
+
+  const [geojsonMarylandPrecinct, setGeojsonMarylandPrecinct] = useState(null);
+  const [geojsonSouthCarolinaPrecinct, setGeojsonSouthCarolinaPrecinct] =
+    useState(null);
+
   const [disableNavigation, setDisableNavigation] = useState(false);
 
   const defaultView = [37.1, -95.7];
@@ -292,11 +297,11 @@ export default function MapPg() {
   return (
     <div style={{ display: "flex" }}>
       {<LeftSideMenu dataVisible={dataVisible} />}
-      
+
       <div
         style={{
           position: "relative",
-          width: dataVisible ? '40vw' : '90vw',
+          width: dataVisible ? "40vw" : "90vw",
         }}
       >
         <MapContainer
@@ -304,7 +309,7 @@ export default function MapPg() {
           zoom={defaultZoom}
           zoomControl={false} //Removes + - Zoom btns in top left
           style={{
-            height: "95vh", 
+            height: "95vh",
             width: "100%",
             transition: "width 0.3s ease",
           }}
