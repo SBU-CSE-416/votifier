@@ -242,7 +242,7 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_state_deomographics = async (state_code) => {
+  const fetch_state_demographics = async (state_code) => {
     try {
       const res = await axios.get(
         `http://localhost:8000/${state_code}/demographics`
@@ -269,7 +269,7 @@ export default function MapPg() {
       console.log("MD districts boundary data from server:", response3.data);
       setGeojsonMarylandCongress(response3.data);
 
-      const state_data = await fetch_state_deomographics(24);
+      const state_data = await fetch_state_demographics(24);
       console.log("Maryland demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
@@ -278,7 +278,7 @@ export default function MapPg() {
       console.log("SC districts boundary data from server:", response4.data);
       setGeojsonSouthCarolinaCongress(response4.data);
 
-      const state_data = await fetch_state_deomographics(45);
+      const state_data = await fetch_state_demographics(45);
       console.log("South Carolina demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
