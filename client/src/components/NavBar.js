@@ -22,13 +22,12 @@ export default function NavBar(props) {
         <div className='nav-container'>
             <header className='navbar'>
                 <div style={{display:"flex", alignItems:"center"}}>
-                    <img id="sbu-logo-img" src="/sbu_round_logo.png" onClick={goHome} alt="sbu logo"></img>
-                    <p id='home-btn' className='text-btn' onClick={goHome}>Votifier</p>
+                    <img id="sbu-logo-img" src="/sbu_round_logo.png" alt="sbu logo"></img>
+                    <p id='home-btn' className='text-btn' >Votifier</p>
                 </div>
                 <div style={{display:"flex", justifyContent:"flex-end"}}>
                     <p id="map-btn" className='text-btn' onClick={toMap}>Map</p>
-                    {/* <p id="data-btn" className='text-btn' onClick={toData}>Data</p> */}
-                    <p id="credits-btn" className='text-btn' onClick={toCredits}>Credits</p>
+                    {/* <p id="credits-btn" className='text-btn' onClick={toCredits}>Credits</p> */}
                 </div>
             </header>
         </div>
