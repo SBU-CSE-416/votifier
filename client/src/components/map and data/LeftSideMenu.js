@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "../../stylesheets/map and data/leftSideMenu.css";
 
-export default function LeftSideMenu(){
+export default function LeftSideMenu(props){
+    let dataVisible = props.dataVisible;
     const [ isStatesOpen, setStatesOpen ] = useState(false);
     const [ selectedStates, setSelectedStates] = useState({
         maryland: false,
@@ -22,6 +23,8 @@ export default function LeftSideMenu(){
     return (
         <div className="side-nav-container">
             {/* States Dropdown Menu*/}
+            { dataVisible ? 
+            (
             <div>
                 <p onClick={toggleStateDropdown} className="dropdown-title">{ isStatesOpen ? "v States" : ">States"}</p>
                 {isStatesOpen && (
@@ -47,7 +50,12 @@ export default function LeftSideMenu(){
                     </div>
                 )}
             </div>
-
+            ) : (
+                <div>
+                    <p>Select a state on the map.</p>
+                </div>
+            )
+            }
         </div>
     );
 }

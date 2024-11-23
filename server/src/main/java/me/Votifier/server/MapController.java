@@ -15,14 +15,14 @@ import java.util.Map;
 @RequestMapping("/")
 public class MapController {
 
-    private static final Map<Integer, String> stateIdToName = Map.of(
+    private static final Map<Integer, String> fipsCodeToName = Map.of(
             24, "maryland",
             45, "south_carolina"
     );
 
-    @GetMapping("/{stateid}")
-    public ResponseEntity<Resource> getState(@PathVariable("stateid") int stateId) {
-        String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fipsCode}")
+    public ResponseEntity<Resource> getState(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -41,9 +41,9 @@ public class MapController {
         }
     }
 
-    @GetMapping("/{stateid}/districts")
-    public ResponseEntity<Resource> getDistricts(@PathVariable("stateid") int stateId) {
-        String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fipsCode}/districts")
+    public ResponseEntity<Resource> getDistricts(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -62,9 +62,9 @@ public class MapController {
         }
     }
 
-    @GetMapping("/{stateid}/demographics")
-    public ResponseEntity<Resource> getDemographics(@PathVariable("stateid") int stateId) {
-        String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fipsCode}/demographics")
+    public ResponseEntity<Resource> getDemographics(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -82,9 +82,9 @@ public class MapController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @GetMapping("/{stateid}/precincts")
-public ResponseEntity<Resource> getPrecincts(@PathVariable("stateid") int stateId) {
-    String stateName = stateIdToName.get(stateId);
+    @GetMapping("/{fipsCode}/precincts")
+public ResponseEntity<Resource> getPrecincts(@PathVariable("fipsCode") int fipsCode) {
+    String stateName = fipsCodeToName.get(fipsCode);
         if (stateName == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
