@@ -1,5 +1,6 @@
 package me.Votifier.server;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class MapController {
             24, "maryland",
             45, "south_carolina"
     );
-
+    @Cacheable(value = "states", key = "#fipsCode")
     @GetMapping("/{fipsCode}")
     public ResponseEntity<Resource> getState(@PathVariable("fipsCode") int fipsCode) {
         String stateName = fipsCodeToName.get(fipsCode);
