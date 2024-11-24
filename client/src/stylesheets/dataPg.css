@@ -1,8 +1,9 @@
 .datapg-container {
-  width: 50vw;
+  /* width: 50vw; */
   position: absolute;
   right: 0;
   /* border-left: #000000 1px solid; */
+  border-left: #000000 2px solid;
 }
 .data-charts-container {
   height: 60vh;
