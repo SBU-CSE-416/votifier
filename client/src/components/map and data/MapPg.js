@@ -35,166 +35,6 @@ const initialState = {
   },
 };
 
-function BackButtonControl({ resetView }) {
-  const map = useMap();
-
-  useEffect(() => {
-    const backButton = L.control({ position: "topright" });
-    const ensembleButton = L.control({ position: "topright" });
-    ensembleButton.onAdd = () => {
-      const button = L.DomUtil.create(
-        "button",
-        "leaflet-bar leaflet-control leaflet-control-custom"
-      );
-      button.innerText = "Compare with Ensemble Data";
-      button.style.fontSize = "15px";
-      button.style.backgroundColor = "#fff";
-      button.style.border = "2px solid #3388ff";
-      button.style.cursor = "pointer";
-      button.style.padding = "8px";
-      button.style.width = "150px";
-      button.style.height = "50px";
-      button.title = "Go back to default view";
-      return button;
-    };
-
-    //create the back button
-    backButton.onAdd = () => {
-      const button = L.DomUtil.create(
-        "button",
-        "leaflet-bar leaflet-control leaflet-control-custom"
-      );
-      button.innerText = "Go Back";
-      button.style.fontSize = "15px";
-      button.style.backgroundColor = "#fff";
-      button.style.border = "2px solid #3388ff";
-      button.style.cursor = "pointer";
-      button.style.padding = "8px";
-      button.style.width = "150px";
-      button.style.height = "50px";
-      button.title = "Go back to default view";
-
-      //calls the reset map view function
-      button.onclick = () => {
-        resetView(map);
-      };
-      return button;
-    };
-
-    //adds the buttons to the map
-    backButton.addTo(map);
-    ensembleButton.addTo(map);
-
-    return () => {
-      //remove the button from the map or else the button will be created over and over again
-      map.removeControl(backButton);
-      map.removeControl(ensembleButton);
-    };
-  }, [map, resetView]);
-
-  return null;
-}
-
-//controls the feature
-function FeatureInteraction({
-  geojsonData,
-  onFeatureClick,
-  disableNavigation,
-  featureType,
-}) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (disableNavigation) {
-      map.dragging.disable();
-      map.scrollWheelZoom.disable();
-      map.doubleClickZoom.disable();
-      map.touchZoom.disable();
-      map.boxZoom.disable();
-    } else {
-      map.dragging.enable();
-      map.scrollWheelZoom.enable();
-      map.doubleClickZoom.enable();
-      map.touchZoom.enable();
-      map.boxZoom.enable();
-    }
-  }, [disableNavigation, map]);
-
-  const geojsonStyle = {
-    fillColor: featureType === "district" ? "#FF5733" : "#3388ff",
-    weight: 2,
-    opacity: 1,
-    color: "white",
-    dashArray: "3",
-    fillOpacity: 0.7,
-  };
-
-  const highlightFeature = (layer) => {
-    layer.setStyle({
-      weight: 3,
-      color: "#000000",
-      dashArray: "",
-      fillOpacity: 0.9,
-    });
-    layer.bringToFront();
-  };
-
-  const resetHighlight = (layer) => {
-    layer.setStyle(geojsonStyle);
-  };
-
-  const handleFeatureClick = (feature, layer) => {
-    highlightFeature(layer);
-    const bounds = layer.getBounds();
-    map.fitBounds(bounds);
-    onFeatureClick(feature);
-  };
-
-  return (
-    <>
-      {geojsonData && (
-        <GeoJSON
-          data={geojsonData}
-          style={geojsonStyle}
-          onEachFeature={(feature, layer) => {
-            const properties = feature.properties;
-
-            layer.unbindTooltip();
-            layer.bindTooltip(
-              `${
-                properties.name ||
-                properties.NAME ||
-                "Congressional District " + properties.DISTRICT
-              }`,
-              {
-                permanent: false,
-                direction: "auto",
-                sticky: true,
-              }
-            );
-            //   layer.bindPopup(
-            //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
-            //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
-            // );
-
-            layer.on("mouseover", () => {
-              highlightFeature(layer);
-              layer.openTooltip();
-            });
-
-            layer.on("mouseout", () => {
-              resetHighlight(layer);
-              layer.closeTooltip();
-            });
-
-            layer.on("click", () => handleFeatureClick(feature, layer));
-          }}
-        />
-      )}
-    </>
-  );
-}
-
 export default function MapPg() {
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: "" });
@@ -241,7 +81,177 @@ export default function MapPg() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (selectedView === "district") {
+      setShowDistricts(true);
+      setShowPrecincts(false);
+    } else if (selectedView === "precinct") {
+      setShowDistricts(false);
+      setShowPrecincts(true);
+    }
+  }, [selectedView]);
+
   useEffect(() => {}, [hoverState]);
+
+  function BackButtonControl({ resetView }) {
+    const map = useMap();
+
+    useEffect(() => {
+      const backButton = L.control({ position: "topright" });
+      const ensembleButton = L.control({ position: "topright" });
+      ensembleButton.onAdd = () => {
+        const button = L.DomUtil.create(
+          "button",
+          "leaflet-bar leaflet-control leaflet-control-custom"
+        );
+        button.innerText = "Compare with Ensemble Data";
+        button.style.fontSize = "15px";
+        button.style.backgroundColor = "#fff";
+        button.style.border = "2px solid #3388ff";
+        button.style.cursor = "pointer";
+        button.style.padding = "8px";
+        button.style.width = "150px";
+        button.style.height = "50px";
+        button.title = "Go back to default view";
+        return button;
+      };
+
+      //create the back button
+      backButton.onAdd = () => {
+        const button = L.DomUtil.create(
+          "button",
+          "leaflet-bar leaflet-control leaflet-control-custom"
+        );
+        button.innerText = "Go Back";
+        button.style.fontSize = "15px";
+        button.style.backgroundColor = "#fff";
+        button.style.border = "2px solid #3388ff";
+        button.style.cursor = "pointer";
+        button.style.padding = "8px";
+        button.style.width = "150px";
+        button.style.height = "50px";
+        button.title = "Go back to default view";
+
+        //calls the reset map view function
+        button.onclick = () => {
+          resetView(map);
+        };
+        return button;
+      };
+
+      //adds the buttons to the map
+      backButton.addTo(map);
+      ensembleButton.addTo(map);
+
+      return () => {
+        //remove the button from the map or else the button will be created over and over again
+        map.removeControl(backButton);
+        map.removeControl(ensembleButton);
+      };
+    }, [map, resetView]);
+
+    return null;
+  }
+
+  //controls the feature
+  const FeatureInteraction = ({
+    geojsonData,
+    onFeatureClick,
+    disableNavigation,
+    featureType,
+  }) => {
+    const map = useMap();
+
+    useEffect(() => {
+      if (disableNavigation) {
+        map.dragging.disable();
+        map.scrollWheelZoom.disable();
+        map.doubleClickZoom.disable();
+        map.touchZoom.disable();
+        map.boxZoom.disable();
+      } else {
+        map.dragging.enable();
+        map.scrollWheelZoom.enable();
+        map.doubleClickZoom.enable();
+        map.touchZoom.enable();
+        map.boxZoom.enable();
+      }
+    }, [disableNavigation, map]);
+
+    const geojsonStyle = {
+      fillColor: featureType === "district" ? "#FF5733" : "#3388ff",
+      weight: 2,
+      opacity: 1,
+      color: "white",
+      dashArray: "3",
+      fillOpacity: 0.7,
+    };
+
+    const highlightFeature = (layer) => {
+      layer.setStyle({
+        weight: 3,
+        color: "#000000",
+        dashArray: "",
+        fillOpacity: 0.9,
+      });
+      layer.bringToFront();
+    };
+
+    const resetHighlight = (layer) => {
+      layer.setStyle(geojsonStyle);
+    };
+
+    const handleFeatureClick = (feature, layer) => {
+      highlightFeature(layer);
+      const bounds = layer.getBounds();
+      map.fitBounds(bounds);
+      onFeatureClick(feature);
+    };
+
+    return (
+      <>
+        {geojsonData && (
+          <GeoJSON
+            data={geojsonData}
+            style={geojsonStyle}
+            onEachFeature={(feature, layer) => {
+              const properties = feature.properties;
+
+              layer.unbindTooltip();
+              layer.bindTooltip(
+                `${
+                  properties.name ||
+                  properties.NAME ||
+                  "Congressional District " + properties.DISTRICT
+                }`,
+                {
+                  permanent: false,
+                  direction: "auto",
+                  sticky: true,
+                }
+              );
+              //   layer.bindPopup(
+              //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
+              //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
+              // );
+
+              layer.on("mouseover", () => {
+                highlightFeature(layer);
+                layer.openTooltip();
+              });
+
+              layer.on("mouseout", () => {
+                resetHighlight(layer);
+                layer.closeTooltip();
+              });
+
+              layer.on("click", () => handleFeatureClick(feature, layer));
+            }}
+          />
+        )}
+      </>
+    );
+  };
 
   const fetch_precinct_boundary = async (fips_code) => {
     try {
