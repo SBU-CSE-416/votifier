@@ -209,49 +209,84 @@ export default function MapPg() {
       onFeatureClick(feature);
     };
 
-    return (
-      <>
-        {geojsonData && (
-          <GeoJSON
-            data={geojsonData}
-            style={geojsonStyle}
-            onEachFeature={(feature, layer) => {
-              const properties = feature.properties;
+    if (featureType === "district" || featureType === "state") {
+      return (
+        <>
+          {geojsonData && (
+            <GeoJSON
+              data={geojsonData}
+              style={geojsonStyle}
+              onEachFeature={(feature, layer) => {
+                const properties = feature.properties;
 
-              layer.unbindTooltip();
-              layer.bindTooltip(
-                `${
-                  properties.name ||
-                  properties.NAME ||
-                  "Congressional District " + properties.DISTRICT
-                }`,
-                {
-                  permanent: false,
-                  direction: "auto",
-                  sticky: true,
-                }
-              );
-              //   layer.bindPopup(
-              //     `<strong>District:</strong> ${properties.name || "District " + properties.DISTRICT}<br>
-              //      <strong>Details:</strong> ${properties.details || "No additional details available."}`
-              // );
+                layer.unbindTooltip();
+                layer.bindTooltip(
+                  `${
+                    properties.name ||
+                    properties.NAME ||
+                    "Congressional District " + properties.DISTRICT
+                  }`,
+                  {
+                    permanent: false,
+                    direction: "auto",
+                    sticky: true,
+                  }
+                );
 
-              layer.on("mouseover", () => {
-                highlightFeature(layer);
-                layer.openTooltip();
-              });
+                layer.on("mouseover", () => {
+                  highlightFeature(layer);
+                  layer.openTooltip();
+                });
 
-              layer.on("mouseout", () => {
-                resetHighlight(layer);
-                layer.closeTooltip();
-              });
+                layer.on("mouseout", () => {
+                  resetHighlight(layer);
+                  layer.closeTooltip();
+                });
 
-              layer.on("click", () => handleFeatureClick(feature, layer));
-            }}
-          />
-        )}
-      </>
-    );
+                layer.on("click", () => handleFeatureClick(feature, layer));
+              }}
+            />
+          )}
+        </>
+      );
+    }
+    else if (featureType === "precinct") {
+      return(
+        <>
+          {geojsonData && (
+            <GeoJSON
+              data={geojsonData}
+              style={geojsonStyle}
+              onEachFeature={(feature, layer) => {
+                const properties = feature.properties;
+
+                layer.unbindTooltip();
+                layer.bindTooltip(
+                  `${properties.NAME || "Precinct " + properties.PRECINCT}`,
+                  {
+                    permanent: false,
+                    direction: "auto",
+                    sticky: true,
+                  }
+                );
+
+                layer.on("mouseover", () => {
+                  highlightFeature(layer);
+                  layer.openTooltip();
+                });
+
+                layer.on("mouseout", () => {
+                  resetHighlight(layer);
+                  layer.closeTooltip();
+                });
+
+                layer.on("click", () => handleFeatureClick(feature, layer));
+              }}
+            />
+          )}
+        </>
+      );
+    }
   };
 
   const fetch_precinct_boundary = async (fips_code) => {
