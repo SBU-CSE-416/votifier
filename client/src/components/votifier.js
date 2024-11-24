@@ -1,11 +1,26 @@
 import { useState } from "react";
 import NavBar from "./NavBar";
-import LeftSideMenu from "./map and data/LeftSideMenu";
+import HomePg from "./HomePg";
 import MapPg from "./map and data/MapPg";
 
 export default function Votifier() {
   const [pg, setPage] = useState("home");
 
+  const checkState = () => {
+    if (pg === "home") {
+      return (
+        <>
+          <HomePg></HomePg>
+        </>
+      );
+    } else if (pg === "map") {
+      return (
+        <>
+          <MapPg></MapPg>
+        </>
+      );
+    }
+  };
 
   return (
     <section style={{ display: "flex", flexDirection: "column" }}>

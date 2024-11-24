@@ -20,6 +20,7 @@
   }
   
   .info-title {
+    font-family: sans-serif;
     font-size: 14px;
     color: #e0f7fa;
   }
@@ -32,6 +33,7 @@
   
   .info-subtitle {
     font-size: 14px;
+    font-family: sans-serif;
     color: #b2ebf2;
   }
   
