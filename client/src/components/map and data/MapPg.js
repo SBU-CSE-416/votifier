@@ -44,7 +44,8 @@ export default function MapPg() {
 
   //LeftSideMenu selectors
   const [selectedView, setView] = useState("");
-  const [selectedHeatMap, setHeatMap] = useState("");
+  const [selectedPlan, setPlan] = useState("");
+  const [selectedHeatmap, setHeatmap] = useState("");
   const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
@@ -59,18 +60,18 @@ export default function MapPg() {
 
   const [disableNavigation, setDisableNavigation] = useState(false);
 
-  const defaultView = [37.1, -95.7];
-  const defaultZoom = 4;
+  const defaultView = [37.7, -94.7];
+  const defaultZoom = 4.5;
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response1 = await axios.get("http://localhost:8000/45");
+        const response1 = await axios.get("http://localhost:8000/api/map/45/state");
 
         setGeojsonSouthCarolina(response1.data);
         console.log("SC boundary data from server:", response1.data);
 
-        const response2 = await axios.get("http://localhost:8000/24");
+        const response2 = await axios.get("http://localhost:8000/api/map/24/state");
 
         setGeojsonMaryland(response2.data);
         console.log("MD boundary data from server:", response2.data);
@@ -86,7 +87,8 @@ export default function MapPg() {
     if (selectedView === "district") {
       setShowDistricts(true);
       setShowPrecincts(false);
-    } else if (selectedView === "precinct") {
+    } 
+    else if (selectedView === "precincts") {
       setShowDistricts(false);
       setShowPrecincts(true);
     }
@@ -95,29 +97,10 @@ export default function MapPg() {
   useEffect(() => {}, [hoverState]);
 
   function BackButtonControl({ resetView }) {
-    const map = useMap();
+    const map = useMap()
 
     useEffect(() => {
       const backButton = L.control({ position: "topright" });
-      const ensembleButton = L.control({ position: "topright" });
-      ensembleButton.onAdd = () => {
-        const button = L.DomUtil.create(
-          "button",
-          "leaflet-bar leaflet-control leaflet-control-custom"
-        );
-        button.innerText = "Compare with Ensemble Data";
-        button.style.fontSize = "15px";
-        button.style.backgroundColor = "#fff";
-        button.style.border = "2px solid #3388ff";
-        button.style.cursor = "pointer";
-        button.style.padding = "8px";
-        button.style.width = "150px";
-        button.style.height = "50px";
-        button.title = "Go back to default view";
-        return button;
-      };
-
-      //create the back button
       backButton.onAdd = () => {
         const button = L.DomUtil.create(
           "button",
@@ -133,6 +116,13 @@ export default function MapPg() {
         button.style.height = "50px";
         button.title = "Go back to default view";
 
+        const handleResetView = () => {
+          // Handle map reset
+          resetView(map);
+        };
+    
+        window.addEventListener('reset-map-view', handleResetView);
+
         //calls the reset map view function
         button.onclick = () => {
           resetView(map);
@@ -142,12 +132,11 @@ export default function MapPg() {
 
       //adds the buttons to the map
       backButton.addTo(map);
-      ensembleButton.addTo(map);
 
       return () => {
         //remove the button from the map or else the button will be created over and over again
         map.removeControl(backButton);
-        map.removeControl(ensembleButton);
+        window.removeEventListener('reset-map-view', handleResetView);
       };
     }, [map, resetView]);
 
@@ -170,7 +159,8 @@ export default function MapPg() {
         map.doubleClickZoom.disable();
         map.touchZoom.disable();
         map.boxZoom.disable();
-      } else {
+      } 
+      else {
         map.dragging.enable();
         map.scrollWheelZoom.enable();
         map.doubleClickZoom.enable();
@@ -257,7 +247,7 @@ export default function MapPg() {
   const fetch_precinct_boundary = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${fips_code}/precincts`
+        `http://localhost:8000/api/map/${fips_code}/precincts`
       );
       return res;
     } catch (error) {
@@ -267,7 +257,7 @@ export default function MapPg() {
   const fetch_district_boundary = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${fips_code}/districts`
+        `http://localhost:8000/api/map/${fips_code}/districts`
       );
       return res;
     } catch (error) {
@@ -277,7 +267,7 @@ export default function MapPg() {
   const fetch_state_demographics = async (fips_code) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/${fips_code}/demographics`
+        `http://localhost:8000/api/charts/${fips_code}/summary`
       );
       return res;
     } catch (error) {
@@ -312,7 +302,8 @@ export default function MapPg() {
       setStateCode(24);
       setState(state_data.data);
       setShowDistricts(true);
-    } else if (properties.NAME === "South Carolina") {
+    } 
+    else if (properties.NAME === "South Carolina") {
       const sc_district_res = await fetch_district_boundary(45);
       console.log(
         "SC districts boundary data from server:",
@@ -327,7 +318,7 @@ export default function MapPg() {
       setShowDistricts(true);
     }
 
-    if (selectedView === "precinct") {
+    if (selectedView === "precincts") {
       console.log("inside onFeatureClick precinct");
       if (properties.NAME === "Maryland") {
         const mdPrecinctDataRes = await fetch_precinct_boundary(24);
@@ -351,8 +342,10 @@ export default function MapPg() {
       {
         <LeftSideMenu
           dataVisible={dataVisible}
-          setHeatMap={setHeatMap}
-          selectedHeatMap={selectedHeatMap}
+          setHeatmap={setHeatmap}
+          setPlan={setPlan}
+          selectedPlan={selectedPlan}
+          selectedHeatmap={selectedHeatmap}
           setView={setView}
           selectedView={selectedView}
           selectedStateCode={selectedStateCode}
@@ -363,7 +356,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: dataVisible ? "40vw" : "90vw",
+          width: dataVisible ? "41vw" : "90vw",
         }}
       >
         <MapContainer
@@ -373,7 +366,7 @@ export default function MapPg() {
           style={{
             height: "95vh",
             width: "100%",
-            transition: "width 0.3s ease",
+            transition: "width 0.5s ease",
           }}
         >
           <TileLayer
@@ -431,7 +424,7 @@ export default function MapPg() {
               disableNavigation={disableNavigation}
               setHoverState={setHoverState}
               setState={setState}
-              featureType="precinct"
+              featureType="precincts"
             />
           )}
 
@@ -442,7 +435,7 @@ export default function MapPg() {
               disableNavigation={disableNavigation}
               setHoverState={setHoverState}
               setState={setState}
-              featureType="precinct"
+              featureType="precincts"
             />
           )}
 
