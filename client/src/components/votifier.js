@@ -33,9 +33,9 @@ export default function Votifier() {
   return (
     <section style={{ display: "flex", flexDirection: "column" }}>
       <NavBar setPage={setPage}></NavBar>
-      <div>
-        {/* {pg !== "home" && pg !== "credits" ? (<LeftSideMenu></LeftSideMenu>) : null} */}
-        {checkState()}
+      <div style={{ display: "flex" }}>
+        <MapPg></MapPg>
+        {/* {checkState()} */}
       </div>
     </section>
   );
