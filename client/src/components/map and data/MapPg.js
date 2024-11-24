@@ -82,7 +82,7 @@ export default function MapPg() {
 
     fetchData();
   }, []);
-
+  console.log("showPrecincts", showPrecincts);
   useEffect(() => {
     if (selectedView === "district") {
       setShowDistricts(true);
@@ -144,6 +144,7 @@ export default function MapPg() {
   }
 
   //controls the feature
+  
   const FeatureInteraction = ({
     geojsonData,
     onFeatureClick,
@@ -151,7 +152,7 @@ export default function MapPg() {
     featureType,
   }) => {
     const map = useMap();
-
+    console.log("current geojson: ",geojsonData )
     useEffect(() => {
       if (disableNavigation) {
         map.dragging.disable();
@@ -177,6 +178,7 @@ export default function MapPg() {
       dashArray: "3",
       fillOpacity: 0.7,
     };
+    
 
     const highlightFeature = (layer) => {
       layer.setStyle({
@@ -249,6 +251,7 @@ export default function MapPg() {
       const res = await axios.get(
         `http://localhost:8000/api/map/${fips_code}/precincts`
       );
+      
       return res;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -317,19 +320,21 @@ export default function MapPg() {
       setState(state_data.data);
       setShowDistricts(true);
     }
-
     if (selectedView === "precincts") {
       console.log("inside onFeatureClick precinct");
+      console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
         const mdPrecinctDataRes = await fetch_precinct_boundary(24);
         console.log("precinct, MD data:", mdPrecinctDataRes.data);
         setGeojsonMarylandPrecinct(mdPrecinctDataRes.data);
         setShowPrecincts(true);
+        console.log("MD precinct boundary data from server:", mdPrecinctDataRes.data);
       } else if (properties.NAME === "South Carolina") {
         const scPrecinctDataRes = await fetch_precinct_boundary(45);
         console.log("precinct, SC data:", scPrecinctDataRes);
         setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
         setShowPrecincts(true);
+        console.log("SC precinct boundary data from server:", scPrecinctDataRes.data);
       }
     }
 
