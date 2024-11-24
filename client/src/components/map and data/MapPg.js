@@ -281,23 +281,31 @@ export default function MapPg() {
     setDataVisible(false);
     setDisableNavigation(false);
     setShowDistricts(false);
+    setShowPrecincts(false);
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
+    console.log("inside onFeatureClick");
 
     if (properties.NAME === "Maryland") {
-      const response3 = await fetch_district_boundary(24);
-      console.log("MD districts boundary data from server:", response3.data);
-      setGeojsonMarylandCongress(response3.data);
+      const md_district_res = await fetch_district_boundary(24);
+      console.log(
+        "MD districts boundary data from server:",
+        md_district_res.data
+      );
+      setGeojsonMarylandCongress(md_district_res.data);
 
       const state_data = await fetch_state_demographics(24);
       console.log("Maryland demographics data:", state_data.data);
       setState(state_data.data);
       setShowDistricts(true);
     } else if (properties.NAME === "South Carolina") {
-      const response4 = await fetch_district_boundary(45);
-      console.log("SC districts boundary data from server:", response4.data);
-      setGeojsonSouthCarolinaCongress(response4.data);
+      const sc_district_res = await fetch_district_boundary(45);
+      console.log(
+        "SC districts boundary data from server:",
+        sc_district_res.data
+      );
+      setGeojsonSouthCarolinaCongress(sc_district_res.data);
 
       const state_data = await fetch_state_demographics(45);
       console.log("South Carolina demographics data:", state_data.data);
@@ -306,12 +314,16 @@ export default function MapPg() {
     }
 
     if (selectedView === "precinct") {
+      console.log("inside onFeatureClick precinct");
       if (properties.NAME === "Maryland") {
-        console.log("precinct,MD data");
-        const md_precinct_bounds = await fetch_state_precinct_boundaries(24);
+        const mdPrecinctDataRes = await fetch_precinct_boundary(24);
+        console.log("precinct, MD data:", mdPrecinctDataRes.data);
+        setGeojsonMarylandPrecinct(mdPrecinctDataRes.data);
         setShowPrecincts(true);
       } else if (properties.NAME === "South Carolina") {
-        console.log("precinct,SC data");
+        const scPrecinctDataRes = await fetch_precinct_boundary(45);
+        console.log("precinct, SC data:", scPrecinctDataRes);
+        setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
         setShowPrecincts(true);
       }
     }
@@ -372,6 +384,7 @@ export default function MapPg() {
             featureType="state"
           />
 
+          {/* District Boundaries */}
           {showDistricts && geojsonMarylandCongress && (
             <FeatureInteraction
               geojsonData={geojsonMarylandCongress}
@@ -391,6 +404,29 @@ export default function MapPg() {
               setHoverState={setHoverState}
               setState={setState}
               featureType="district"
+            />
+          )}
+
+          {/* Precinct Boundaries */}
+          {showPrecincts && geojsonSouthCarolinaPrecinct && (
+            <FeatureInteraction
+              geojsonData={geojsonSouthCarolinaPrecinct}
+              onFeatureClick={onFeatureClick}
+              disableNavigation={disableNavigation}
+              setHoverState={setHoverState}
+              setState={setState}
+              featureType="precinct"
+            />
+          )}
+
+          {showPrecincts && geojsonMarylandPrecinct && (
+            <FeatureInteraction
+              geojsonData={geojsonMarylandPrecinct}
+              onFeatureClick={onFeatureClick}
+              disableNavigation={disableNavigation}
+              setHoverState={setHoverState}
+              setState={setState}
+              featureType="precinct"
             />
           )}
 
