@@ -180,7 +180,7 @@ export default function MapPg() {
     }, [disableNavigation, map]);
 
     const geojsonStyle = {
-      fillColor: featureType === "district" ? "#FF5733" : "#3388ff",
+      fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
       weight: 2,
       opacity: 1,
       color: "white",
@@ -209,7 +209,7 @@ export default function MapPg() {
       onFeatureClick(feature);
     };
 
-    if (featureType === "district" || featureType === "state") {
+    // if (featureType === "district" || featureType === "state") {
       return (
         <>
           {geojsonData && (
@@ -249,44 +249,44 @@ export default function MapPg() {
           )}
         </>
       );
-    }
-    else if (featureType === "precinct") {
-      return(
-        <>
-          {geojsonData && (
-            <GeoJSON
-              data={geojsonData}
-              style={geojsonStyle}
-              onEachFeature={(feature, layer) => {
-                const properties = feature.properties;
+    // }
+    // else if (featureType === "precinct") {
+    //   return(
+    //     <>
+    //       {geojsonData && (
+    //         <GeoJSON
+    //           data={geojsonData}
+    //           style={geojsonStyle}
+    //           onEachFeature={(feature, layer) => {
+    //             const properties = feature.properties;
 
-                layer.unbindTooltip();
-                layer.bindTooltip(
-                  `${properties.NAME || "Precinct " + properties.PRECINCT}`,
-                  {
-                    permanent: false,
-                    direction: "auto",
-                    sticky: true,
-                  }
-                );
+    //             layer.unbindTooltip();
+    //             layer.bindTooltip(
+    //               `${properties.NAME || "Precinct " + properties.PRECINCT}`,
+    //               {
+    //                 permanent: false,
+    //                 direction: "auto",
+    //                 sticky: true,
+    //               }
+    //             );
 
-                layer.on("mouseover", () => {
-                  highlightFeature(layer);
-                  layer.openTooltip();
-                });
+    //             layer.on("mouseover", () => {
+    //               highlightFeature(layer);
+    //               layer.openTooltip();
+    //             });
 
-                layer.on("mouseout", () => {
-                  resetHighlight(layer);
-                  layer.closeTooltip();
-                });
+    //             layer.on("mouseout", () => {
+    //               resetHighlight(layer);
+    //               layer.closeTooltip();
+    //             });
 
-                layer.on("click", () => handleFeatureClick(feature, layer));
-              }}
-            />
-          )}
-        </>
-      );
-    }
+    //             layer.on("click", () => handleFeatureClick(feature, layer));
+    //           }}
+    //         />
+    //       )}
+    //     </>
+    //   );
+    // }
   };
 
   const fetch_precinct_boundary = async (fips_code) => {
@@ -371,7 +371,7 @@ export default function MapPg() {
         setShowPrecincts(true);
       } else if (properties.NAME === "South Carolina") {
         const scPrecinctDataRes = await fetch_precinct_boundary(45);
-        console.log("precinct, SC data:", scPrecinctDataRes);
+        console.log("precinct, SC data:", scPrecinctDataRes.data);
         setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
         setShowPrecincts(true);
       }
