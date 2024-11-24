@@ -10,12 +10,28 @@ export default function LeftSideMenu(props) {
   const handleHeatMapChange = (event) => {
     props.setHeatMap(event.target.value);
   };
+  const checkSelectedState = () => {
+    let stateName = "";
+    if (props.selectedStateCode) {
+      if (props.selectedStateCode === 45) {
+        stateName = "South Carolina";
+      } else if (props.selectedStateCode === 24) {
+        stateName = "Maryland";
+      }
+      return (
+        <div>
+          <p>{stateName}</p>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="side-nav-container">
       {/* States Dropdown Menu*/}
       {dataVisible ? (
         <div className="dropdown-content">
+          {checkSelectedState()}
           <label>
             <span>Select Map View:</span>
             <select

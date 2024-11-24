@@ -45,6 +45,7 @@ export default function MapPg() {
   //LeftSideMenu selectors
   const [selectedView, setView] = useState("");
   const [selectedHeatMap, setHeatMap] = useState("");
+  const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
@@ -292,6 +293,7 @@ export default function MapPg() {
     setDisableNavigation(false);
     setShowDistricts(false);
     setShowPrecincts(false);
+    setStateCode(null);
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
@@ -307,6 +309,7 @@ export default function MapPg() {
 
       const state_data = await fetch_state_demographics(24);
       console.log("Maryland demographics data:", state_data.data);
+      setStateCode(24);
       setState(state_data.data);
       setShowDistricts(true);
     } else if (properties.NAME === "South Carolina") {
@@ -319,6 +322,7 @@ export default function MapPg() {
 
       const state_data = await fetch_state_demographics(45);
       console.log("South Carolina demographics data:", state_data.data);
+      setStateCode(45);
       setState(state_data.data);
       setShowDistricts(true);
     }
@@ -351,6 +355,8 @@ export default function MapPg() {
           selectedHeatMap={selectedHeatMap}
           setView={setView}
           selectedView={selectedView}
+          selectedStateCode={selectedStateCode}
+          setStateCode={selectedStateCode}
         />
       }
 
