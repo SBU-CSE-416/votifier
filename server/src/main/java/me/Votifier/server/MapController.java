@@ -84,24 +84,24 @@ public class MapController {
         }
     }
     @GetMapping("/{fipsCode}/precincts")
-public ResponseEntity<Resource> getPrecincts(@PathVariable("fipsCode") int fipsCode) {
-    String stateName = fipsCodeToName.get(fipsCode);
-        if (stateName == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        try {
-            // Retrieve JSON file
-            Path filePath = Paths.get("data/states/" + stateName + "/geodata/" + stateName + "_precincts.geojson");
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return ResponseEntity.ok(resource);
-            } else {
+    public ResponseEntity<Resource> getPrecincts(@PathVariable("fipsCode") int fipsCode) {
+        String stateName = fipsCodeToName.get(fipsCode);
+            if (stateName == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        } 
-        catch (MalformedURLException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-}
+            try {
+                // Retrieve JSON file
+                Path filePath = Paths.get("data/states/" + stateName + "/geodata/" + stateName + "_precincts.geojson");
+                Resource resource = new UrlResource(filePath.toUri());
+                if (resource.exists()) {
+                    return ResponseEntity.ok(resource);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
+            } 
+            catch (MalformedURLException e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+    }
 
 }
