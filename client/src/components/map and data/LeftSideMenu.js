@@ -3,14 +3,12 @@ import "../../stylesheets/map and data/leftSideMenu.css";
 
 export default function LeftSideMenu(props) {
   let dataVisible = props.dataVisible;
-  const [selectedView, setView] = useState("district");
-  const [selectedHeatMap, setHeatMap] = useState("");
 
   const handleViewChange = (event) => {
-    setView(event.target.value);
+    props.setView(event.target.value);
   };
   const handleHeatMapChange = (event) => {
-    setHeatMap(event.target.value);
+    props.setHeatMap(event.target.value);
   };
 
   return (
@@ -21,7 +19,7 @@ export default function LeftSideMenu(props) {
           <label>
             <span>Select Map View:</span>
             <select
-              value={selectedView}
+              value={props.selectedView}
               onChange={handleViewChange}
               className="dropdown-select"
             >
@@ -30,9 +28,9 @@ export default function LeftSideMenu(props) {
             </select>
           </label>
           <label>
-            <span>Select HeatMap:</span>
+            <span>Select Heat Map:</span>
             <select
-              value={selectedHeatMap}
+              value={props.selectedHeatMap}
               onChange={handleHeatMapChange}
               className="dropdown-select"
             >

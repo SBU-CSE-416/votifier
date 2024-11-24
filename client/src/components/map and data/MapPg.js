@@ -7,6 +7,7 @@ import "../../stylesheets/map and data/map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
+
 const initialState = {
   box1: {
     title: "State Name",
@@ -201,6 +202,10 @@ export default function MapPg() {
   const [showDistricts, setShowDistricts] = useState(false);
   const [showPrecincts, setShowPrecincts] = useState(false);
 
+  //LeftSideMenu selectors
+  const [selectedView, setView] = useState("");
+  const [selectedHeatMap, setHeatMap] = useState("");
+
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
   const [geojsonMarylandCongress, setGeojsonMarylandCongress] = useState(null);
@@ -238,6 +243,16 @@ export default function MapPg() {
 
   useEffect(() => {}, [hoverState]);
 
+  const fetch_precinct_boundary = async (fips_code) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/${fips_code}/precincts`
+      );
+      return res;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   const fetch_district_boundary = async (fips_code) => {
     try {
       const res = await axios.get(
@@ -290,13 +305,32 @@ export default function MapPg() {
       setShowDistricts(true);
     }
 
+    if (selectedView === "precinct") {
+      if (properties.NAME === "Maryland") {
+        console.log("precinct,MD data");
+        const md_precinct_bounds = await fetch_state_precinct_boundaries(24);
+        setShowPrecincts(true);
+      } else if (properties.NAME === "South Carolina") {
+        console.log("precinct,SC data");
+        setShowPrecincts(true);
+      }
+    }
+
     setDataVisible(true);
     setDisableNavigation(true);
   };
 
   return (
     <div style={{ display: "flex" }}>
-      {<LeftSideMenu dataVisible={dataVisible} />}
+      {
+        <LeftSideMenu
+          dataVisible={dataVisible}
+          setHeatMap={setHeatMap}
+          selectedHeatMap={selectedHeatMap}
+          setView={setView}
+          selectedView={selectedView}
+        />
+      }
 
       <div
         style={{
