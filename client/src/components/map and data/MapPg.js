@@ -34,7 +34,17 @@ const initialState = {
     value: "0",
   },
 };
+function MapResizer({ dataVisible }) {
+  const map = useMap();
 
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 0);
+  }, [dataVisible, map]);
+
+  return null;
+}
 export default function MapPg() {
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: "" });
@@ -169,14 +179,14 @@ export default function MapPg() {
         map.boxZoom.enable();
       }
     }, [disableNavigation, map]);
-
+    console.log("featureType: ", featureType);
     const geojsonStyle = {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
-      weight: featureType === "precinct" ? 0.5 : 2,
+      weight: featureType === "precinct" ? 0.2 : 0.2,
       opacity: 1,
-      color: "white",
+      color: featureType === "precinct" ? "#000000" : "#FFFFFF",
       dashArray: "",
-      fillOpacity: 0.7,
+      fillOpacity: featureType === "precinct" ? 0.5 : 0.7,
     };
     
 
@@ -197,7 +207,9 @@ export default function MapPg() {
     const handleFeatureClick = (feature, layer) => {
       highlightFeature(layer);
       const bounds = layer.getBounds();
-      map.fitBounds(bounds);
+      map.fitBounds(bounds, {
+        maxZoom: 7, 
+      });
       onFeatureClick(feature);
     };
 
@@ -376,6 +388,7 @@ export default function MapPg() {
             transition: "width 0.5s ease",
           }}
         >
+          <MapResizer dataVisible={dataVisible} />
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
             attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
@@ -424,6 +437,7 @@ export default function MapPg() {
           )}
 
           {/* Precinct Boundaries */}
+          console.log("showPrecincts", showPrecincts);
           {showPrecincts && geojsonSouthCarolinaPrecinct && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaPrecinct}
