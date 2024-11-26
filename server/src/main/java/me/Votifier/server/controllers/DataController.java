@@ -36,7 +36,6 @@ public class DataController {
     // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     public ResponseEntity<Resource> gatherSummaryDataFromLocal(StateAbbreviation stateAbbreviation) {
         if(stateAbbreviation == null) {
-            System.out.println("(!) Invalid state");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         try {
