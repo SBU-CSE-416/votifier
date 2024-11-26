@@ -8,7 +8,7 @@ import GeneralInfoBox from "./GeneralInfoBox"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({state}) {
-    const [activeTab, setActiveTab] = useState("demographics");
+    const [activeTab, setActiveTab] = useState("cd-table");
     return(
         
     <div id="info" >
@@ -21,22 +21,28 @@ export default function DataPg({state}) {
             </div>
               <div className="data-navbar">
                 <div
-                  className={`tab ${activeTab === "demographics" ? "active" : ""}`}
-                  onClick={() => setActiveTab("demographics")}
+                  className={`tab ${activeTab === "cd-table" ? "active" : ""}`}
+                  onClick={() => setActiveTab("cd-table")}
                 >
-                  Demographics
+                  Congressional Districts
                 </div>
                 <div
-                  className={`tab ${activeTab === "racial" ? "active" : ""}`}
-                  onClick={() => setActiveTab("racial")}
+                  className={`tab ${activeTab === "gingles" ? "active" : ""}`}
+                  onClick={() => setActiveTab("gingles")}
                 >
-                  Precinct Analysis
+                  Gingles 2/3
                 </div>
                 <div
-                  className={`tab ${activeTab === "economic" ? "active" : ""}`}
-                  onClick={() => setActiveTab("economic")}
+                  className={`tab ${activeTab === "ei-analysis" ? "active" : ""}`}
+                  onClick={() => setActiveTab("ei-analysis")}
                 >
                   Ecological Inference
+                </div>
+                <div
+                  className={`tab ${activeTab === "ensemble-data" ? "active" : ""}`}
+                  onClick={() => setActiveTab("ensemble-data")}
+                >
+                  Ensemble Data
                 </div>
               </div>
             <div className="data-charts-container">

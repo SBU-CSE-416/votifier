@@ -172,10 +172,10 @@ export default function MapPg() {
 
     const geojsonStyle = {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
-      weight: 2,
+      weight: featureType === "precinct" ? 0.5 : 2,
       opacity: 1,
       color: "white",
-      dashArray: "3",
+      dashArray: "",
       fillOpacity: 0.7,
     };
     

@@ -67,6 +67,6 @@ public class DataController {
     
     // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     private Path resolveFilePath(String fullStateName) {
-        return Paths.get("data/states/", fullStateName, "/demographics/", (fullStateName + "_general.json"));
+        return Paths.get("data/states/", fullStateName, "/summary/", (fullStateName + "_summary.json"));
     }
 }
