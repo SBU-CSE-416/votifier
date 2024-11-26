@@ -66,12 +66,12 @@ export default function MapPg() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response1 = await axios.get("http://localhost:8000/api/map/45/state");
+        const response1 = await axios.get("http://localhost:8000/api/map/SC/boundary/state");
 
         setGeojsonSouthCarolina(response1.data);
         console.log("SC boundary data from server:", response1.data);
 
-        const response2 = await axios.get("http://localhost:8000/api/map/24/state");
+        const response2 = await axios.get("http://localhost:8000/api/map/MD/boundary/state");
 
         setGeojsonMaryland(response2.data);
         console.log("MD boundary data from server:", response2.data);
@@ -129,9 +129,6 @@ export default function MapPg() {
         };
         return button;
       };
-
-      //adds the buttons to the map
-      backButton.addTo(map);
 
       return () => {
         //remove the button from the map or else the button will be created over and over again
@@ -242,10 +239,10 @@ export default function MapPg() {
       );
   };
 
-  const fetch_precinct_boundary = async (fips_code) => {
+  const fetch_precinct_boundary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/map/${fips_code}/precincts`
+        `http://localhost:8000/api/map/${state_abbreviation}/boundary/precincts`
       );
       
       return res;
@@ -253,20 +250,20 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_district_boundary = async (fips_code) => {
+  const fetch_district_boundary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/map/${fips_code}/districts`
+        `http://localhost:8000/api/map/${state_abbreviation}/boundary/districts`
       );
       return res;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_state_demographics = async (fips_code) => {
+  const fetch_state_demographics = async (state_abbreviation) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/charts/${fips_code}/summary`
+        `http://localhost:8000/api/data/${state_abbreviation}/summary`
       );
       return res;
     } catch (error) {
@@ -289,51 +286,47 @@ export default function MapPg() {
     console.log("inside onFeatureClick");
     console.log("selectedView: ", selectedView);
 
-    if (selectedView === "districts"){
-      if (properties.NAME === "Maryland") {
-        const md_district_res = await fetch_district_boundary(24);
-        console.log(
-          "MD districts boundary data from server:",
-          md_district_res.data
-        );
-        setGeojsonMarylandCongress(md_district_res.data);
+    if (properties.NAME === "Maryland") {
+      const md_district_res = await fetch_district_boundary("MD");
+      console.log(
+        "MD districts boundary data from server:",
+        md_district_res.data
+      );
+      setGeojsonMarylandCongress(md_district_res.data);
 
-        const state_data = await fetch_state_demographics(24);
-        console.log("Maryland demographics data:", state_data.data);
-        setStateCode(24);
-        setState(state_data.data);
-        setShowDistricts(true);
-        setShowPrecincts(false);
-      } 
-      else if (properties.NAME === "South Carolina") {
-        const sc_district_res = await fetch_district_boundary(45);
-        console.log(
-          "SC districts boundary data from server:",
-          sc_district_res.data
-        );
-        setGeojsonSouthCarolinaCongress(sc_district_res.data);
+      const state_data = await fetch_state_demographics("MD");
+      console.log("Maryland demographics data:", state_data.data);
+      setStateCode(24);
+      setState(state_data.data);
+      setShowDistricts(true);
+    } 
+    else if (properties.NAME === "South Carolina") {
+      const sc_district_res = await fetch_district_boundary("SC");
+      console.log(
+        "SC districts boundary data from server:",
+        sc_district_res.data
+      );
+      setGeojsonSouthCarolinaCongress(sc_district_res.data);
 
-        const state_data = await fetch_state_demographics(45);
-        console.log("South Carolina demographics data:", state_data.data);
-        setStateCode(45);
-        setState(state_data.data);
-        setShowDistricts(true);
-        setShowPrecincts(false);
-      }
+      const state_data = await fetch_state_demographics("SC");
+      console.log("South Carolina demographics data:", state_data.data);
+      setStateCode(45);
+      setState(state_data.data);
+      setShowDistricts(true);
     }
     if (selectedView === "precincts") {
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
-        const mdPrecinctDataRes = await fetch_precinct_boundary(24);
+        const mdPrecinctDataRes = await fetch_precinct_boundary("MD");
         console.log("precinct, MD data:", mdPrecinctDataRes.data);
         setGeojsonMarylandPrecinct(mdPrecinctDataRes.data);
         setShowPrecincts(true);
         setShowDistricts(false);
         console.log("MD precinct boundary data from server:", mdPrecinctDataRes.data);
       } else if (properties.NAME === "South Carolina") {
-        const scPrecinctDataRes = await fetch_precinct_boundary(45);
-        console.log("precinct, SC data:", scPrecinctDataRes.data);
+        const scPrecinctDataRes = await fetch_precinct_boundary("SC");
+        console.log("precinct, SC data:", scPrecinctDataRes);
         setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
         setShowPrecincts(true);
         setShowDistricts(false);
