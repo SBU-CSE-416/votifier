@@ -130,6 +130,9 @@ export default function MapPg() {
         return button;
       };
 
+      //adds the buttons to the map
+      //backButton.addTo(map);
+
       return () => {
         //remove the button from the map or else the button will be created over and over again
         map.removeControl(backButton);
