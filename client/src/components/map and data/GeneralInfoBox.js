@@ -8,17 +8,17 @@ const GeneralInfoBox = ({ state }) => {
       <table className="info-table">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Value</th>
+            {stateBoxes.map((box, index) => (
+              <th key={index} className="info-title">{box.title}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {stateBoxes.map((box, index) => (
-            <tr key={index}>
-              <td>{box.title}</td>
-              <td>{box.value}</td>
-            </tr>
-          ))}
+          <tr>
+            {stateBoxes.map((box, index) => (
+              <td key={index} className="info-value">{box.value}</td>
+            ))}
+          </tr>
         </tbody>
       </table>
     </div>
