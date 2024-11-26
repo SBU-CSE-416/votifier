@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import me.Votifier.server.services.DataService;
 
 import me.Votifier.server.model.StateAbbreviation;
-import me.Votifier.server.model.UnknownFileException;
+import me.Votifier.server.model.exceptions.UnknownFileException;
 
 
 @RestController
