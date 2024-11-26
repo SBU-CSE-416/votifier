@@ -6,18 +6,21 @@
 .info-table {
   width: 100%;
   border-collapse: collapse;
+  text-align: left;
 }
 
-.info-table th, 
-.info-table td {
+.info-table th, .info-table td {
   border: 1px solid #ddd;
-  text-align: left;
   padding: 8px;
 }
 
-.info-table th {
+.info-title {
   background-color: #f4f4f4;
   font-weight: bold;
+}
+
+.info-value {
+  background-color: #fff;
 }
 
 .info-table tr:nth-child(even) {
