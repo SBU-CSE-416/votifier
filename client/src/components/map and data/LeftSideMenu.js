@@ -73,13 +73,13 @@ export default function LeftSideMenu(props) {
           </div>
           <div className="left-dropdown">
             <select
-                value={props.selectedView}
-                onChange={handleViewChange}
-                className="dropdown-select"
-              >
-                <option value="district">Districts</option>
-                <option value="precincts">Precincts</option>
-              </select>
+              value={props.selectedView}
+              onChange={handleViewChange}
+              className="dropdown-select"
+            >
+              <option value="districts">Districts</option>
+              <option value="precincts">Precincts</option>
+            </select>
           </div>
           <div className="left-label">
             <label>
