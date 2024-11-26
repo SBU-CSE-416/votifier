@@ -84,7 +84,7 @@ export default function MapPg() {
   }, []);
   console.log("showPrecincts", showPrecincts);
   useEffect(() => {
-    if (selectedView === "district") {
+    if (selectedView === "districts") {
       setShowDistricts(true);
       setShowPrecincts(false);
     } 
@@ -289,33 +289,35 @@ export default function MapPg() {
     console.log("inside onFeatureClick");
     console.log("selectedView: ", selectedView);
 
-    if (properties.NAME === "Maryland") {
-      const md_district_res = await fetch_district_boundary("MD");
-      console.log(
-        "MD districts boundary data from server:",
-        md_district_res.data
-      );
-      setGeojsonMarylandCongress(md_district_res.data);
+    if (selectedView === "districts") {
+      if (properties.NAME === "Maryland") {
+        const md_district_res = await fetch_district_boundary("MD");
+        console.log(
+          "MD districts boundary data from server:",
+          md_district_res.data
+        );
+        setGeojsonMarylandCongress(md_district_res.data);
 
-      const state_data = await fetch_state_demographics("MD");
-      console.log("Maryland demographics data:", state_data.data);
-      setStateCode(24);
-      setState(state_data.data);
-      setShowDistricts(true);
-    } 
-    else if (properties.NAME === "South Carolina") {
-      const sc_district_res = await fetch_district_boundary("SC");
-      console.log(
-        "SC districts boundary data from server:",
-        sc_district_res.data
-      );
-      setGeojsonSouthCarolinaCongress(sc_district_res.data);
+        const state_data = await fetch_state_demographics("MD");
+        console.log("Maryland demographics data:", state_data.data);
+        setStateCode(24);
+        setState(state_data.data);
+        setShowDistricts(true);
+      } 
+      else if (properties.NAME === "South Carolina") {
+        const sc_district_res = await fetch_district_boundary("SC");
+        console.log(
+          "SC districts boundary data from server:",
+          sc_district_res.data
+        );
+        setGeojsonSouthCarolinaCongress(sc_district_res.data);
 
-      const state_data = await fetch_state_demographics("SC");
-      console.log("South Carolina demographics data:", state_data.data);
-      setStateCode(45);
-      setState(state_data.data);
-      setShowDistricts(true);
+        const state_data = await fetch_state_demographics("SC");
+        console.log("South Carolina demographics data:", state_data.data);
+        setStateCode(45);
+        setState(state_data.data);
+        setShowDistricts(true);
+      }
     }
     if (selectedView === "precincts") {
       console.log("inside onFeatureClick precinct");
