@@ -6,6 +6,7 @@ export default function LeftSideMenu(props) {
   let dataVisible = props.dataVisible;
 
   const handleViewChange = (event) => {
+    console.log("View changed to:", event.target.value);
     props.setView(event.target.value);
   };
   const handleHeatmapChange = (event) => {
@@ -28,14 +29,14 @@ export default function LeftSideMenu(props) {
       );
     }
   };
-
+  console.log("props.selectedView:", props.selectedView); 
   return (
     <div className="side-nav-container">
       {/* States Dropdown Menu*/}
       {dataVisible ? (
         <div className="dropdown-content">
           <div className="left-container">
-            <BackButton></BackButton>
+          <BackButton handleResetView={props.handleResetView}> </BackButton>
           </div>
           <div className="left-container">
             {checkSelectedState()}
@@ -46,6 +47,7 @@ export default function LeftSideMenu(props) {
             </label>
           </div>
           <div className="left-dropdown">
+          
           <select 
                 value={props.selectedPlan}
                 onChange={handlePlanChange}
@@ -88,18 +90,19 @@ export default function LeftSideMenu(props) {
           </div>
           <div className="left-dropdown">
             <select
-                value={props.selectedHeatmap}
-                onChange={handleHeatmapChange}
-                className="dropdown-select"
-              >
-                <option value="none">None</option>
-                <option value="demographic">Demographic</option>
-                <option value="economic">Economic/Income</option>
-                <option value="regions">Economic/Regions</option>
-                <option value="poverty">Economic/Poverty</option>
-                <option value="politicalIncome">Political/Income</option>
+              value={props.selectedHeatmap}
+              onChange={(e) => props.setHeatmap(e.target.value)}
+              className="dropdown-select"
+            >
+              <option value="none">None</option>
+              <option value="demographic">Demographic</option>
+              <option value="economic">Economic/Income</option>
+              <option value="regions">Economic/Regions</option>
+              <option value="poverty">Economic/Poverty</option>
+              <option value="politicalIncome">Political/Income</option>
             </select>
           </div>
+
         </div>
       ) : (
         <div className="dropdown-content">
