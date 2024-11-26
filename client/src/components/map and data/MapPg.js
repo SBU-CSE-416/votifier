@@ -74,6 +74,10 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
+    console.log("Selected View Updated:", selectedView);
+  }, [selectedView]);
+
+  useEffect(() => {
     async function fetchData() {
       try {
         const response1 = await axios.get("http://localhost:8000/api/map/SC/boundary/state");
@@ -92,6 +96,41 @@ export default function MapPg() {
 
     fetchData();
   }, []);
+  const fetchHeatmapData = async (state_abbreviation, demographic_group) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demographic_group}`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching heatmap data:", error);
+      return null;
+    }
+  };
+  useEffect(() => {
+    const loadHeatmap = async () => {
+      if (selectedHeatmap === "demographic" && selectedStateCode) {
+        const stateCodeMapping = {
+          45: "SC", // South Carolina
+          24: "MD", // Maryland
+        };
+  
+        const stateAbbreviation = stateCodeMapping[selectedStateCode];
+        const demographicGroup = "WHITE";
+  
+        const heatmapData = await fetchHeatmapData(stateAbbreviation, demographicGroup);
+  
+        if (stateAbbreviation === "SC") {
+          setGeojsonSouthCarolina(heatmapData);
+        } else if (stateAbbreviation === "MD") {
+          setGeojsonMaryland(heatmapData);
+        }
+      }
+    };
+  
+    loadHeatmap();
+  }, [selectedHeatmap, selectedStateCode]);
+    
   console.log("showPrecincts", showPrecincts);
   useEffect(() => {
     if (selectedView === "districts") {
@@ -182,7 +221,7 @@ export default function MapPg() {
     console.log("featureType: ", featureType);
     const geojsonStyle = {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
-      weight: featureType === "precinct" ? 0.2 : 0.2,
+      weight: 0.5,
       opacity: 1,
       color: featureType === "precinct" ? "#000000" : "#FFFFFF",
       dashArray: "",
@@ -354,7 +393,7 @@ export default function MapPg() {
     setDataVisible(true);
     setDisableNavigation(true);
   };
-
+  console.log("state:", state);
   return (
     <div style={{ display: "flex" }}>
       {
@@ -369,6 +408,7 @@ export default function MapPg() {
           selectedStateCode={selectedStateCode}
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
+          handleResetView={handleResetView}
         />
       }
 
@@ -437,7 +477,6 @@ export default function MapPg() {
           )}
 
           {/* Precinct Boundaries */}
-          console.log("showPrecincts", showPrecincts);
           {showPrecincts && geojsonSouthCarolinaPrecinct && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaPrecinct}
@@ -463,8 +502,8 @@ export default function MapPg() {
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-
       {dataVisible && <DataPg state={state} />}
+      
     </div>
   );
 }

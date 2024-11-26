@@ -24,7 +24,7 @@ export default function DataPg({state}) {
                   className={`tab ${activeTab === "cd-table" ? "active" : ""}`}
                   onClick={() => setActiveTab("cd-table")}
                 >
-                  Congressional Districts
+                  Summary
                 </div>
                 <div
                   className={`tab ${activeTab === "gingles" ? "active" : ""}`}
@@ -46,22 +46,22 @@ export default function DataPg({state}) {
                 </div>
               </div>
             <div className="data-charts-container">
-                {activeTab === "demographics" && (
+                {activeTab === "cd-table" && (
                   <div className="data-charts">
                     <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
                     <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart>
+                    
+                  </div>
+                )}
+                {activeTab === "ensemble-data" && (
+                  <div className="data-charts">
                     <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot>
                   </div>
                 )}
-                {activeTab === "racial" && (
-                  <div className="data-charts">
-                    <VotingGraph w={300} h={150} />
-                  </div>
-                )}
-                {activeTab === "economic" && (
+                {activeTab === "ei-analysis" && (
                   <div className="data-charts">
                     <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Racial Group"} />
-                    <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/>
+                    {/* <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/> */}
                   </div>
         )}  
             </div>
