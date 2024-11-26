@@ -1,22 +1,32 @@
-import React from 'react';
+import React from "react";
 import "../../stylesheets/map and data/GeneralInfoBox.css";
 
 const GeneralInfoBox = ({ state }) => {
-  const stateBoxes = Object.values(state);
+  // Filter out the `HOUS_INCOME_DIS` key 
+  const filteredStateData = Object.entries(state).filter(
+    ([key]) => key !== "HOUS_INCOME_DIS"
+  );
+
   return (
     <div className="info-table-container">
       <table className="info-table">
         <thead>
           <tr>
-            {stateBoxes.map((box, index) => (
-              <th key={index} className="info-title">{box.title}</th>
+            {filteredStateData.map(([key], index) => (
+              <th key={index} className="info-title">
+                {key.replaceAll("_", " ")}
+              </th>
             ))}
           </tr>
         </thead>
         <tbody>
           <tr>
-            {stateBoxes.map((box, index) => (
-              <td key={index} className="info-value">{box.value}</td>
+            {filteredStateData.map(([_, value], index) => (
+              <td key={index} className="info-value">
+                {typeof value === "number"
+                  ? value.toLocaleString() // Format numbers with commas
+                  : value}
+              </td>
             ))}
           </tr>
         </tbody>
