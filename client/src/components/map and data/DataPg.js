@@ -1,5 +1,6 @@
 import RacialBarChart from "./RacialChart";
 import HistogramChart from "./HistogramChart";
+import HouseholdIncomeHistogram from "./HouseholdIncomeHistogram";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
 import VotingGraph from "./VotingGraph";
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
@@ -8,7 +9,13 @@ import GeneralInfoBox from "./GeneralInfoBox"
 import "../../stylesheets/dataPg.css"
 import { useState } from "react";
 export default function DataPg({state}) {
-    const [activeTab, setActiveTab] = useState("cd-table");
+    const [activeTab, setActiveTab] = useState("summary");
+    console.log("DataPg state:", state);
+
+    const houseIncomeData = Object.entries(state.HOUS_INCOME_DIS).map(([bin, value]) => {
+      const formattedBin = bin.replace("_", "-").replace("K", "K+").replace("MORE", "+");
+      return { bin: formattedBin, value };
+    });
     return(
         
     <div id="info" >
@@ -21,8 +28,8 @@ export default function DataPg({state}) {
             </div>
               <div className="data-navbar">
                 <div
-                  className={`tab ${activeTab === "cd-table" ? "active" : ""}`}
-                  onClick={() => setActiveTab("cd-table")}
+                  className={`tab ${activeTab === "summary" ? "active" : ""}`}
+                  onClick={() => setActiveTab("summary")}
                 >
                   Summary
                 </div>
@@ -46,11 +53,15 @@ export default function DataPg({state}) {
                 </div>
               </div>
             <div className="data-charts-container">
-                {activeTab === "cd-table" && (
+                {activeTab === "summary" && (
                   <div className="data-charts">
+                    <HouseholdIncomeHistogram w={400} h={200} title={"Household Income Distribution"} data={houseIncomeData} />
                     <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
                     {/* <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart> */}
+<<<<<<< HEAD
                     
+=======
+>>>>>>> d7c3a76af50c24e290483ce316b02bcc690b513d
                   </div>
                 )}
                 {activeTab === "ensemble-data" && (
