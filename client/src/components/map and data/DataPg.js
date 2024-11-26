@@ -49,13 +49,19 @@ export default function DataPg({state}) {
                 {activeTab === "cd-table" && (
                   <div className="data-charts">
                     <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
-                    <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart>
+                    {/* <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart> */}
                     
                   </div>
                 )}
                 {activeTab === "ensemble-data" && (
                   <div className="data-charts">
                     <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot>
+                  </div>
+                )}
+                {activeTab === "gingles" && (
+                  <div className="data-charts">
+                    <h2> Comming Soon</h2>
+                    {/* <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/> */}
                   </div>
                 )}
                 {activeTab === "ei-analysis" && (

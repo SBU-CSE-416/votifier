@@ -155,6 +155,7 @@ export default function MapPg() {
           "button",
           "leaflet-bar leaflet-control leaflet-control-custom"
         );
+        button.style.display = "none"
         button.innerText = "Go Back";
         button.style.fontSize = "15px";
         button.style.backgroundColor = "#fff";
@@ -180,7 +181,7 @@ export default function MapPg() {
       };
 
       //adds the buttons to the map
-      //backButton.addTo(map);
+      backButton.addTo(map);
 
       return () => {
         //remove the button from the map or else the button will be created over and over again
@@ -415,7 +416,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: dataVisible ? "41vw" : "90vw",
+          width: dataVisible ? "41.75vw" : "90vw",
         }}
       >
         <MapContainer
