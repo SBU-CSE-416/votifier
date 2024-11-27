@@ -1,31 +1,38 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const data = [
-  { bin: '0-10', population: 30000 },
-  { bin: '11-20', population: 40000 },
-  { bin: '21-30', population: 100000 },
-  { bin: '31-40', population: 150000 },
-  { bin: '41-50', population: 120000 },
-  { bin: '51-60', population: 70000 },
-  { bin: '61-70', population: 60000 },
-  { bin: '71-80', population: 30000 },
-  { bin: '80+', population: 2000 }
-];
-
-// Use default parameters instead of defaultProps
-const HistogramChart = ({ w = 600, h = 300, title = "Title Needed" }) => (
-  <div>
-    <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>
+const HistogramChart = ({ data, w = 1000, h = 500, title = "Title Needed" }) => (
+  <div style={{ margin: '30px' }}>
+    <h2 style={{ textAlign: 'center', marginBottom: '10px', fontFamily: 'Arial, sans-serif', color: '#333' }}>
       {title}
     </h2>
-    <BarChart width={w} height={h} data={data} barCategoryGap="0%">
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="bin" label={{ value: "Age Ranges", position: 'insideBottom', offset: -5 }} />
-      <YAxis label={{ angle: -90, position: 'insideLeft', offset: -7}} />
-      <Tooltip />
-      <Bar dataKey="population" fill="#46ACC2" />
-    </BarChart>
+    <ResponsiveContainer width={w} height={h}>
+      <BarChart data={data} barCategoryGap="20%">
+        <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+        <XAxis 
+          dataKey="range" 
+          label={{
+            value: "Income Ranges",
+            position: "insideBottom",
+            offset: 0,
+            style: { fontSize: '14px', fontWeight: 'bold' },
+          }}
+          tick={{ fontSize: 12 }}
+        />
+        <YAxis 
+          label={{
+            value: "Percentage",
+            angle: -90,
+            offset: 0,
+            position: "insideLeft",
+            style: { fontSize: '14px', fontWeight: 'bold' },
+          }}
+          tick={{ fontSize: 12 }}
+        />
+        <Tooltip />
+        <Bar dataKey="percentage" fill="#46ACC2" />
+      </BarChart>
+    </ResponsiveContainer>
   </div>
 );
 
