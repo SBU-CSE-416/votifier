@@ -102,6 +102,22 @@ export default function LeftSideMenu(props) {
               <option value="politicalIncome">Political/Income</option>
             </select>
           </div>
+          {props.selectedHeatmap === "demographic" ? 
+            <div className="left-label">
+              <select
+                value={props.selectedDemographic}
+                onChange={(e) => props.setDemographic(e.target.value)}
+                className="dropdown-select"
+              >
+                <option value="white">White</option>
+                <option value="black">Black</option>
+                <option value="hispanic">Hispanic</option>
+                <option value="asian">Asian</option>
+                <option value="native">Native American</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          : null}
 
         </div>
       ) : (

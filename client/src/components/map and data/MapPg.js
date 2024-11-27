@@ -56,6 +56,7 @@ export default function MapPg() {
   const [selectedView, setView] = useState("districts");
   const [selectedPlan, setPlan] = useState("");
   const [selectedHeatmap, setHeatmap] = useState("");
+  const [selectedDemographic, setDemographic] = useState("white");
   const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
@@ -409,6 +410,8 @@ export default function MapPg() {
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
+          selectedDemographic={selectedDemographic}
+          setDemographic={setDemographic}
         />
       }
 
