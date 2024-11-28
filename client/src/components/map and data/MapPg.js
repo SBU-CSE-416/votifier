@@ -156,6 +156,7 @@ export default function MapPg() {
           "button",
           "leaflet-bar leaflet-control leaflet-control-custom"
         );
+        button.style.display = "none"
         button.innerText = "Go Back";
         button.style.fontSize = "15px";
         button.style.backgroundColor = "#fff";
@@ -418,7 +419,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: dataVisible ? "41vw" : "90vw",
+          width: dataVisible ? "41.75vw" : "90vw",
         }}
       >
         <MapContainer

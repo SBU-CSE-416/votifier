@@ -11,7 +11,12 @@ import { useState } from "react";
 export default function DataPg({state}) {
     const [activeTab, setActiveTab] = useState("summary");
     console.log("DataPg state:", state);
-
+    const incomeDistributionData = Object.entries(state.HOUS_INCOME_DIS).map(
+      ([range, percentage]) => ({
+        range: range.replace(/_/g, "-"),
+        percentage,
+      })
+    );
     const houseIncomeData = Object.entries(state.HOUS_INCOME_DIS).map(([bin, value]) => {
       const formattedBin = bin.replace("_", "-").replace("K", "K+").replace("MORE", "+");
       return { bin: formattedBin, value };
@@ -37,13 +42,13 @@ export default function DataPg({state}) {
                   className={`tab ${activeTab === "gingles" ? "active" : ""}`}
                   onClick={() => setActiveTab("gingles")}
                 >
-                  Gingles 2/3
+                  Gingles Analysis
                 </div>
                 <div
                   className={`tab ${activeTab === "ei-analysis" ? "active" : ""}`}
                   onClick={() => setActiveTab("ei-analysis")}
                 >
-                  Ecological Inference
+                  EI Analysis
                 </div>
                 <div
                   className={`tab ${activeTab === "ensemble-data" ? "active" : ""}`}
@@ -55,8 +60,13 @@ export default function DataPg({state}) {
             <div className="data-charts-container">
                 {activeTab === "summary" && (
                   <div className="data-charts">
-                    <HouseholdIncomeHistogram w={400} h={200} title={"Household Income Distribution"} data={houseIncomeData} />
-                    <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
+                    {/* <HouseholdIncomeHistogram w={400} h={200} title={"Household Income Distribution"} data={houseIncomeData} /> */}
+                    <HistogramChart
+                      data={incomeDistributionData}
+                      w={500}
+                      h={250}
+                      title={"Household Income Distribution"}
+                    />
                     {/* <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart> */}
                   </div>
                 )}
@@ -67,14 +77,15 @@ export default function DataPg({state}) {
                 )}
                 {activeTab === "gingles" && (
                   <div className="data-charts">
-                    <h2> Comming Soon</h2>
+                    <h2> Coming Soon</h2>
                     {/* <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/> */}
                   </div>
                 )}
                 {activeTab === "ei-analysis" && (
                   <div className="data-charts">
-                    <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Racial Group"} />
+                    {/* <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Racial Group"} /> */}
                     {/* <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/> */}
+                    <h2> Coming Soon</h2>
                   </div>
         )}  
             </div>
