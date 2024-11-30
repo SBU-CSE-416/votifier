@@ -79,13 +79,13 @@ public class MapController {
             Path filePath = null;
             switch(stateAbbreviation){
                 case SC:
-                    filePath = Paths.get("data/processed_individual/sc_precinct_boundaries_with_bins.geojson");
+                    filePath = Paths.get("data/processed_individual/sc_precinct_boundaries.geojson");
                     break;
                 case MD:
-                    filePath = Paths.get("data/processed_individual/md_precinct_boundaries_with_bins.geojson");
+                    filePath = Paths.get("data/processed_individual/md_precinct_boundaries.geojson");
                     break;
                 default:
-                    filePath = Paths.get("data/processed_individual/unknown_precinct_boundaries_with_bins.geojson");
+                    filePath = Paths.get("data/processed_individual/unknown_precinct_boundaries.geojson");
                     break;
             }
             Resource resource = getResourceFromLocal(filePath);
