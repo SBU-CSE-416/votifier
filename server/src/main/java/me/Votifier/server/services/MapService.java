@@ -50,6 +50,8 @@ public class MapService {
 
     private static final String TOTAL_POPULATION_IDENTIFIER = "TOT_POP22";
 
+    
+
     public ResponseEntity<Resource> colorHeatmapDemographic(
         ResponseEntity<Resource> precinctsBoundariesGeoJsonResponse, 
         ResponseEntity<Resource> precinctsPopulationGroupsJsonResponse, 
