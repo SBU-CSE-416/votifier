@@ -7,21 +7,27 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum RacialGroup {
-    WHITE("White"),
-    BLACK("Black/African American"),
-    HISPANIC_LATINO("Hispanic/Latino"),
-    ASIAN("Asian"),
-    PACIFIC_ISLANDER("Hawaiian/Other Pacific Islander"),
-    NATIVE_AMERICAN("Native American/Alaskan Native");
+    WHITE("White", "WHT_NHSP22"),
+    BLACK("Black/African American", "BLK_NHSP22"),
+    HISPANIC_LATINO("Hispanic/Latino", "HIS_POP22"),
+    ASIAN("Asian", "ASN_NHSP22"),
+    PACIFIC_ISLANDER("Hawaiian/Other Pacific Islander", "HPI_NHSP22"),
+    NATIVE_AMERICAN("Native American/Alaskan Native", "AIA_NHSP22");
     
     private final String formattedRacialGroupName;
+    private final String identifier;
     
-    RacialGroup(String formattedRacialGroupName) {
+    RacialGroup(String formattedRacialGroupName, String identifier) {
         this.formattedRacialGroupName = formattedRacialGroupName;
+        this.identifier = identifier;
     }
     
     public String getFormattedRacialGroupName() {
         return formattedRacialGroupName;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     private static final Map<String, RacialGroup> formattedRacialGroupNameToEnum = Arrays.stream(values())
