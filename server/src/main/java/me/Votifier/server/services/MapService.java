@@ -50,6 +50,8 @@ public class MapService {
     private static final String PACIFIC_ISLANDER_POPULATION_IDENTIFIER = "HPI_NHSP22";
     private static final String NATIVE_AMERICAN_POPULATION_IDENTIFIER = "AIA_NHSP22";
 
+    
+
     public ResponseEntity<Resource> colorHeatmapDemographic(
         ResponseEntity<Resource> precinctBoundariesGeoJSON, 
         ResponseEntity<Resource> precinctRacialGroupsPopulationJSON, 

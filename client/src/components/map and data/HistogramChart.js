@@ -2,6 +2,8 @@ import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const HistogramChart = ({ data, w = 1000, h = 500, title = "Title Needed" }) => (
+  //print data  
+  
   <div style={{ margin: '30px' }}>
     <h2 style={{ textAlign: 'center', marginBottom: '10px', fontFamily: 'Arial, sans-serif', color: '#333' }}>
       {title}
