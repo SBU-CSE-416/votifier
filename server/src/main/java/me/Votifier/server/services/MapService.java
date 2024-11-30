@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -24,31 +25,40 @@ import com.alibaba.fastjson.support.geo.FeatureCollection;
 
 import me.Votifier.server.model.StateAbbreviation;
 import me.Votifier.server.model.Bin;
+import me.Votifier.server.model.BinsFeature;
+import me.Votifier.server.model.configurations.bins.BinsConfig;
 import me.Votifier.server.model.RacialGroup;
 
 import me.Votifier.server.model.exceptions.InvalidBinRangeException;
 import me.Votifier.server.model.exceptions.InvalidRacialGroupException;
 
+import java.util.Arrays;
+
 @Service
 public class MapService {
 
-    
-    private static final TreeMap<Integer, Bin> loadedBins = new TreeMap<>();
+    private static Map<BinsFeature, TreeMap<Integer, Bin>> loadedBins = new HashMap<>();
 
-    public MapService() {
-        loadedBins.put(Integer.valueOf(1), new Bin(1,new int[]{0,9},"#fff6f7"));
-        loadedBins.put(Integer.valueOf(2), new Bin(1,new int[]{10,19}, "#fde1e0"));
-        loadedBins.put(Integer.valueOf(3), new Bin(1,new int[]{20,29}, "#ffc3bf"));
-        loadedBins.put(Integer.valueOf(4), new Bin(1,new int[]{30,39}, "#fb9eb8"));
-        loadedBins.put(Integer.valueOf(5), new Bin(1,new int[]{40,49}, "#f768a2"));
-        loadedBins.put(Integer.valueOf(6), new Bin(1,new int[]{50,59}, "#df3595"));
-        loadedBins.put(Integer.valueOf(7), new Bin(1,new int[]{60,69}, "#b10085"));
-        loadedBins.put(Integer.valueOf(8), new Bin(1,new int[]{70,79}, "#7c007a"));
-        loadedBins.put(Integer.valueOf(9), new Bin(1,new int[]{80,89}, "#51006d"));
-        loadedBins.put(Integer.valueOf(10), new Bin(1,new int[]{90,100}, "#1c0227"));
+    @Autowired
+    public MapService(BinsConfig binsConfig) {
+        loadedBins.putAll(binsConfig.getAllBins());
     }
 
     private static final String TOTAL_POPULATION_IDENTIFIER = "TOT_POP22";
+
+    // public void testRoute(){
+
+    //     for(BinsFeature feature : loadedBins.keySet()){
+    //         System.out.println(feature.name());
+    //         TreeMap<Integer, Bin> tmap = loadedBins.get(feature);
+    //         for (Map.Entry<Integer, Bin> entry : tmap.entrySet()) {
+    //             Integer key = entry.getKey();  // Get the key (Integer)
+    //             Bin bin = entry.getValue();    // Get the Bin object (value)
+    //             // You can now work with the key and bin
+    //             System.out.println("Key: " + key + ", Bin: " + bin.getBinNumber() + " | Color: " + bin.getColor() + " | Range: " + Arrays.toString(bin.getRange()));
+    //         }
+    //     }
+    // }
 
     public ResponseEntity<Resource> colorHeatmapDemographic(
         ResponseEntity<Resource> precinctsBoundariesGeoJsonResponse, 
@@ -56,6 +66,8 @@ public class MapService {
         RacialGroup selectedRacialGroup) {
 
         try {
+            TreeMap<Integer, Bin> loadedHeatmapBins = loadedBins.get(BinsFeature.HEATMAP_DEMOGRAPHIC); 
+
             StringBuilder reusableJsonContentBuilder = new StringBuilder();
 
             Resource precinctsBoundariesBody = precinctsBoundariesGeoJsonResponse.getBody();
@@ -84,11 +96,11 @@ public class MapService {
                 double selectedRacialGroupPopulation = precinct.getDoubleValue(selectedRacialGroupIdentifier);
                 double totalPopulation = precinct.getDoubleValue(TOTAL_POPULATION_IDENTIFIER);
                 if(totalPopulation <= 0) {
-                    assignedBin = loadedBins.get(1);
+                    assignedBin = loadedHeatmapBins.get(1);
                 }
                 else {
                     int racialGroupPopulationPercentage = (int)((selectedRacialGroupPopulation/totalPopulation) * 100);
-                    for(Bin bin : loadedBins.values()) {
+                    for(Bin bin : loadedHeatmapBins.values()) {
                         if(bin.isInRange(racialGroupPopulationPercentage)) {
                             assignedBin = bin;
                             break;
@@ -112,6 +124,7 @@ public class MapService {
             return ResponseEntity.status(HttpStatus.OK).contentType(org.springframework.http.MediaType.parseMediaType("application/geo+json")).body(resource);
         }
         catch (Exception exception){
+            exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
