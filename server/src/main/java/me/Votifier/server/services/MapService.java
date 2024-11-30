@@ -46,19 +46,7 @@ public class MapService {
 
     private static final String TOTAL_POPULATION_IDENTIFIER = "TOT_POP22";
 
-    // public void testRoute(){
-
-    //     for(BinsFeature feature : loadedBins.keySet()){
-    //         System.out.println(feature.name());
-    //         TreeMap<Integer, Bin> tmap = loadedBins.get(feature);
-    //         for (Map.Entry<Integer, Bin> entry : tmap.entrySet()) {
-    //             Integer key = entry.getKey();  // Get the key (Integer)
-    //             Bin bin = entry.getValue();    // Get the Bin object (value)
-    //             // You can now work with the key and bin
-    //             System.out.println("Key: " + key + ", Bin: " + bin.getBinNumber() + " | Color: " + bin.getColor() + " | Range: " + Arrays.toString(bin.getRange()));
-    //         }
-    //     }
-    // }
+    
 
     public ResponseEntity<Resource> colorHeatmapDemographic(
         ResponseEntity<Resource> precinctsBoundariesGeoJsonResponse, 
