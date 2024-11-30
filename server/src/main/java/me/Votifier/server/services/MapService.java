@@ -5,139 +5,125 @@ import org.springframework.http.HttpStatus;
 
 import java.util.TreeMap;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.geo.Feature;
+import com.alibaba.fastjson.support.geo.FeatureCollection;
 
 import me.Votifier.server.model.StateAbbreviation;
 import me.Votifier.server.model.Bin;
+import me.Votifier.server.model.BinsFeature;
+import me.Votifier.server.model.configurations.bins.BinsConfig;
 import me.Votifier.server.model.RacialGroup;
 
 import me.Votifier.server.model.exceptions.InvalidBinRangeException;
 import me.Votifier.server.model.exceptions.InvalidRacialGroupException;
 
+import java.util.Arrays;
+
 @Service
 public class MapService {
 
-    
-    private static final TreeMap<Integer, Bin> loadedBins = new TreeMap<>();
+    private static Map<BinsFeature, TreeMap<Integer, Bin>> loadedBins = new HashMap<>();
 
-    public MapService() {
-        loadedBins.put(Integer.valueOf(1), new Bin(1,new int[]{0,9},"#fff6f7"));
-        loadedBins.put(Integer.valueOf(2), new Bin(1,new int[]{10,19}, "#fde1e0"));
-        loadedBins.put(Integer.valueOf(3), new Bin(1,new int[]{20,29}, "#ffc3bf"));
-        loadedBins.put(Integer.valueOf(4), new Bin(1,new int[]{30,39}, "#fb9eb8"));
-        loadedBins.put(Integer.valueOf(5), new Bin(1,new int[]{40,49}, "#f768a2"));
-        loadedBins.put(Integer.valueOf(6), new Bin(1,new int[]{50,59}, "#df3595"));
-        loadedBins.put(Integer.valueOf(7), new Bin(1,new int[]{60,69}, "#b10085"));
-        loadedBins.put(Integer.valueOf(8), new Bin(1,new int[]{70,79}, "#7c007a"));
-        loadedBins.put(Integer.valueOf(9), new Bin(1,new int[]{80,89}, "#51006d"));
-        loadedBins.put(Integer.valueOf(10), new Bin(1,new int[]{90,100}, "#1c0227"));
+    @Autowired
+    public MapService(BinsConfig binsConfig) {
+        loadedBins.putAll(binsConfig.getAllBins());
     }
 
     private static final String TOTAL_POPULATION_IDENTIFIER = "TOT_POP22";
-    private static final String WHITE_POPULATION_IDENTIFIER = "WHT_NHSP22";
-    private static final String BLACK_POPULATION_IDENTIFIER = "BLK_NHSP22";
-    private static final String HISPANIC_LATINO_POPULATION_IDENTIFIER = "HIS_POP22";
-    private static final String ASIAN_POPULATION_IDENTIFIER = "ASN_NHSP22";
-    private static final String PACIFIC_ISLANDER_POPULATION_IDENTIFIER = "HPI_NHSP22";
-    private static final String NATIVE_AMERICAN_POPULATION_IDENTIFIER = "AIA_NHSP22";
+
+    
 
     public ResponseEntity<Resource> colorHeatmapDemographic(
-        ResponseEntity<Resource> precinctBoundariesGeoJSON, 
-        ResponseEntity<Resource> precinctRacialGroupsPopulationJSON, 
+        ResponseEntity<Resource> precinctsBoundariesGeoJsonResponse, 
+        ResponseEntity<Resource> precinctsPopulationGroupsJsonResponse, 
         RacialGroup selectedRacialGroup) {
+
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            Resource responseBodyPrecinctBoundaries = precinctBoundariesGeoJSON.getBody();
-            BufferedReader responseBodyPrecinctBoundariesReader = new BufferedReader(new InputStreamReader(responseBodyPrecinctBoundaries.getInputStream()));
-            StringBuilder jsonContent = new StringBuilder();
-            String currentJsonLine = "";
-            while ((currentJsonLine = responseBodyPrecinctBoundariesReader.readLine()) != null) {
-                jsonContent.append(currentJsonLine);
-            }
-            responseBodyPrecinctBoundariesReader.close();
-            String precinctBoundariesJsonString = jsonContent.toString();
-            JsonNode precinctBoundariesJsonArray = mapper.readTree(precinctBoundariesJsonString);
+            TreeMap<Integer, Bin> loadedHeatmapBins = loadedBins.get(BinsFeature.HEATMAP_DEMOGRAPHIC); 
 
-            jsonContent.setLength(0);
-            currentJsonLine = "";
+            StringBuilder reusableJsonContentBuilder = new StringBuilder();
 
-            Resource responseBodyPrecinctRacialGroups = precinctRacialGroupsPopulationJSON.getBody();
-            BufferedReader responseBodyPrecinctRacialGroupsReader = new BufferedReader(new InputStreamReader(responseBodyPrecinctRacialGroups.getInputStream()));
-            while ((currentJsonLine = responseBodyPrecinctRacialGroupsReader.readLine()) != null) {
-                jsonContent.append(currentJsonLine);
-            }
-            responseBodyPrecinctRacialGroupsReader.close();
-            String precinctRacialGroupsJsonString = jsonContent.toString();
-            JsonNode racialGroupsJsonArray = mapper.readTree(precinctRacialGroupsJsonString);
+            Resource precinctsBoundariesBody = precinctsBoundariesGeoJsonResponse.getBody();
+            InputStreamReader precinctsBoundariesBodyStream = new InputStreamReader(precinctsBoundariesBody.getInputStream());
+            BufferedReader precinctsBoundariesBodyReader = new BufferedReader(precinctsBoundariesBodyStream);
+            String precinctsBoundariesJsonString = constructJSONString(precinctsBoundariesBodyReader, reusableJsonContentBuilder);
+            FeatureCollection precinctsBoundariesJson = JSON.parseObject(precinctsBoundariesJsonString, FeatureCollection.class);
             
-            String racialDataRowIdentifier = null;
-            switch(selectedRacialGroup){
-                case WHITE:
-                    racialDataRowIdentifier = WHITE_POPULATION_IDENTIFIER;
-                    break;
-                case BLACK:
-                    racialDataRowIdentifier = BLACK_POPULATION_IDENTIFIER;
-                    break;
-                case HISPANIC_LATINO:
-                    racialDataRowIdentifier = HISPANIC_LATINO_POPULATION_IDENTIFIER;
-                    break;
-                case ASIAN:
-                    racialDataRowIdentifier = ASIAN_POPULATION_IDENTIFIER;
-                    break;
-                case PACIFIC_ISLANDER:
-                    racialDataRowIdentifier = PACIFIC_ISLANDER_POPULATION_IDENTIFIER;
-                    break;
-                case NATIVE_AMERICAN:
-                    racialDataRowIdentifier = NATIVE_AMERICAN_POPULATION_IDENTIFIER;
-                    break;
-                default:
-                    throw new InvalidRacialGroupException();
+            reusableJsonContentBuilder.setLength(0);
+
+            Resource precinctsPopulationGroupsBody = precinctsPopulationGroupsJsonResponse.getBody();
+            InputStreamReader precinctsPopulationGroupsBodyStream = new InputStreamReader(precinctsPopulationGroupsBody.getInputStream());
+            BufferedReader precinctsPopulationGroupsBodyReader = new BufferedReader(precinctsPopulationGroupsBodyStream);
+            String precinctsPopulationGroupsJsonString = constructJSONString(precinctsPopulationGroupsBodyReader, reusableJsonContentBuilder);
+            JSONArray precinctsPopulationGroupsJson = JSON.parseObject(precinctsPopulationGroupsJsonString, JSONArray.class);
+
+            String selectedRacialGroupIdentifier = selectedRacialGroup.getIdentifier();
+            if(selectedRacialGroupIdentifier == null){
+                throw new InvalidRacialGroupException();
             }
-            HashMap<String, String> assignedPrecincts = new HashMap<>();
-            for(JsonNode precinctRacialGroupsEntry : racialGroupsJsonArray) {
-                String uniquePrecinctId = precinctRacialGroupsEntry.path("UNIQUE_ID").asText();
+            Map<String, String> assignedPrecincts = new HashMap<>();
+            List<JSONObject> precincts = precinctsPopulationGroupsJson.toJavaList(JSONObject.class);
+            for(JSONObject precinct : precincts) {
+                String uniquePrecinctId = precinct.getString("UNIQUE_ID");
                 Bin assignedBin = null;
-                double racialGroupPopulationInPrecinct = precinctRacialGroupsEntry.path(racialDataRowIdentifier).asDouble();
-                double totalPopulationInPrecinct = precinctRacialGroupsEntry.path(TOTAL_POPULATION_IDENTIFIER).asDouble();
-                if(totalPopulationInPrecinct <= 0) {
-                    assignedBin = loadedBins.get(1);
+                double selectedRacialGroupPopulation = precinct.getDoubleValue(selectedRacialGroupIdentifier);
+                double totalPopulation = precinct.getDoubleValue(TOTAL_POPULATION_IDENTIFIER);
+                if(totalPopulation <= 0) {
+                    assignedBin = loadedHeatmapBins.get(1);
                 }
                 else {
-                    int racialGroupPercentageInPrecinct = (int)((racialGroupPopulationInPrecinct/totalPopulationInPrecinct) * 100);
-                    for(Bin bin : loadedBins.values()){
-                        if(bin.isInRange(racialGroupPercentageInPrecinct)){
-                            assignedBin = loadedBins.get(bin.getBinNumber());
+                    int racialGroupPopulationPercentage = (int)((selectedRacialGroupPopulation/totalPopulation) * 100);
+                    for(Bin bin : loadedHeatmapBins.values()) {
+                        if(bin.isInRange(racialGroupPopulationPercentage)) {
+                            assignedBin = bin;
                             break;
                         }
                     }
                 }
-                if(assignedBin == null){
+                if(assignedBin == null) {
                     throw new InvalidBinRangeException();
-                }
+                }   
                 String assignedPrecinctHexColor = assignedBin.getColor();
                 assignedPrecincts.put(uniquePrecinctId, assignedPrecinctHexColor);
             }
-            for(JsonNode precinctFeature : precinctBoundariesJsonArray.path("features")) {
-                JsonNode propertiesArray = precinctFeature.path("properties");
-                String uniquePrecinctId = propertiesArray.path("UNIQUE_ID").asText();
-                ((ObjectNode) propertiesArray).put("assigned_color", assignedPrecincts.get(uniquePrecinctId));
+            for(Feature precinct : precinctsBoundariesJson.getFeatures()) {
+                Map<String, String> precinctProperties = precinct.getProperties();
+                String precinctId = precinctProperties.get("UNIQUE_ID");
+                precinctProperties.put("ASSIGNED_COLOR", assignedPrecincts.get(precinctId));
+                precinct.setProperties(precinctProperties);
             }
-            String stringJson = mapper.writeValueAsString(precinctBoundariesJsonArray);
+            String stringJson = JSON.toJSONString(precinctsBoundariesJson, SerializerFeature.PrettyFormat);
             Resource resource = new ByteArrayResource(stringJson.getBytes());
             return ResponseEntity.status(HttpStatus.OK).contentType(org.springframework.http.MediaType.parseMediaType("application/geo+json")).body(resource);
         }
         catch (Exception exception){
+            exception.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public String constructJSONString(BufferedReader responseBodyReader, StringBuilder jsonContentBuilder) throws IOException {
+        String currentJsonLine = "";
+        while ((currentJsonLine = responseBodyReader.readLine()) != null) {
+            jsonContentBuilder.append(currentJsonLine);
+        }
+        responseBodyReader.close();
+        return jsonContentBuilder.toString();
     }
 
     public ResponseEntity<Resource> colorHeatmapEconomicIncome(StateAbbreviation stateAbbreviation) {

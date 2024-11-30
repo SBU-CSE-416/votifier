@@ -1,9 +1,9 @@
 package me.Votifier.server.model;
 
 public enum StateViewLevel {
-    STATE("_state.geojson"),
-    DISTRICTS("_cd.geojson"),
-    PRECINCTS("_precincts.geojson");
+    STATE("state_boundaries"),
+    DISTRICTS("cd_boundaries"),
+    PRECINCTS("precinct_boundaries");
 
     private final String fileExtensionSegment;
     

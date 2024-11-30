@@ -4,7 +4,7 @@ import "../../stylesheets/map and data/GeneralInfoBox.css";
 const GeneralInfoBox = ({ state }) => {
   // Filter out the `HOUS_INCOME_DIS` key 
   const filteredStateData = Object.entries(state).filter(
-    ([key]) => key !== "HOUS_INCOME_DIS"
+    ([key]) => key !== "HOUS_INCOME_DIS" && key !== "id"
   );
 
   return (
@@ -25,6 +25,8 @@ const GeneralInfoBox = ({ state }) => {
               <td key={index} className="info-value">
                 {typeof value === "number"
                   ? value.toLocaleString() // Format numbers with commas
+                  : typeof value === "object"
+                  ? JSON.stringify(value) // Convert objects to strings
                   : value}
               </td>
             ))}
