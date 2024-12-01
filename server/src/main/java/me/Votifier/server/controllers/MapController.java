@@ -21,14 +21,14 @@ import org.springframework.http.ResponseEntity;
 import me.Votifier.server.services.MapService;
 
 import me.Votifier.server.model.StateViewLevel;
+import me.Votifier.server.model.documents.DistrictsBoundary;
+import me.Votifier.server.model.documents.PrecinctsBoundary;
+import me.Votifier.server.model.documents.StateBoundary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
-import me.Votifier.server.repository.StateBoundaryRepository;
+import me.Votifier.server.model.repository.DistrictsBoundaryRepository;
+import me.Votifier.server.model.repository.PrecinctsBoundaryRepository;
+import me.Votifier.server.model.repository.StateBoundaryRepository;
 import me.Votifier.server.model.StateAbbreviation;
-import me.Votifier.server.model.StateBoundary;
-import me.Votifier.server.repository.DistrictsBoundaryRepository;
-import me.Votifier.server.model.DistrictsBoundary;
-import me.Votifier.server.model.PrecinctsBoundary;
-import me.Votifier.server.repository.PrecinctsBoundaryRepository;
 import me.Votifier.server.model.RacialGroup;
 
 import java.util.HashMap;
@@ -44,7 +44,6 @@ public class MapController {
 
     public MapController(MapService mapService) {
         this.mapService = mapService;
-
     }
 
     @GetMapping("/{stateAbbreviation}/boundary/state")
@@ -68,9 +67,9 @@ public class MapController {
     @GetMapping("/{stateAbbreviation}/heatmap/demographic/{racialGroup}")
     public ResponseEntity<Resource> getHeatmapDemographic(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup){
         // Note: These two methods will eventually be changed, since we will be accessing the cache/database for this data instead of locally
-        ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctBoundariesFromLocal(stateAbbreviation);
-        ResponseEntity<Resource> precinctRacialGroupsJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
-        return null;
+        ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
+        ResponseEntity<Resource> precinctRacialGroupsJSON = gatherPrecinctRacialGroupsFromLocal(stateAbbreviation);
+        return mapService.colorHeatmapDemographic(precinctBoundaryGeoJSON, precinctRacialGroupsJSON, racialGroup);
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-income")
@@ -120,14 +119,14 @@ public class MapController {
 
     @Cacheable(value = "statePrecincts", key = "#stateAbbreviation")
     public ResponseEntity<Resource> gatherPrecinctsBoundaryDataFromCache(StateAbbreviation stateAbbreviation) {
-        System.out.println("State Abbreviation: " + stateAbbreviation);
-        System.out.println("State Abbreviation Full Name: " + stateAbbreviation.getFullStateName());
+        //System.out.println("State Abbreviation: " + stateAbbreviation);
+        //System.out.println("State Abbreviation Full Name: " + stateAbbreviation.getFullStateName());
         try {
             // Fetch the documents using the NAME field
             List<PrecinctsBoundary> boundaries = precinctsBoundaryRepository.findAllByNAME(stateAbbreviation.getFullStateName());
 
             if (boundaries == null || boundaries.isEmpty()) {
-                System.out.println("No precincts boundary found for: " + stateAbbreviation.getFullStateName());
+                //System.out.println("No precincts boundary found for: " + stateAbbreviation.getFullStateName());
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
@@ -220,6 +219,32 @@ public class MapController {
         } catch (Exception e) {
             System.out.println("Error fetching or serializing state boundary: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity<Resource> gatherPrecinctRacialGroupsFromLocal(StateAbbreviation stateAbbreviation){
+        if(stateAbbreviation == null) {
+            System.out.println("(!) Invalid state");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        try {
+            Path filePath = null;
+            switch(stateAbbreviation){
+                case SC:
+                    filePath = Paths.get("data/processed_individual/sc_precinct_racial_groups.json");
+                    break;
+                case MD:
+                    filePath = Paths.get("data/processed_individual/md_precinct_racial_groups.json");
+                    break;
+                default:
+                    filePath = Paths.get("data/processed_individual/unknown_precinct_racial_groups.json");
+                    break;
+            }
+            Resource resource = getResourceFromLocal(filePath);
+            return ResponseEntity.ok(resource);
+        }
+        catch (UnknownFileException exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

@@ -1,36 +1,38 @@
 package me.Votifier.server.model.configurations.bins;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import me.Votifier.server.model.Bin;
-import me.Votifier.server.model.BinsFeature;
-
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashMap;
+
+import me.Votifier.server.model.configurations.FeatureName;
 
 @Configuration
 @PropertySource("classpath:configurations/bins/heatmap-demographic.properties")
+@PropertySource("classpath:configurations/bins/heatmap-economic-income.properties")
+@PropertySource("classpath:configurations/bins/heatmap-economic-poverty.properties")
+@PropertySource("classpath:configurations/bins/heatmap-region-type.properties")
+@PropertySource("classpath:configurations/bins/heatmap-political-income.properties")
 @ConfigurationProperties(prefix = "bins")
 public class BinsConfig {
 
-    Map<BinsFeature, TreeMap<Integer,Bin>> allBins;
+    Map<FeatureName, HashMap<Integer,Bin>> allBins;
 
-    public Map<BinsFeature, TreeMap<Integer,Bin>> getAllBins() {
+    public Map<FeatureName, HashMap<Integer,Bin>> getAllBins() {
         return allBins;
     }
 
-    public void setAllBins(Map<BinsFeature, TreeMap<Integer,Bin>> bins) {
+    public void setAllBins(Map<FeatureName, HashMap<Integer,Bin>> bins) {
         this.allBins = bins;
     }
 
-    public TreeMap<Integer, Bin> getFeatureBins(BinsFeature feature) {
+    public HashMap<Integer, Bin> getFeatureBins(FeatureName feature) {
         return allBins.get(feature);
     }
 
-    public void setFeatureBin(BinsFeature feature, TreeMap<Integer, Bin> bins) {
+    public void setFeatureBin(FeatureName feature, HashMap<Integer, Bin> bins) {
         allBins.put(feature, bins);
     }
 }
