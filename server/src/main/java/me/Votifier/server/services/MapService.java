@@ -168,6 +168,7 @@ public class MapService {
             // String stringJson = JSON.toJSONString(precinctsBoundariesJson, SerializerFeature.PrettyFormat);
             // Resource resource = new ByteArrayResource(stringJson.getBytes());
             // return ResponseEntity.status(HttpStatus.OK).contentType(org.springframework.http.MediaType.parseMediaType("application/geo+json")).body(resource);
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         }
         catch (Exception exception){
             exception.printStackTrace();

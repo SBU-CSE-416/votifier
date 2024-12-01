@@ -14,7 +14,6 @@ public class PrecinctsBoundary {
     private Object geometry; // Holds the geometry object from GeoJSON
     private String NAME; // State name
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

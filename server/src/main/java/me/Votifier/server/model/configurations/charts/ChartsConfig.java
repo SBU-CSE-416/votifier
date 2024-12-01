@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 import java.util.Map;
-import java.util.HashMap;
 
 import me.Votifier.server.model.configurations.FeatureName;
 
@@ -14,21 +13,21 @@ import me.Votifier.server.model.configurations.FeatureName;
 @ConfigurationProperties(prefix = "charts")
 public class ChartsConfig {
 
-    Map<FeatureName, HashMap<Integer,Chart>> allCharts;
+    Map<FeatureName, Chart> allCharts;
 
-    public Map<FeatureName, HashMap<Integer,Chart>> getAllCharts() {
+    public Map<FeatureName, Chart> getAllCharts() {
         return allCharts;
     }
 
-    public void setAllCharts(Map<FeatureName, HashMap<Integer,Chart>> charts) {
+    public void setAllCharts(Map<FeatureName, Chart> charts) {
         this.allCharts = charts;
     }
 
-    public HashMap<Integer, Chart> getFeatureCharts(FeatureName feature) {
+    public Chart getFeatureChart(FeatureName feature) {
         return allCharts.get(feature);
     }
 
-    public void setFeatureChart(FeatureName feature, HashMap<Integer, Chart> charts) {
-        allCharts.put(feature, charts);
+    public void setFeatureChart(FeatureName feature, Chart chart) {
+        allCharts.put(feature, chart);
     }
 }

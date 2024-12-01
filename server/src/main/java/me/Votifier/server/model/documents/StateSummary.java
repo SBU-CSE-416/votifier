@@ -33,7 +33,6 @@ public class StateSummary {
     private Map<String, Double> HOUS_INCOME_DIS; 
     private double POV_LEVEL; 
 
-    // Getters and Setters
     public String getId() {
         return id;
     }

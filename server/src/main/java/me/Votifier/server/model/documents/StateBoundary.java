@@ -11,7 +11,6 @@ public class StateBoundary {
     private Object features;
     private String NAME; // Matches the "NAME" field in MongoDB
 
-    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -43,6 +42,4 @@ public class StateBoundary {
     public void setNAME(String NAME) {
         this.NAME = NAME;
     }
-}
-
-  
+}  

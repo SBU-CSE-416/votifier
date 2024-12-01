@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import json
+import os
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["votifier"]
@@ -7,7 +8,9 @@ collection = db["state_boundaries"]
 
 collection.delete_many({})
 
-south_carolina_state_path = 'states/south_carolina/geodata/south_carolina_state.geojson'
+print("Current Working Directory:", os.getcwd())
+
+south_carolina_state_path = 'server/data/states/south_carolina/geodata/south_carolina_state.geojson'
 
 with open(south_carolina_state_path, 'r') as file:
     geojson_data = json.load(file)
@@ -20,7 +23,7 @@ collection.create_index([("geometry", "2dsphere")])
 
 print("South Carolina GeoJSON data inserted index created")
 
-maryland_state_path = 'states/maryland/geodata/maryland_state.geojson'
+maryland_state_path = 'server/data/states/maryland/geodata/maryland_state.geojson'
 
 with open(maryland_state_path, 'r') as file:
     geojson_data = json.load(file)
@@ -36,7 +39,7 @@ print("Maryland GeoJSON data inserted index created")
 collection = db["cd_boundaries"]
 
 collection.delete_many({})
-south_carolina_cd_path = 'states/south_carolina/geodata/south_carolina_cd.geojson'
+south_carolina_cd_path = 'server/data/states/south_carolina/geodata/south_carolina_cd.geojson'
 
 with open(south_carolina_cd_path, 'r') as file:
     geojson_data = json.load(file)
@@ -49,7 +52,7 @@ collection.create_index([("geometry", "2dsphere")])
 
 print("South Carolina Congressional District GeoJSON data inserted index created")
 
-maryland_cd_path = 'states/maryland/geodata/maryland_cd.geojson'
+maryland_cd_path = 'server/data/states/maryland/geodata/maryland_cd.geojson'
 
 with open(maryland_cd_path, 'r') as file:
     geojson_data = json.load(file)
@@ -66,7 +69,7 @@ collection = db["precincts_boundaries"]
 
 collection.delete_many({})
 
-south_carolina_precincts_path = 'states/south_carolina/geodata/south_carolina_precincts.geojson'
+south_carolina_precincts_path = 'server/data/states/south_carolina/geodata/south_carolina_precincts.geojson'
 
 with open(south_carolina_precincts_path, 'r') as file:
     geojson_data = json.load(file)
@@ -89,7 +92,7 @@ collection.create_index([("geometry", "2dsphere")])
 
 print("South Carolina Precinct GeoJSON data inserted index created")
 
-maryland_precincts_path = 'states/maryland/geodata/maryland_precincts.geojson'
+maryland_precincts_path = 'server/data/states/maryland/geodata/maryland_precincts.geojson'
 
 with open(maryland_precincts_path, 'r') as file:
 
@@ -118,7 +121,7 @@ collection = db["state_summary"]
 collection.delete_many({})
 
 
-south_carolina_state_summary_path = "states/south_carolina/summary/south_carolina_summary.json"
+south_carolina_state_summary_path = "server/data/states/south_carolina/summary/south_carolina_summary.json"
 
 with open(south_carolina_state_summary_path, 'r') as file:
     summary_data = json.load(file)
