@@ -113,8 +113,6 @@ public class MapController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-    // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     @Autowired
     private PrecinctsBoundaryRepository precinctsBoundaryRepository;
 
@@ -146,9 +144,11 @@ public class MapController {
 
             featureCollection.put("features", features);
 
-            // Convert the FeatureCollection to JSON
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(featureCollection);
+            // Convert the FeatureCollection to JSON using Fastjson
+            String jsonResponse = com.alibaba.fastjson2.JSON.toJSONString(
+                featureCollection,
+                com.alibaba.fastjson2.JSONWriter.Feature.LargeObject // Enable LargeObject feature
+            );
 
             // Convert JSON response to a Resource
             Resource resource = new ByteArrayResource(jsonResponse.getBytes());
