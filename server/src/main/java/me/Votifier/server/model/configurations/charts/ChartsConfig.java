@@ -9,7 +9,7 @@ import java.util.Map;
 import me.Votifier.server.model.configurations.FeatureName;
 
 @Configuration
-@PropertySource("classpath:configurations/charts/gingles-racial.properties")
+@PropertySource("classpath:configurations/charts/gingles-demographic.properties")
 @ConfigurationProperties(prefix = "charts")
 public class ChartsConfig {
 
