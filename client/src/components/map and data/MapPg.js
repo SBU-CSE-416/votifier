@@ -199,6 +199,22 @@ export default function MapPg() {
     featureType,
   }) => {
     const map = useMap();
+    if(store.isDataVisible===true && store.selectedMapView==="districts" && geojsonMarylandCongress){
+      geojsonData = geojsonMarylandCongress;
+      featureType = "district";
+    }
+    else if(store.isDataVisible===true && store.selectedMapView==="districts" && geojsonSouthCarolinaCongress){
+      geojsonData = geojsonSouthCarolinaCongress;
+      featureType = "district";
+    }
+    else if(store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonMarylandPrecinct){
+      geojsonData = geojsonMarylandPrecinct;
+      featureType = "precinct";
+    }
+    else if(store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonSouthCarolinaPrecinct){
+      geojsonData = geojsonSouthCarolinaPrecinct;
+      featureType = "precinct";
+    }
     console.log("current geojson: ",geojsonData )
     useEffect(() => {
       if (disableNavigation) {
@@ -400,6 +416,7 @@ export default function MapPg() {
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
+          FeatureInteraction={FeatureInteraction}
         />
       }
 
