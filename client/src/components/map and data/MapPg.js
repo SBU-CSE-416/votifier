@@ -196,8 +196,6 @@ export default function MapPg() {
   
   const FeatureInteraction = ({
     geojsonData,
-    onFeatureClick,
-    disableNavigation,
     featureType,
   }) => {
     const map = useMap();
@@ -217,7 +215,7 @@ export default function MapPg() {
         map.touchZoom.enable();
         map.boxZoom.enable();
       }
-    }, [disableNavigation, map]);
+    }, [map]);
     console.log("featureType: ", featureType);
     const geojsonStyle = {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
@@ -430,66 +428,41 @@ export default function MapPg() {
           {/* State Boundaries */}
           <FeatureInteraction
             geojsonData={geojsonMaryland}
-            onFeatureClick={onFeatureClick}
-            disableNavigation={disableNavigation}
-            setHoverState={setHoverState}
-            setState={setState}
             featureType="state"
           />
-       
 
           <FeatureInteraction
             geojsonData={geojsonSouthCarolina}
-            onFeatureClick={onFeatureClick}
-            disableNavigation={disableNavigation}
-            setHoverState={setHoverState}
-            setState={setState}
             featureType="state"
           />
 
           {/* District Boundaries */}
-          {showDistricts && geojsonMarylandCongress && (
+          {store.isDataVisible===true && store.selectedMapView==="districts" && geojsonMarylandCongress && (
             <FeatureInteraction
               geojsonData={geojsonMarylandCongress}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
               featureType="district"
             />
           )}
 
-          {showDistricts && geojsonSouthCarolinaCongress && (
+          {store.isDataVisible===true && store.selectedMapView==="districts" && geojsonSouthCarolinaCongress && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaCongress}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
               featureType="district"
             />
           )}
 
           {/* Precinct Boundaries */}
-          {showPrecincts && geojsonSouthCarolinaPrecinct && (
+          {store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonSouthCarolinaPrecinct && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaPrecinct}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
-              featureType="precincts"
+              featureType="precinct"
             />
           )}
 
-          {showPrecincts && geojsonMarylandPrecinct && (
+          {store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonMarylandPrecinct && (
             <FeatureInteraction
               geojsonData={geojsonMarylandPrecinct}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
-              featureType="precincts"
+              featureType="precinct"
             />
           )}
 
@@ -497,7 +470,6 @@ export default function MapPg() {
         </MapContainer>
       </div>
       {store.isDataVisible && <DataPg state={state} />}
-      
     </div>
   );
 }
