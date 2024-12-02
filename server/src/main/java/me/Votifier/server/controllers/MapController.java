@@ -57,27 +57,37 @@ public class MapController {
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/demographic/{racialGroup}")
-    public ResponseEntity<Resource> getHeatmapDemographic(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup){
-        // Note: These two methods will eventually be changed, since we will be accessing the cache/database for this data instead of locally
+    public ResponseEntity<Resource> getHeatmapDemographic(
+        @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, 
+        @PathVariable("racialGroup") RacialGroup racialGroup
+        ) {
+        // Note: The second method will eventually be changed, since we will be accessing the cache/database for this data instead of locally
         ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
         ResponseEntity<Resource> precinctRacialGroupsJSON = gatherPrecinctRacialGroupsFromLocal(stateAbbreviation);
         return mapService.colorHeatmapDemographic(precinctBoundaryGeoJSON, precinctRacialGroupsJSON, racialGroup);
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-income")
-    public ResponseEntity<Resource> getHeatmapEconomicIncome(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation){
+    public ResponseEntity<Resource> getHeatmapEconomicIncome(
+        @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation
+        ) {
+        // Note: The second method will eventually be changed, since we will be accessing the cache/database for this data instead of locally
         ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
         ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromLocal(stateAbbreviation);
         return mapService.colorHeatmapEconomicIncome(precinctBoundaryGeoJSON, precinctEconomicGroupsJSON);
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-regions")
-    public ResponseEntity<Resource> getHeatmapEconomicRegions(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation){
+    public ResponseEntity<Resource> getHeatmapEconomicRegions(
+        @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation
+        ) {
+        // Note: The second method will eventually be changed, since we will be accessing the cache/database for this data instead of locally
+        ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
         return mapService.colorHeatmapEconomicRegions(stateAbbreviation);
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-poverty")
-    public ResponseEntity<Resource> getHeatmapEconomicPoverty(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation){
+    public ResponseEntity<Resource> getHeatmapEconomicPoverty(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
         return mapService.colorHeatmapEconomicPoverty(stateAbbreviation);
     }
 
