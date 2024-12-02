@@ -5,7 +5,6 @@ import { MapStoreContext } from "../../stores/MapStore";
 
 export default function LeftSideMenu(props) {
   const { store } = useContext(MapStoreContext);
-  let dataVisible = props.dataVisible;
 
   const checkSelectedState = () => {
     let stateName = "";
@@ -25,7 +24,7 @@ export default function LeftSideMenu(props) {
   return (
     <div className="side-nav-container">
       {/* States Dropdown Menu*/}
-      {dataVisible ? (
+      {store.isDataVisible ? (
         <div className="dropdown-content">
           <div className="left-container">
           <BackButton handleResetView={props.handleResetView}> </BackButton>

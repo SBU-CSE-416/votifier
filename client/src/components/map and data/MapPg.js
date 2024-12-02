@@ -35,14 +35,14 @@ const initialState = {
     value: "0",
   },
 };
-function MapResizer({ dataVisible }) {
+function MapResizer({store }) {
   const map = useMap();
 
   useEffect(() => {
     setTimeout(() => {
       map.invalidateSize();
     }, 0);
-  }, [dataVisible, map]);
+  }, [store.isDataVisible, map]);
 
   return null;
 }
@@ -51,7 +51,6 @@ export default function MapPg() {
 
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: "" });
-  const [dataVisible, setDataVisible] = useState(false);
   const [showDistricts, setShowDistricts] = useState(false);
   const [showPrecincts, setShowPrecincts] = useState(false);
 
@@ -330,7 +329,7 @@ export default function MapPg() {
     map.setView(defaultView, defaultZoom);
     setState(initialState);
     setHoverState({ districtName: "" });
-    setDataVisible(false);
+    store.setDataVisibility(false);
     setDisableNavigation(false);
     setShowDistricts(false);
     setShowPrecincts(false);
@@ -391,7 +390,7 @@ export default function MapPg() {
       }
     }
 
-    setDataVisible(true);
+    store.setDataVisibility(true);
     setDisableNavigation(true);
   };
   console.log("state:", state);
@@ -399,7 +398,6 @@ export default function MapPg() {
     <div style={{ display: "flex" }}>
       {
         <LeftSideMenu
-          dataVisible={dataVisible}
           selectedStateCode={selectedStateCode}
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
@@ -410,7 +408,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: dataVisible ? "41vw" : "85vw",
+          width: store.isDataVisible ? "41vw" : "85vw",
         }}
       >
         <MapContainer
@@ -423,7 +421,7 @@ export default function MapPg() {
             transition: "width 0.5s ease",
           }}
         >
-          <MapResizer dataVisible={dataVisible} />
+          <MapResizer store={store} />
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
             attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
@@ -498,7 +496,7 @@ export default function MapPg() {
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-      {dataVisible && <DataPg state={state} />}
+      {store.isDataVisible && <DataPg state={state} />}
       
     </div>
   );
