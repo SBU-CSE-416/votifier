@@ -371,7 +371,7 @@ export default function MapPg() {
         setState(state_data.data);
         setShowDistricts(true);
       }
-    }
+    }else
     if (selectedView === "precincts") {
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
