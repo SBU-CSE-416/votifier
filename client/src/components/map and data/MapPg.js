@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import DataPg from "./DataPg";
-import "../../stylesheets/map and data/map.css";
+import "../../stylesheets/map and data/Map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
@@ -56,6 +56,7 @@ export default function MapPg() {
   const [selectedView, setView] = useState("districts");
   const [selectedPlan, setPlan] = useState("");
   const [selectedHeatmap, setHeatmap] = useState("");
+  const [selectedDemographic, setDemographic] = useState("white");
   const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
@@ -248,7 +249,7 @@ export default function MapPg() {
       highlightFeature(layer);
       const bounds = layer.getBounds();
       map.fitBounds(bounds, {
-        maxZoom: 7, 
+        maxZoom: 7.5, 
       });
       onFeatureClick(feature);
     };
@@ -410,13 +411,15 @@ export default function MapPg() {
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
+          selectedDemographic={selectedDemographic}
+          setDemographic={setDemographic}
         />
       }
 
       <div
         style={{
           position: "relative",
-          width: dataVisible ? "41.75vw" : "90vw",
+          width: dataVisible ? "41vw" : "85vw",
         }}
       >
         <MapContainer

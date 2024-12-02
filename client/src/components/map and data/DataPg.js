@@ -6,7 +6,7 @@ import VotingGraph from "./VotingGraph";
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
 import GeneralInfoBox from "./GeneralInfoBox"
-import "../../stylesheets/dataPg.css"
+import "../../stylesheets/map and data/DataPg.css";
 import { useState } from "react";
 
 
