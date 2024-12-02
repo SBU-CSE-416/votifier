@@ -6,18 +6,24 @@ export const MapStoreContext = createContext({});
 // Reducer action types
 export const MapStoreReducerAction = {
     SET_MAP_VIEW: "SET_MAP_VIEW",
-    SET_SELECTED_STATE: "SET_SELECTED_STATE",
+    SET_SELECTED_STATE_CODE: "SET_SELECTED_STATE_CODE",
     SET_SELECTED_DISTRICT: "SET_SELECTED_DISTRICT",
     SET_SELECTED_PRECINCT: "SET_SELECTED_PRECINCT",
+    SET_HEATMAP: "SET_HEATMAP",
+    SET_DEMOGRAPHIC: "SET_DEMOGRAPHIC", // for heatmap
+    SET_DATA_VISIBILITY: "SET_DATA_VISIBILITY",
 };
 
 // Context Provider
 function MapStoreContextProvider(props) {
     const [store, setStore] = useState({
-        selectedMapView: "state", // Default view: "state", can also be "district" or "precinct"
-        selectedState: null,
+        selectedMapView: "districts",
+        selectedStateCode: null,
         selectedDistrict: null,
         selectedPrecinct: null,
+        selectedHeatmap: "none", 
+        selectedDemographic: "white",
+        isDataVisible: false,
     });
 
     useEffect(() => {
@@ -40,10 +46,10 @@ function MapStoreContextProvider(props) {
                 return;
             }
 
-            case MapStoreReducerAction.SET_SELECTED_STATE: {
+            case MapStoreReducerAction.SET_SELECTED_STATE_CODE: {
                 setStore((prevStore) => ({
                     ...prevStore,
-                    selectedState: payload, // Update the selected state
+                    selectedstateCode: payload, // Update the selected state
                 }));
                 return;
             }
@@ -63,6 +69,30 @@ function MapStoreContextProvider(props) {
                 }));
                 return;
             }
+            
+            case MapStoreReducerAction.SET_HEATMAP: {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    selectedHeatmap: payload, // Update the selected heatmap
+                }));
+                return;
+            }
+
+            case MapStoreReducerAction.SET_DEMOGRAPHIC: {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    selectedDemographic: payload, // Update the selected demographic
+                }));
+                return;
+            }
+
+            case MapStoreReducerAction.SET_DATA_VISIBILITY: {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    isDataVisible: payload, // Update the data visibility
+                }));
+                return;
+            }
 
             default: {
                 return store;
@@ -75,8 +105,8 @@ function MapStoreContextProvider(props) {
         MapStoreReducer(MapStoreReducerAction.SET_MAP_VIEW, selectedMapView);
     };
 
-    store.setSelectedState = function (state) {
-        MapStoreReducer(MapStoreReducerAction.SET_SELECTED_STATE, state);
+    store.setselectedstateCode = function (state) {
+        MapStoreReducer(MapStoreReducerAction.SET_SELECTED_STATE_CODE, state);
     };
 
     store.setSelectedDistrict = function (district) {
@@ -85,6 +115,18 @@ function MapStoreContextProvider(props) {
 
     store.setSelectedPrecinct = function (precinct) {
         MapStoreReducer(MapStoreReducerAction.SET_SELECTED_PRECINCT, precinct);
+    };
+
+    store.setSelectedHeatmap = function (heatmap) {
+        MapStoreReducer(MapStoreReducerAction.SET_HEATMAP, heatmap);
+    };
+
+    store.setSelectedDemographic = function (demographic) {
+        MapStoreReducer(MapStoreReducerAction.SET_DEMOGRAPHIC, demographic);
+    };
+
+    store.setDataVisibility = function (isDataVisible) {
+        MapStoreReducer(MapStoreReducerAction.SET_DATA_VISIBILITY, isDataVisible);
     };
 
     // Return context provider
