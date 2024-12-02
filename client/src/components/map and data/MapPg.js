@@ -56,10 +56,6 @@ export default function MapPg() {
   const [showPrecincts, setShowPrecincts] = useState(false);
 
   //LeftSideMenu selectors
-  const [selectedView, setView] = useState("districts");
-  const [selectedPlan, setPlan] = useState("");
-  const [selectedHeatmap, setHeatmap] = useState("");
-  const [selectedDemographic, setDemographic] = useState("white");
   const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
@@ -113,7 +109,7 @@ export default function MapPg() {
   };
   useEffect(() => {
     const loadHeatmap = async () => {
-      if (selectedHeatmap === "demographic" && selectedStateCode) {
+      if (store.selectedHeatmap === "demographic" && selectedStateCode) {
         const stateCodeMapping = {
           45: "SC", // South Carolina
           24: "MD", // Maryland
@@ -133,7 +129,7 @@ export default function MapPg() {
     };
   
     loadHeatmap();
-  }, [selectedHeatmap, selectedStateCode]);
+  }, [store.selectedHeatmap, selectedStateCode]);
     
   console.log("showPrecincts", showPrecincts);
   useEffect(() => {
@@ -404,18 +400,10 @@ export default function MapPg() {
       {
         <LeftSideMenu
           dataVisible={dataVisible}
-          setHeatmap={setHeatmap}
-          setPlan={setPlan}
-          selectedPlan={selectedPlan}
-          selectedHeatmap={selectedHeatmap}
-          setView={setView}
-          selectedView={selectedView}
           selectedStateCode={selectedStateCode}
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
-          selectedDemographic={selectedDemographic}
-          setDemographic={setDemographic}
         />
       }
 
@@ -450,6 +438,7 @@ export default function MapPg() {
             setState={setState}
             featureType="state"
           />
+       
 
           <FeatureInteraction
             geojsonData={geojsonSouthCarolina}

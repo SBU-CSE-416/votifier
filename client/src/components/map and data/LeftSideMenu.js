@@ -7,17 +7,6 @@ export default function LeftSideMenu(props) {
   const { store } = useContext(MapStoreContext);
   let dataVisible = props.dataVisible;
 
-  const handleViewChange = (event) => {
-    console.log("View changed to:", event.target.value);
-    //props.setView(event.target.value);
-    store.setMapView(event.target.value);
-  };
-  const handleHeatmapChange = (event) => {
-    props.setHeatmap(event.target.value);
-  };
-  const handlePlanChange = (event) => {
-    props.setPlan(event.target.value);
-  }
   const checkSelectedState = () => {
     let stateName = "";
     if (props.selectedStateCode) {
@@ -52,8 +41,8 @@ export default function LeftSideMenu(props) {
           <div className="left-dropdown">
           
           <select 
-                value={props.selectedPlan}
-                onChange={handlePlanChange}
+                value={store.selectedDistrictPlan}
+                onChange={(event) => store.setDistrictPlan(event.target.value)}
                 className="dropdown-select"
               >
                 <optgroup label="Official Plans">
@@ -79,7 +68,7 @@ export default function LeftSideMenu(props) {
           <div className="left-dropdown">
             <select
               value={store.selectedMapView}
-              onChange={handleViewChange}
+              onChange={(event) => store.setMapView(event.target.value)}
               className="dropdown-select"
             >
               <option value="districts">Districts</option>
@@ -93,8 +82,8 @@ export default function LeftSideMenu(props) {
           </div>
           <div className="left-dropdown">
             <select
-              value={props.selectedHeatmap}
-              onChange={(e) => props.setHeatmap(e.target.value)}
+              value={store.selectedHeatmap}
+              onChange={(event) => store.setSelectedHeatmap(event.target.value)}
               className="dropdown-select"
             >
               <option value="none">None</option>
@@ -105,7 +94,7 @@ export default function LeftSideMenu(props) {
               <option value="politicalIncome">Political/Income</option>
             </select>
           </div>
-          {props.selectedHeatmap === "demographic" ? 
+          {store.selectedHeatmap === "demographic" ? 
             <>
               <div className="left-label">
                 <label>
@@ -114,8 +103,8 @@ export default function LeftSideMenu(props) {
               </div>
               <div className="left-dropdown">
                 <select
-                  value={props.selectedDemographic}
-                  onChange={(e) => props.setDemographic(e.target.value)}
+                  value={store.selectedDemographic}
+                  onChange={(event) => store.setSelectedDemographic(event.target.value)}
                   className="dropdown-select"
                 >
                   <option value="white">White</option>

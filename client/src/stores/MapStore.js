@@ -11,6 +11,7 @@ export const MapStoreReducerAction = {
     SET_SELECTED_PRECINCT: "SET_SELECTED_PRECINCT",
     SET_HEATMAP: "SET_HEATMAP",
     SET_DEMOGRAPHIC: "SET_DEMOGRAPHIC", // for heatmap
+    SET_DISTRICT_PLAN: "SET_DISTRICT_PLAN",
     SET_DATA_VISIBILITY: "SET_DATA_VISIBILITY",
 };
 
@@ -23,6 +24,7 @@ function MapStoreContextProvider(props) {
         selectedPrecinct: null,
         selectedHeatmap: "none", 
         selectedDemographic: "white",
+        selectedDistrictPlan: null,
         isDataVisible: false,
     });
 
@@ -86,6 +88,14 @@ function MapStoreContextProvider(props) {
                 return;
             }
 
+            case MapStoreReducerAction.SET_DISTRICT_PLAN: { 
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    selectedDistrictPlan: payload, // Update the selected district plan
+                }));
+                return;
+            }
+
             case MapStoreReducerAction.SET_DATA_VISIBILITY: {
                 setStore((prevStore) => ({
                     ...prevStore,
@@ -123,6 +133,10 @@ function MapStoreContextProvider(props) {
 
     store.setSelectedDemographic = function (demographic) {
         MapStoreReducer(MapStoreReducerAction.SET_DEMOGRAPHIC, demographic);
+    };
+
+    store.setDistrictPlan = function (districtPlan) {
+        MapStoreReducer(MapStoreReducerAction.SET_DISTRICT_PLAN, districtPlan);
     };
 
     store.setDataVisibility = function (isDataVisible) {
