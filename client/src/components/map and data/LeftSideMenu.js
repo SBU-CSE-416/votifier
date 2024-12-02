@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useContext } from "react";
 import "../../stylesheets/map and data/LeftSideMenu.css";
 import BackButton from "./BackButton";
+import { MapStoreContext } from "../../stores/MapStore";
 
 export default function LeftSideMenu(props) {
+  const { store } = useContext(MapStoreContext);
   let dataVisible = props.dataVisible;
 
   const handleViewChange = (event) => {
     console.log("View changed to:", event.target.value);
-    props.setView(event.target.value);
+    //props.setView(event.target.value);
+    store.setMapView(event.target.value);
   };
   const handleHeatmapChange = (event) => {
     props.setHeatmap(event.target.value);
@@ -29,7 +32,7 @@ export default function LeftSideMenu(props) {
       );
     }
   };
-  console.log("props.selectedView:", props.selectedView); 
+  console.log("store.selectedMapView:", store.selectedMapView); 
   return (
     <div className="side-nav-container">
       {/* States Dropdown Menu*/}
@@ -75,7 +78,7 @@ export default function LeftSideMenu(props) {
           </div>
           <div className="left-dropdown">
             <select
-              value={props.selectedView}
+              value={store.selectedMapView}
               onChange={handleViewChange}
               className="dropdown-select"
             >

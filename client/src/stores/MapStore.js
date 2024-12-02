@@ -14,7 +14,7 @@ export const MapStoreReducerAction = {
 // Context Provider
 function MapStoreContextProvider(props) {
     const [store, setStore] = useState({
-        mapView: "state", // Default view: "state", can also be "district" or "precinct"
+        selectedMapView: "state", // Default view: "state", can also be "district" or "precinct"
         selectedState: null,
         selectedDistrict: null,
         selectedPrecinct: null,
@@ -25,7 +25,7 @@ function MapStoreContextProvider(props) {
     }, []);
 
     /**
-     * Reducer for the MapView state.
+     * Reducer for the selectedMapView state.
      * Updates properties of the global store based on the action type provided.
      * @param {MapStoreReducerAction} actionType The type identifier for the desired action
      * @param {Any} payload The payload for the chosen action
@@ -35,7 +35,7 @@ function MapStoreContextProvider(props) {
             case MapStoreReducerAction.SET_MAP_VIEW: {
                 setStore((prevStore) => ({
                     ...prevStore,
-                    mapView: payload, // Update the mapView state
+                    selectedMapView: payload, // Update the selectedMapView state
                 }));
                 return;
             }
@@ -71,8 +71,8 @@ function MapStoreContextProvider(props) {
     };
 
     // Methods to update the store
-    store.setMapView = function (mapView) {
-        MapStoreReducer(MapStoreReducerAction.SET_MAP_VIEW, mapView);
+    store.setMapView = function (selectedMapView) {
+        MapStoreReducer(MapStoreReducerAction.SET_MAP_VIEW, selectedMapView);
     };
 
     store.setSelectedState = function (state) {

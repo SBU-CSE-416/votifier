@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -7,6 +7,7 @@ import "../../stylesheets/map and data/Map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
+import { MapStoreContext } from "../../stores/MapStore";
 
 const initialState = {
   box1: {
@@ -46,6 +47,8 @@ function MapResizer({ dataVisible }) {
   return null;
 }
 export default function MapPg() {
+  const { store } = useContext(MapStoreContext);
+
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: "" });
   const [dataVisible, setDataVisible] = useState(false);
@@ -75,8 +78,8 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
-    console.log("Selected View Updated:", selectedView);
-  }, [selectedView]);
+    console.log("Selected View Updated:", store.selectedMapView);
+  }, [store.selectedMapView]);
 
   useEffect(() => {
     async function fetchData() {
@@ -134,15 +137,15 @@ export default function MapPg() {
     
   console.log("showPrecincts", showPrecincts);
   useEffect(() => {
-    if (selectedView === "districts") {
+    if (store.selectedMapView === "districts") {
       setShowDistricts(true);
       setShowPrecincts(false);
     } 
-    else if (selectedView === "precincts") {
+    else if (store.selectedMapView === "precincts") {
       setShowDistricts(false);
       setShowPrecincts(true);
     }
-  }, [selectedView]);
+  }, [store.selectedMapView]);
 
   useEffect(() => {}, [hoverState]);
 
@@ -340,9 +343,9 @@ export default function MapPg() {
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
     console.log("inside onFeatureClick");
-    console.log("selectedView: ", selectedView);
+    console.log("store.selectedMapView: ", store.selectedMapView);
 
-    if (selectedView === "districts") {
+    if (store.selectedMapView === "districts") {
       if (properties.NAME === "Maryland") {
         const md_district_res = await fetch_district_boundary("MD");
         console.log(
@@ -372,7 +375,7 @@ export default function MapPg() {
         setShowDistricts(true);
       }
     }else
-    if (selectedView === "precincts") {
+    if (store.selectedMapView === "precincts") {
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
