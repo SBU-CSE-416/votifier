@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../stylesheets/map and data/leftSideMenu.css";
+import "../../stylesheets/map and data/LeftSideMenu.css";
 import BackButton from "./BackButton";
 
 export default function LeftSideMenu(props) {
@@ -102,6 +102,30 @@ export default function LeftSideMenu(props) {
               <option value="politicalIncome">Political/Income</option>
             </select>
           </div>
+          {props.selectedHeatmap === "demographic" ? 
+            <>
+              <div className="left-label">
+                <label>
+                  <span>Select Racial Group for Heatmap</span>
+                </label>
+              </div>
+              <div className="left-dropdown">
+                <select
+                  value={props.selectedDemographic}
+                  onChange={(e) => props.setDemographic(e.target.value)}
+                  className="dropdown-select"
+                >
+                  <option value="white">White</option>
+                  <option value="black">Black/African American</option>
+                  <option value="hispanic">Hispanic/Latino</option>
+                  <option value="asian">Asian</option>
+                  <option value="native">Native/Hawaiian/Pacific Islander</option>
+                  <option value="asian">American Indian/Alaska Native</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </>
+          : null}
 
         </div>
       ) : (
