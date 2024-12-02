@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../stylesheets/map and data/leftSideMenu.css";
+import "../../stylesheets/map and data/LeftSideMenu.css";
 import BackButton from "./BackButton";
 
 export default function LeftSideMenu(props) {

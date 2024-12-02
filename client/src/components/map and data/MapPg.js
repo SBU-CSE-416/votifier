@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import DataPg from "./DataPg";
-import "../../stylesheets/map and data/map.css";
+import "../../stylesheets/map and data/Map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
