@@ -249,7 +249,7 @@ export default function MapPg() {
       highlightFeature(layer);
       const bounds = layer.getBounds();
       map.fitBounds(bounds, {
-        maxZoom: 7, 
+        maxZoom: 7.5, 
       });
       onFeatureClick(feature);
     };
