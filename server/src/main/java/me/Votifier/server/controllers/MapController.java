@@ -67,8 +67,8 @@ public class MapController {
     @GetMapping("/{stateAbbreviation}/heatmap/economic-income")
     public ResponseEntity<Resource> getHeatmapEconomicIncome(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation){
         ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
-        // ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromLocal(stateAbbreviation);
-        return mapService.colorHeatmapEconomicIncome(precinctBoundaryGeoJSON, null);
+        ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromLocal(stateAbbreviation);
+        return mapService.colorHeatmapEconomicIncome(precinctBoundaryGeoJSON, precinctEconomicGroupsJSON);
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-regions")
@@ -189,6 +189,32 @@ public class MapController {
                     break;
                 default:
                     filePath = Paths.get("data/processed_individual/unknown_precinct_racial_groups.json");
+                    break;
+            }
+            Resource resource = getResourceFromLocal(filePath);
+            return ResponseEntity.ok(resource);
+        }
+        catch (UnknownFileException exception) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
+    public ResponseEntity<Resource> gatherPrecinctEconomicGroupsFromLocal(StateAbbreviation stateAbbreviation){
+        if(stateAbbreviation == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        try {
+            Path filePath = null;
+            switch(stateAbbreviation){
+                case SC:
+                    filePath = Paths.get("data/states/south_carolina/economic/south_carolina_precincts_household_income_fixed.json");
+                    break;
+                case MD:
+                    filePath = Paths.get("data/states/maryland/economic/maryland_precincts_household_income_fixed.json");
+                    break;
+                default:
+                    filePath = Paths.get("data/states/unknown/economic/unknown_precincts_household_income_fixed.json");
                     break;
             }
             Resource resource = getResourceFromLocal(filePath);
