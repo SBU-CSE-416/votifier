@@ -108,8 +108,11 @@ public class MapController {
 
             featureCollection.put("features", features);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(featureCollection);
+            // Convert the FeatureCollection to JSON using Fastjson
+            String jsonResponse = com.alibaba.fastjson2.JSON.toJSONString(
+                featureCollection,
+                com.alibaba.fastjson2.JSONWriter.Feature.LargeObject // Enable LargeObject feature
+            );
 
             Resource resource = new ByteArrayResource(jsonResponse.getBytes());
 
