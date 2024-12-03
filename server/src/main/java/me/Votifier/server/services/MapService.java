@@ -133,7 +133,7 @@ public class MapService {
         try {
             Map<Integer, Bin> loadedHeatmapBins = loadedBins.get(FeatureName.HEATMAP_ECONOMIC_INCOME); 
             final int BIN_COLOR_INDEX = 0;
-            final int ASSIGNED_PROPERTIES_COUNT = 2;
+            final String UNIQUE_ID_LABEL = "UNIQUE_ID";
             final String COLOR_LABEL = "ASSIGNED_COLOR";
             final String INCOME_LABEL = "AVERAGE_HOUSEHOLD_INCOME";
 
@@ -158,7 +158,7 @@ public class MapService {
             List<JSONObject> precincts = precinctsEconomicGroupsJson.toJavaList(JSONObject.class);
 
             for(JSONObject precinct : precincts) {
-                String uniquePrecinctId = precinct.getString("UNIQUE_ID");
+                String uniquePrecinctId = precinct.getString(UNIQUE_ID_LABEL);
                 Bin assignedBin = null;
                 double totalAccumulatedIncomeSum = 0.0;
                 int estimatedAverageHouseholdIncome = 0;
@@ -201,16 +201,16 @@ public class MapService {
             }
             for(Feature precinct : precinctsBoundariesJson.getFeatures()) {
                 Map<String, String> precinctProperties = precinct.getProperties();
-                String precinctId = precinctProperties.get("UNIQUE_ID");
-                precinctProperties.put("ASSIGNED_COLOR", assignedPrecinctsColors.get(precinctId));
-                precinctProperties.put("AVERAGE_HOUSEHOLD_INCOME", assignedPrecinctsIncome.get(precinctId));
+                String precinctId = precinctProperties.get(UNIQUE_ID_LABEL);
+                precinctProperties.put(COLOR_LABEL, assignedPrecinctsColors.get(precinctId));
+                precinctProperties.put(INCOME_LABEL, assignedPrecinctsIncome.get(precinctId));
                 precinct.setProperties(precinctProperties);
             }
             String stringJson = JSON.toJSONString(precinctsBoundariesJson, SerializerFeature.PrettyFormat);
             Resource resource = new ByteArrayResource(stringJson.getBytes());
             return ResponseEntity.status(HttpStatus.OK).contentType(org.springframework.http.MediaType.parseMediaType("application/geo+json")).body(resource);
         }
-        catch (Exception exception){
+        catch (Exception exception) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
