@@ -1,3 +1,0 @@
-import gerrychain;
-
-print("Test")
