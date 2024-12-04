@@ -4,7 +4,7 @@ import "../../stylesheets/map and data/GeneralInfoBox.css";
 const GeneralInfoBox = ({ state }) => {
   // Filter out unwanted keys like `hous_INCOME_DIS` and `id`
   const filteredStateData = Object.entries(state).filter(
-    ([key]) => key !== "hous_INCOME_DIS" && key !== "id"
+    ([key]) => key !== "house_HOLD_INCOME_DISTRIBUTION" && key !== "id"
   );
 
   // Maximum number of columns per table
