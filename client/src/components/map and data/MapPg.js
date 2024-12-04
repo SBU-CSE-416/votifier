@@ -50,6 +50,7 @@ export default function MapPg() {
   const { store } = useContext(MapStoreContext);
 
   const [state, setState] = useState(initialState);
+  const [stateSummaryData, setStateSummaryData] = useState(null);
   const [hoverState, setHoverState] = useState({ districtName: "" });
   const [showDistricts, setShowDistricts] = useState(false);
   const [showPrecincts, setShowPrecincts] = useState(false);
@@ -237,7 +238,7 @@ export default function MapPg() {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
       weight: 0.5,
       opacity: 1,
-      color: featureType === "precinct" ? "#000000" : "#FFFFFF",
+      color: "#FFFFFF",
       dashArray: "",
       fillOpacity: featureType === "precinct" ? 0.5 : 0.7,
     };
@@ -328,7 +329,7 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_state_demographics = async (state_abbreviation) => {
+  const fetch_state_summary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
         `http://localhost:8000/api/data/${state_abbreviation}/summary`
@@ -364,10 +365,10 @@ export default function MapPg() {
         );
         setGeojsonMarylandCongress(md_district_res.data);
 
-        const state_data = await fetch_state_demographics("MD");
-        console.log("Maryland demographics data:", state_data.data);
+        const state_summary_data = await fetch_state_summary("MD");
+        console.log("Maryland demographics data:", state_summary_data.data);
         setStateCode(24);
-        setState(state_data.data);
+        setStateSummaryData(state_summary_data.data);
         setShowDistricts(true);
       } 
       else if (properties.NAME === "South Carolina") {
@@ -378,10 +379,10 @@ export default function MapPg() {
         );
         setGeojsonSouthCarolinaCongress(sc_district_res.data);
 
-        const state_data = await fetch_state_demographics("SC");
-        console.log("South Carolina demographics data:", state_data.data);
+        const state_summary_data = await fetch_state_summary("SC");
+        console.log("South Carolina demographics data:", state_summary_data.data);
         setStateCode(45);
-        setState(state_data.data);
+        setStateSummaryData(state_summary_data.data);
         setShowDistricts(true);
       }
     }else
@@ -486,7 +487,7 @@ export default function MapPg() {
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-      {store.isDataVisible && <DataPg state={state} />}
+      {store.isDataVisible && <DataPg stateSummaryData={stateSummaryData} />}
     </div>
   );
 }
