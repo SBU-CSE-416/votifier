@@ -1,18 +1,12 @@
 import numpy as np
-import multiprocessing as mp
-import os
+import argparse
 
 def square_me(num):
-    result = int(np.square(num))
-    pid = os.getpid()
-    return (result, pid)
+    result = int(np.square(int(num)))
+    return result
 
 if __name__ == "__main__":
-
-    p = mp.Pool(processes=4)
-
-    for num in range(1,11):
-        results = p.apply_async(square_me, [num])
-        square, pid = results.get()
-        print(f'{pid} | The square of {num} is {square}')
-    p.close()
+    arguments_parser = argparse.ArgumentParser()
+    arguments_parser.add_argument('--plan_id', type=str, required=True)
+    args = arguments_parser.parse_args()
+    print(f'The square of {args.plan_id} is {square_me(args.plan_id)}')
