@@ -115,7 +115,7 @@ function MapStoreContextProvider(props) {
         MapStoreReducer(MapStoreReducerAction.SET_MAP_VIEW, selectedMapView);
     };
 
-    store.setselectedstateCode = function (state) {
+    store.setSelectedStateCode = function (state) {
         MapStoreReducer(MapStoreReducerAction.SET_SELECTED_STATE_CODE, state);
     };
 

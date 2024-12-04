@@ -8,11 +8,11 @@ export default function LeftSideMenu(props) {
 
   const checkSelectedState = () => {
     let stateName = "";
-    if (props.selectedStateCode) {
-      if (props.selectedStateCode === 45) {
+    if (store.selectedStateCode) {
+      if (store.selectedStateCode === 45) {
         stateName = "South Carolina";
       } 
-      else if (props.selectedStateCode === 24) {
+      else if (store.selectedStateCode === 24) {
         stateName = "Maryland";
       }
       return (
@@ -110,8 +110,8 @@ export default function LeftSideMenu(props) {
                   <option value="black">Black/African American</option>
                   <option value="hispanic">Hispanic/Latino</option>
                   <option value="asian">Asian</option>
-                  <option value="native">Native/Hawaiian/Pacific Islander</option>
-                  <option value="asian">American Indian/Alaska Native</option>
+                  <option value="native">Hawaiian/Other Pacific Islander</option>
+                  <option value="asian">Native American/Alaskan Native</option>
                   <option value="other">Other</option>
                 </select>
               </div>

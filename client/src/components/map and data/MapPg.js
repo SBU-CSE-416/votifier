@@ -51,11 +51,6 @@ export default function MapPg() {
 
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: "" });
-  const [showDistricts, setShowDistricts] = useState(false);
-  const [showPrecincts, setShowPrecincts] = useState(false);
-
-  //LeftSideMenu selectors
-  const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
@@ -95,52 +90,9 @@ export default function MapPg() {
 
     fetchData();
   }, []);
-  const fetchHeatmapData = async (state_abbreviation, demographic_group) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demographic_group}`
-      );
-      return res.data;
-    } catch (error) {
-      console.error("Error fetching heatmap data:", error);
-      return null;
-    }
-  };
-  useEffect(() => {
-    const loadHeatmap = async () => {
-      if (store.selectedHeatmap === "demographic" && selectedStateCode) {
-        const stateCodeMapping = {
-          45: "SC", // South Carolina
-          24: "MD", // Maryland
-        };
-  
-        const stateAbbreviation = stateCodeMapping[selectedStateCode];
-        const demographicGroup = "WHITE";
-  
-        const heatmapData = await fetchHeatmapData(stateAbbreviation, demographicGroup);
-  
-        if (stateAbbreviation === "SC") {
-          setGeojsonSouthCarolina(heatmapData);
-        } else if (stateAbbreviation === "MD") {
-          setGeojsonMaryland(heatmapData);
-        }
-      }
-    };
-  
-    loadHeatmap();
-  }, [store.selectedHeatmap, selectedStateCode]);
-    
-  console.log("showPrecincts", showPrecincts);
-  useEffect(() => {
-    if (store.selectedMapView === "districts") {
-      setShowDistricts(true);
-      setShowPrecincts(false);
-    } 
-    else if (store.selectedMapView === "precincts") {
-      setShowDistricts(false);
-      setShowPrecincts(true);
-    }
-  }, [store.selectedMapView]);
+  useEffect(() => { 
+    console.log("handleHeatMapChange:", store.selectedHeatmap);
+  }, [store.selectedHeatmap]);
 
   useEffect(() => {}, [hoverState]);
 
@@ -346,9 +298,7 @@ export default function MapPg() {
     store.setDataVisibility(false);
     store.setMapView("districts");
     setDisableNavigation(false);
-    setShowDistricts(false);
-    setShowPrecincts(false);
-    setStateCode(null);
+    store.setSelectedStateCode(null);
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
@@ -366,9 +316,8 @@ export default function MapPg() {
 
         const state_data = await fetch_state_demographics("MD");
         console.log("Maryland demographics data:", state_data.data);
-        setStateCode(24);
+        store.setSelectedStateCode(24);
         setState(state_data.data);
-        setShowDistricts(true);
       } 
       else if (properties.NAME === "South Carolina") {
         const sc_district_res = await fetch_district_boundary("SC");
@@ -380,9 +329,8 @@ export default function MapPg() {
 
         const state_data = await fetch_state_demographics("SC");
         console.log("South Carolina demographics data:", state_data.data);
-        setStateCode(45);
+        store.setSelectedStateCode(45);
         setState(state_data.data);
-        setShowDistricts(true);
       }
     }else
     if (store.selectedMapView === "precincts") {
@@ -392,15 +340,11 @@ export default function MapPg() {
         const mdPrecinctDataRes = await fetch_precinct_boundary("MD");
         console.log("precinct, MD data:", mdPrecinctDataRes.data);
         setGeojsonMarylandPrecinct(mdPrecinctDataRes.data);
-        setShowPrecincts(true);
-        setShowDistricts(false);
         console.log("MD precinct boundary data from server:", mdPrecinctDataRes.data);
       } else if (properties.NAME === "South Carolina") {
         const scPrecinctDataRes = await fetch_precinct_boundary("SC");
         console.log("precinct, SC data:", scPrecinctDataRes);
         setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
-        setShowPrecincts(true);
-        setShowDistricts(false);
         console.log("SC precinct boundary data from server:", scPrecinctDataRes.data);
       }
     }
@@ -413,8 +357,6 @@ export default function MapPg() {
     <div style={{ display: "flex" }}>
       {
         <LeftSideMenu
-          selectedStateCode={selectedStateCode}
-          setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
         />
