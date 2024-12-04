@@ -74,26 +74,30 @@ export default function LeftSideMenu(props) {
               <option value="precincts">Precincts</option>
             </select>
           </div>
-          <div className="left-label">
-            <label>
-              <span>Selected Heatmap</span>
-            </label>
-          </div>
-          <div className="left-dropdown">
-            <select
-              value={store.selectedHeatmap}
-              onChange={(event) => store.setSelectedHeatmap(event.target.value)}
-              className="dropdown-select"
-            >
-              <option value="none">None</option>
-              <option value="demographic">Demographic</option>
-              <option value="economic">Economic/Income</option>
-              <option value="regions">Economic/Regions</option>
-              <option value="poverty">Economic/Poverty</option>
-              <option value="politicalIncome">Political/Income</option>
-            </select>
-          </div>
-          {store.selectedHeatmap === "demographic" ? 
+          {store.selectedMapView === "precincts" ? 
+            <>
+              <div className="left-label">
+                <label>
+                  <span>Selected Heatmap</span>
+                </label>
+              </div>
+              <div className="left-dropdown">
+                <select
+                  value={store.selectedHeatmap}
+                  onChange={(event) => store.setSelectedHeatmap(event.target.value)}
+                  className="dropdown-select"
+                >
+                  <option value="none">None</option>
+                  <option value="demographic">Demographic</option>
+                  <option value="economic">Economic/Income</option>
+                  <option value="regions">Economic/Regions</option>
+                  <option value="poverty">Economic/Poverty</option>
+                  <option value="politicalIncome">Political/Income</option>
+                </select>
+              </div>
+            </>
+          : null}
+          {(store.selectedHeatmap === "demographic" && store.selectedMapView==="precincts") ? 
             <>
               <div className="left-label">
                 <label>

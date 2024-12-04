@@ -35,17 +35,7 @@ const initialState = {
     value: "0",
   },
 };
-function MapResizer({store }) {
-  const map = useMap();
 
-  useEffect(() => {
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  }, [store.isDataVisible, map]);
-
-  return null;
-}
 export default function MapPg() {
   const { store } = useContext(MapStoreContext);
 
@@ -90,9 +80,31 @@ export default function MapPg() {
 
     fetchData();
   }, []);
+
+  const fetch_demographic_heatmap = async (state_abbreviation, demographic_group) => {
+
+  };
+
+
   useEffect(() => { 
     console.log("handleHeatMapChange:", store.selectedHeatmap);
-  }, [store.selectedHeatmap]);
+    if(store.selectedMapView !== "precincts"){
+      return;
+    }
+    if( store.selectedHeatmap === "none"){
+      console.log("none heatmap handler");
+    }else if(store.selectedHeatmap === "demographic"){
+      console.log("demographic heatmap handler");
+    }else if(store.selectedHeatmap === "economic"){
+      console.log("economic heatmap handler");
+    }else if(store.selectedHeatmap === "regions"){
+      console.log("regions heatmap handler");
+    }else if(store.selectedHeatmap === "poverty"){
+      console.log("poverty heatmap handler");
+    }else if(store.selectedHeatmap === "politicalIncome"){
+      console.log("politicalIncome heatmap handler");
+    }
+  }, [store.selectedHeatmap, store.selectedMapView]);
 
   useEffect(() => {}, [hoverState]);
 
@@ -290,6 +302,18 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   };
+
+  function MapResizer({store }) {
+    const map = useMap();
+  
+    useEffect(() => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 0);
+    }, [store.isDataVisible, map]);
+  
+    return null;
+  }
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
