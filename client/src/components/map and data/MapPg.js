@@ -344,6 +344,7 @@ export default function MapPg() {
     setState(initialState);
     setHoverState({ districtName: "" });
     store.setDataVisibility(false);
+    store.setMapView("districts");
     setDisableNavigation(false);
     setShowDistricts(false);
     setShowPrecincts(false);
@@ -416,7 +417,6 @@ export default function MapPg() {
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
-          FeatureInteraction={FeatureInteraction}
         />
       }
 
