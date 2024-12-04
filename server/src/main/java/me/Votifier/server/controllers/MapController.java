@@ -118,10 +118,9 @@ public class MapController {
 
             featureCollection.put("features", features);
 
-            // Convert the FeatureCollection to JSON using Fastjson
             String jsonResponse = com.alibaba.fastjson2.JSON.toJSONString(
                 featureCollection,
-                com.alibaba.fastjson2.JSONWriter.Feature.LargeObject // Enable LargeObject feature
+                com.alibaba.fastjson2.JSONWriter.Feature.LargeObject 
             );
 
             Resource resource = new ByteArrayResource(jsonResponse.getBytes());

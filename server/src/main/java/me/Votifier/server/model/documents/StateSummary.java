@@ -9,29 +9,39 @@ import java.util.Map;
 public class StateSummary {
 
     @Id
-    private String id; 
+    private String id;
 
-    private String NAME; 
-    private double TOT_POP; 
-    private double TOT_WHITE; 
-    private double TOT_BLACK;
-    private double TOT_HISP; 
-    private double TOT_ASIAN;
-    private double TOT_NATIVE; 
-    private double TOT_ISLANDER; 
-    private double TOT_OTHER; 
+    private String NAME;
+    private double TOTAL_POPULATION;
 
-    private double DEM_VOT_DIS; 
-    private double REP_VOT_DIS; 
+    // Racial demographics in percentage
+    private double WHITE_PERCENT;
+    private double BLACK_PERCENT;
+    private double HISPANIC_PERCENT;
+    private double ASIAN_PERCENT;
+    private double NATIVE_AMERICAN_PERCENT;
+    private double ISLANDER_PERCENT;
+    private double OTHER_RACE_PERCENT;
 
-    private double URBAN_DIS;
-    private double SUBURBAN_DIS; 
-    private double RURAL_DIS; 
+    // Voting data
+    private double TOTAL_VOTES;
+    private double DEM_VOTES;
+    private double DEM_PERCENT;
+    private double REP_VOTES;
+    private double REP_PERCENT;
 
-    private double TOT_HOUS; 
+    // Household data
+    private double TOTAL_HOUSEHOLDS;
+    private Map<String, Double> HOUSEHOLD_INCOME_DISTRIBUTION;
 
-    private Map<String, Double> HOUS_INCOME_DIS; 
-    private double POV_LEVEL; 
+    // Regional demographics
+    private double RURAL_PERCENT;
+    private double SUBURBAN_PERCENT;
+    private double URBAN_PERCENT;
+
+    private double POVERTY_LEVEL;
+
+    // Getters and setters
 
     public String getId() {
         return id;
@@ -49,131 +59,155 @@ public class StateSummary {
         this.NAME = NAME;
     }
 
-    public double getTOT_POP() {
-        return TOT_POP;
+    public double getTOTAL_POPULATION() {
+        return TOTAL_POPULATION;
     }
 
-    public void setTOT_POP(double TOT_POP) {
-        this.TOT_POP = TOT_POP;
+    public void setTOTAL_POPULATION(double TOTAL_POPULATION) {
+        this.TOTAL_POPULATION = TOTAL_POPULATION;
+    }
+    public double getWHITE_PERCENT() {
+        return WHITE_PERCENT;
     }
 
-    public double getTOT_WHITE() {
-        return TOT_WHITE;
+    public void setWHITE_PERCENT(double WHITE_PERCENT) {
+        this.WHITE_PERCENT = WHITE_PERCENT;
     }
 
-    public void setTOT_WHITE(double TOT_WHITE) {
-        this.TOT_WHITE = TOT_WHITE;
+    public double getBLACK_PERCENT() {
+        return BLACK_PERCENT;
     }
 
-    public double getTOT_BLACK() {
-        return TOT_BLACK;
+    public void setBLACK_PERCENT(double BLACK_PERCENT) {
+        this.BLACK_PERCENT = BLACK_PERCENT;
     }
 
-    public void setTOT_BLACK(double TOT_BLACK) {
-        this.TOT_BLACK = TOT_BLACK;
+    public double getHISPANIC_PERCENT() {
+        return HISPANIC_PERCENT;
     }
 
-    public double getTOT_HISP() {
-        return TOT_HISP;
+    public void setHISPANIC_PERCENT(double HISPANIC_PERCENT) {
+        this.HISPANIC_PERCENT = HISPANIC_PERCENT;
     }
 
-    public void setTOT_HISP(double TOT_HISP) {
-        this.TOT_HISP = TOT_HISP;
+    public double getASIAN_PERCENT() {
+        return ASIAN_PERCENT;
     }
 
-    public double getTOT_ASIAN() {
-        return TOT_ASIAN;
+    public void setASIAN_PERCENT(double ASIAN_PERCENT) {
+        this.ASIAN_PERCENT = ASIAN_PERCENT;
     }
 
-    public void setTOT_ASIAN(double TOT_ASIAN) {
-        this.TOT_ASIAN = TOT_ASIAN;
+    public double getNATIVE_AMERICAN_PERCENT() {
+        return NATIVE_AMERICAN_PERCENT;
     }
 
-    public double getTOT_NATIVE() {
-        return TOT_NATIVE;
+    public void setNATIVE_AMERICAN_PERCENT(double NATIVE_AMERICAN_PERCENT) {
+        this.NATIVE_AMERICAN_PERCENT = NATIVE_AMERICAN_PERCENT;
     }
 
-    public void setTOT_NATIVE(double TOT_NATIVE) {
-        this.TOT_NATIVE = TOT_NATIVE;
+    public double getISLANDER_PERCENT() {
+        return ISLANDER_PERCENT;
     }
 
-    public double getTOT_ISLANDER() {
-        return TOT_ISLANDER;
+    public void setISLANDER_PERCENT(double ISLANDER_PERCENT) {
+        this.ISLANDER_PERCENT = ISLANDER_PERCENT;
     }
 
-    public void setTOT_ISLANDER(double TOT_ISLANDER) {
-        this.TOT_ISLANDER = TOT_ISLANDER;
+    public double getOTHER_RACE_PERCENT() {
+        return OTHER_RACE_PERCENT;
     }
 
-    public double getTOT_OTHER() {
-        return TOT_OTHER;
+    public void setOTHER_RACE_PERCENT(double OTHER_RACE_PERCENT) {
+        this.OTHER_RACE_PERCENT = OTHER_RACE_PERCENT;
     }
 
-    public void setTOT_OTHER(double TOT_OTHER) {
-        this.TOT_OTHER = TOT_OTHER;
+    public double getTOTAL_VOTES() {
+        return TOTAL_VOTES;
     }
 
-    public double getDEM_VOT_DIS() {
-        return DEM_VOT_DIS;
+    public void setTOTAL_VOTES(double TOTAL_VOTES) {
+        this.TOTAL_VOTES = TOTAL_VOTES;
     }
 
-    public void setDEM_VOT_DIS(double DEM_VOT_DIS) {
-        this.DEM_VOT_DIS = DEM_VOT_DIS;
+    public double getDEM_VOTES() {
+        return DEM_VOTES;
     }
 
-    public double getREP_VOT_DIS() {
-        return REP_VOT_DIS;
+    public void setDEM_VOTES(double DEM_VOTES) {
+        this.DEM_VOTES = DEM_VOTES;
     }
 
-    public void setREP_VOT_DIS(double REP_VOT_DIS) {
-        this.REP_VOT_DIS = REP_VOT_DIS;
+    public double getDEM_PERCENT() {
+        return DEM_PERCENT;
     }
 
-    public double getURBAN_DIS() {
-        return URBAN_DIS;
+    public void setDEM_PERCENT(double DEM_PERCENT) {
+        this.DEM_PERCENT = DEM_PERCENT;
     }
 
-    public void setURBAN_DIS(double URBAN_DIS) {
-        this.URBAN_DIS = URBAN_DIS;
+    public double getREP_VOTES() {
+        return REP_VOTES;
     }
 
-    public double getSUBURBAN_DIS() {
-        return SUBURBAN_DIS;
+    public void setREP_VOTES(double REP_VOTES) {
+        this.REP_VOTES = REP_VOTES;
     }
 
-    public void setSUBURBAN_DIS(double SUBURBAN_DIS) {
-        this.SUBURBAN_DIS = SUBURBAN_DIS;
+    public double getREP_PERCENT() {
+        return REP_PERCENT;
     }
 
-    public double getRURAL_DIS() {
-        return RURAL_DIS;
+    public void setREP_PERCENT(double REP_PERCENT) {
+        this.REP_PERCENT = REP_PERCENT;
     }
 
-    public void setRURAL_DIS(double RURAL_DIS) {
-        this.RURAL_DIS = RURAL_DIS;
+    public double getTOTAL_HOUSEHOLDS() {
+        return TOTAL_HOUSEHOLDS;
     }
 
-    public double getTOT_HOUS() {
-        return TOT_HOUS;
+    public void setTOTAL_HOUSEHOLDS(double TOTAL_HOUSEHOLDS) {
+        this.TOTAL_HOUSEHOLDS = TOTAL_HOUSEHOLDS;
     }
 
-    public void setTOT_HOUS(double TOT_HOUS) {
-        this.TOT_HOUS = TOT_HOUS;
+    public Map<String, Double> getHOUSE_HOLD_INCOME_DISTRIBUTION() {
+        return HOUSEHOLD_INCOME_DISTRIBUTION;
     }
 
-    public Map<String, Double> getHOUS_INCOME_DIS() {
-        return HOUS_INCOME_DIS;
+    public void setHOUSE_HOLD_INCOME_DISTRIBUTION(Map<String, Double> HOUSE_HOLD_INCOME_DISTRIBUTION) {
+        this.HOUSEHOLD_INCOME_DISTRIBUTION = HOUSE_HOLD_INCOME_DISTRIBUTION;
     }
 
-    public void setHOUS_INCOME_DIS(Map<String, Double> HOUS_INCOME_DIS) {
-        this.HOUS_INCOME_DIS = HOUS_INCOME_DIS;
+    public double getRURAL_PERCENT() {
+        return RURAL_PERCENT;
     }
 
-    public double getPOV_LEVEL() {
-        return POV_LEVEL;
+    public void setRURAL_PERCENT(double RURAL_PERCENT) {
+        this.RURAL_PERCENT = RURAL_PERCENT;
     }
 
-    public void setPOV_LEVEL(double POV_LEVEL) {
-        this.POV_LEVEL = POV_LEVEL;
+    public double getSUBURBAN_PERCENT() {
+        return SUBURBAN_PERCENT;
+    }
+
+    public void setSUBURBAN_PERCENT(double SUBURBAN_PERCENT) {
+        this.SUBURBAN_PERCENT = SUBURBAN_PERCENT;
+    }
+
+    public double getURBAN_PERCENT() {
+        return URBAN_PERCENT;
+    }
+
+    public void setURBAN_PERCENT(double URBAN_PERCENT) {
+        this.URBAN_PERCENT = URBAN_PERCENT;
+    }
+
+    public double getPOVERTY_LEVEL() {
+        return POVERTY_LEVEL;
+    }
+
+    public void setPOVERTY_LEVEL(double POVERTY_LEVEL) {
+        this.POVERTY_LEVEL = POVERTY_LEVEL;
     }
 }
+

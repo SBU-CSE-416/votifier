@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -7,6 +7,7 @@ import "../../stylesheets/map and data/Map.css";
 import "../../stylesheets/BackButton.css";
 import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
+import { MapStoreContext } from "../../stores/MapStore";
 
 const initialState = {
   box1: {
@@ -34,29 +35,26 @@ const initialState = {
     value: "0",
   },
 };
-function MapResizer({ dataVisible }) {
+function MapResizer({store }) {
   const map = useMap();
 
   useEffect(() => {
     setTimeout(() => {
       map.invalidateSize();
     }, 0);
-  }, [dataVisible, map]);
+  }, [store.isDataVisible, map]);
 
   return null;
 }
 export default function MapPg() {
+  const { store } = useContext(MapStoreContext);
+
   const [state, setState] = useState(initialState);
   const [hoverState, setHoverState] = useState({ districtName: "" });
-  const [dataVisible, setDataVisible] = useState(false);
   const [showDistricts, setShowDistricts] = useState(false);
   const [showPrecincts, setShowPrecincts] = useState(false);
 
   //LeftSideMenu selectors
-  const [selectedView, setView] = useState("districts");
-  const [selectedPlan, setPlan] = useState("");
-  const [selectedHeatmap, setHeatmap] = useState("");
-  const [selectedDemographic, setDemographic] = useState("white");
   const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
@@ -75,8 +73,8 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
-    console.log("Selected View Updated:", selectedView);
-  }, [selectedView]);
+    console.log("Selected View Updated:", store.selectedMapView);
+  }, [store.selectedMapView]);
 
   useEffect(() => {
     async function fetchData() {
@@ -110,7 +108,7 @@ export default function MapPg() {
   };
   useEffect(() => {
     const loadHeatmap = async () => {
-      if (selectedHeatmap === "demographic" && selectedStateCode) {
+      if (store.selectedHeatmap === "demographic" && selectedStateCode) {
         const stateCodeMapping = {
           45: "SC", // South Carolina
           24: "MD", // Maryland
@@ -130,19 +128,19 @@ export default function MapPg() {
     };
   
     loadHeatmap();
-  }, [selectedHeatmap, selectedStateCode]);
+  }, [store.selectedHeatmap, selectedStateCode]);
     
   console.log("showPrecincts", showPrecincts);
   useEffect(() => {
-    if (selectedView === "districts") {
+    if (store.selectedMapView === "districts") {
       setShowDistricts(true);
       setShowPrecincts(false);
     } 
-    else if (selectedView === "precincts") {
+    else if (store.selectedMapView === "precincts") {
       setShowDistricts(false);
       setShowPrecincts(true);
     }
-  }, [selectedView]);
+  }, [store.selectedMapView]);
 
   useEffect(() => {}, [hoverState]);
 
@@ -198,11 +196,25 @@ export default function MapPg() {
   
   const FeatureInteraction = ({
     geojsonData,
-    onFeatureClick,
-    disableNavigation,
     featureType,
   }) => {
     const map = useMap();
+    if(store.isDataVisible===true && store.selectedMapView==="districts" && geojsonMarylandCongress){
+      geojsonData = geojsonMarylandCongress;
+      featureType = "district";
+    }
+    else if(store.isDataVisible===true && store.selectedMapView==="districts" && geojsonSouthCarolinaCongress){
+      geojsonData = geojsonSouthCarolinaCongress;
+      featureType = "district";
+    }
+    else if(store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonMarylandPrecinct){
+      geojsonData = geojsonMarylandPrecinct;
+      featureType = "precinct";
+    }
+    else if(store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonSouthCarolinaPrecinct){
+      geojsonData = geojsonSouthCarolinaPrecinct;
+      featureType = "precinct";
+    }
     console.log("current geojson: ",geojsonData )
     useEffect(() => {
       if (disableNavigation) {
@@ -219,7 +231,7 @@ export default function MapPg() {
         map.touchZoom.enable();
         map.boxZoom.enable();
       }
-    }, [disableNavigation, map]);
+    }, [map]);
     console.log("featureType: ", featureType);
     const geojsonStyle = {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
@@ -331,7 +343,8 @@ export default function MapPg() {
     map.setView(defaultView, defaultZoom);
     setState(initialState);
     setHoverState({ districtName: "" });
-    setDataVisible(false);
+    store.setDataVisibility(false);
+    store.setMapView("districts");
     setDisableNavigation(false);
     setShowDistricts(false);
     setShowPrecincts(false);
@@ -340,9 +353,9 @@ export default function MapPg() {
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
     console.log("inside onFeatureClick");
-    console.log("selectedView: ", selectedView);
+    console.log("store.selectedMapView: ", store.selectedMapView);
 
-    if (selectedView === "districts") {
+    if (store.selectedMapView === "districts") {
       if (properties.NAME === "Maryland") {
         const md_district_res = await fetch_district_boundary("MD");
         console.log(
@@ -371,8 +384,8 @@ export default function MapPg() {
         setState(state_data.data);
         setShowDistricts(true);
       }
-    }
-    if (selectedView === "precincts") {
+    }else
+    if (store.selectedMapView === "precincts") {
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
@@ -392,7 +405,7 @@ export default function MapPg() {
       }
     }
 
-    setDataVisible(true);
+    store.setDataVisibility(true);
     setDisableNavigation(true);
   };
   console.log("state:", state);
@@ -400,26 +413,17 @@ export default function MapPg() {
     <div style={{ display: "flex" }}>
       {
         <LeftSideMenu
-          dataVisible={dataVisible}
-          setHeatmap={setHeatmap}
-          setPlan={setPlan}
-          selectedPlan={selectedPlan}
-          selectedHeatmap={selectedHeatmap}
-          setView={setView}
-          selectedView={selectedView}
           selectedStateCode={selectedStateCode}
           setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
-          selectedDemographic={selectedDemographic}
-          setDemographic={setDemographic}
         />
       }
 
       <div
         style={{
           position: "relative",
-          width: dataVisible ? "41vw" : "85vw",
+          width: store.isDataVisible ? "41vw" : "85vw",
         }}
       >
         <MapContainer
@@ -432,7 +436,7 @@ export default function MapPg() {
             transition: "width 0.5s ease",
           }}
         >
-          <MapResizer dataVisible={dataVisible} />
+          <MapResizer store={store} />
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"
             attribution="&copy; <a href='https://carto.com/'>CartoDB</a>"
@@ -441,73 +445,48 @@ export default function MapPg() {
           {/* State Boundaries */}
           <FeatureInteraction
             geojsonData={geojsonMaryland}
-            onFeatureClick={onFeatureClick}
-            disableNavigation={disableNavigation}
-            setHoverState={setHoverState}
-            setState={setState}
             featureType="state"
           />
 
           <FeatureInteraction
             geojsonData={geojsonSouthCarolina}
-            onFeatureClick={onFeatureClick}
-            disableNavigation={disableNavigation}
-            setHoverState={setHoverState}
-            setState={setState}
             featureType="state"
           />
 
           {/* District Boundaries */}
-          {showDistricts && geojsonMarylandCongress && (
+          {store.isDataVisible===true && store.selectedMapView==="districts" && geojsonMarylandCongress && (
             <FeatureInteraction
               geojsonData={geojsonMarylandCongress}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
               featureType="district"
             />
           )}
 
-          {showDistricts && geojsonSouthCarolinaCongress && (
+          {store.isDataVisible===true && store.selectedMapView==="districts" && geojsonSouthCarolinaCongress && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaCongress}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
               featureType="district"
             />
           )}
 
           {/* Precinct Boundaries */}
-          {showPrecincts && geojsonSouthCarolinaPrecinct && (
+          {store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonSouthCarolinaPrecinct && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaPrecinct}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
-              featureType="precincts"
+              featureType="precinct"
             />
           )}
 
-          {showPrecincts && geojsonMarylandPrecinct && (
+          {store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonMarylandPrecinct && (
             <FeatureInteraction
               geojsonData={geojsonMarylandPrecinct}
-              onFeatureClick={onFeatureClick}
-              disableNavigation={disableNavigation}
-              setHoverState={setHoverState}
-              setState={setState}
-              featureType="precincts"
+              featureType="precinct"
             />
           )}
 
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-      {dataVisible && <DataPg state={state} />}
-      
+      {store.isDataVisible && <DataPg state={state} />}
     </div>
   );
 }
