@@ -82,7 +82,51 @@ export default function MapPg() {
   }, []);
 
   const fetch_demographic_heatmap = async (state_abbreviation, demographic_group) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demographic_group}`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching demographic heatmap data:", error);
+      return null;
+    }
+  };
 
+  const fetch_economicIncome_heatmap = async (state_abbreviation) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/economic-income`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching economicIncome heatmap data:", error);
+      return null;
+    }
+  };
+
+  const fetch_economicRegions_heatmap = async (state_abbreviation) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/economic-regions`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching economicRegions heatmap data:", error);
+      return null;
+    }
+  };
+
+  const fetch_economicPoverty_heatmap = async (state_abbreviation) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/economic-poverty`
+      );
+      return res.data;
+    } catch (error) { 
+      console.error("Error fetching economicPoverty heatmap data:", error);
+      return null;
+    }
   };
 
 
@@ -91,20 +135,39 @@ export default function MapPg() {
     if(store.selectedMapView !== "precincts"){
       return;
     }
+
+    const stateCodeMapping = {
+      45: "SC", // South Carolina
+      24: "MD", // Maryland
+    };
+    const stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+    var heatmapData = null;
     if( store.selectedHeatmap === "none"){
       console.log("none heatmap handler");
-    }else if(store.selectedHeatmap === "demographic"){
+    }
+    else if(store.selectedHeatmap === "demographic"){
       console.log("demographic heatmap handler");
-    }else if(store.selectedHeatmap === "economic"){
-      console.log("economic heatmap handler");
-    }else if(store.selectedHeatmap === "regions"){
-      console.log("regions heatmap handler");
-    }else if(store.selectedHeatmap === "poverty"){
-      console.log("poverty heatmap handler");
+      const demographicGroup = store.selectedDemographic;
+      heatmapData = fetch_demographic_heatmap(stateAbbreviation, demographicGroup);
+
+    }else if(store.selectedHeatmap === "economicIncome"){
+      console.log("economicPoverty heatmap handler");
+      heatmapData = fetch_economicIncome_heatmap(stateAbbreviation);
+    }else if(store.selectedHeatmap === "economicRegions"){
+      console.log("economicRegions heatmap handler");
+      heatmapData = fetch_economicRegions_heatmap(stateAbbreviation);
+    }else if(store.selectedHeatmap === "economicPoverty"){
+      console.log("economicPoverty heatmap handler");
+      heatmapData = fetch_economicPoverty_heatmap(stateAbbreviation);
     }else if(store.selectedHeatmap === "politicalIncome"){
       console.log("politicalIncome heatmap handler");
     }
-  }, [store.selectedHeatmap, store.selectedMapView]);
+    if (stateAbbreviation === "SC") {
+      setGeojsonSouthCarolina(heatmapData);
+    } else if (stateAbbreviation === "MD") {
+      setGeojsonMaryland(heatmapData);
+    }
+  }, [store.selectedHeatmap, store.selectedMapView, store.selectedDemographic, store.selectedStateCode]);
 
   useEffect(() => {}, [hoverState]);
 

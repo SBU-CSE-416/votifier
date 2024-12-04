@@ -2,13 +2,11 @@ import React from "react";
 import "../../stylesheets/map and data/GeneralInfoBox.css";
 
 const GeneralInfoBox = ({ state }) => {
-  // Filter out unwanted keys like `hous_INCOME_DIS` and `id`
   const filteredStateData = Object.entries(state).filter(
     ([key]) => key !== "hous_INCOME_DIS" && key !== "id"
   );
 
-  // Maximum number of columns per table
-  const maxColumnsPerTable = 8; // Adjust based on container size
+  const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {
     splitData.push(filteredStateData.slice(i, i + maxColumnsPerTable));

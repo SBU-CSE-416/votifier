@@ -89,9 +89,9 @@ export default function LeftSideMenu(props) {
                 >
                   <option value="none">None</option>
                   <option value="demographic">Demographic</option>
-                  <option value="economic">Economic/Income</option>
-                  <option value="regions">Economic/Regions</option>
-                  <option value="poverty">Economic/Poverty</option>
+                  <option value="economicIncome">Economic/Income</option>
+                  <option value="economicRegions">Economic/Regions</option>
+                  <option value="economicPoverty">Economic/Poverty</option>
                   <option value="politicalIncome">Political/Income</option>
                 </select>
               </div>
