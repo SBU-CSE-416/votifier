@@ -10,9 +10,9 @@ import "../../stylesheets/map and data/DataPg.css";
 import { useState } from "react";
 
 
-export default function DataPg({ state }) {
+export default function DataPg({ stateSummaryData }) {
   const [activeTab, setActiveTab] = useState("summary");
-  const incomeDistributionData = Object.entries(state.house_HOLD_INCOME_DISTRIBUTION).map(
+  const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
       range: range.replace(/_/g, "-"), // Format the range
       percentage,                     // Use the percentage value
@@ -24,7 +24,7 @@ export default function DataPg({ state }) {
     <div id="info">
       <div className="datapg-container">
         <div className="data-genernal-info">
-          <GeneralInfoBox state={state} />
+          <GeneralInfoBox stateSummaryData={stateSummaryData} />
         </div>
         <div className="data-navbar">
           <div
