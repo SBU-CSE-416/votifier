@@ -11,6 +11,7 @@ import networkx as nx
 from networkx.readwrite import json_graph
 import random
 import pandas as pd
+import matplotlib.pyplot as plt
 
 def calculate_district_election_winner():
    return
@@ -26,7 +27,7 @@ def generate_new_districting_plan(state_graph_json_file, plan_id, num_iterations
 
   # Set up the initial partition object
   elections = [
-    Election("GOV_22", {"Democratic": "GOV_22_DEM", "Republican": "GOV_22_REP"})
+    Election("GOV_22", {"Democratic": "TOT_DEM", "Republican": "TOT_REP"})
   ]
 
   all_updaters = {
@@ -49,11 +50,11 @@ def generate_new_districting_plan(state_graph_json_file, plan_id, num_iterations
       recom,
       pop_col="TOT_POP22",
       pop_target=ideal_population,
-      epsilon=0.01,
-      node_repeats=2,
+      epsilon=pop_constraint,
+      node_repeats=4,
       method = partial(
         bipartition_tree,
-        max_attempts=50,
+        max_attempts=100,
       )
   )
 
@@ -62,10 +63,11 @@ def generate_new_districting_plan(state_graph_json_file, plan_id, num_iterations
     2*len(initial_partition["cut_edges"])
   )
 
+  pop_constraint_value = constraints.within_percent_of_ideal_population(initial_partition, pop_constraint)
+
   recom_chain = MarkovChain(
     proposal=proposal,
-    constraints=[contiguous,
-                 pop_constraint,
+    constraints=[pop_constraint_value,
                  compactness_bound],
     accept=accept.always_accept,
     initial_state=initial_partition,
@@ -74,18 +76,38 @@ def generate_new_districting_plan(state_graph_json_file, plan_id, num_iterations
 
   election_data = pd.DataFrame(
     [sorted(partition["GOV_22"].percents("Democratic"))
-    for partition in recom_chain]
+    for partition in recom_chain.with_progress_bar()]
   )
 
+  election_data.to_csv("last_partition.csv", index=False)
+
+  fig, ax = plt.subplots(figsize=(8, 6))
+
+  # Draw 50% line
+  ax.axhline(0.5, color="#cccccc")
+
+  # Draw boxplot
+  election_data.boxplot(ax=ax, positions=range(len(election_data.columns)))
+  # Draw initial plan's Democratic vote %s (.iloc[0] gives the first row)
+  plt.plot(election_data.iloc[0], "ro")
+
+  # Annotate
+  ax.set_title("Comparing the 2022 plan to an ensemble")
+  ax.set_ylabel("Democratic vote % (Governor 2022")
+  ax.set_xlabel("Sorted Districts")
+  ax.set_ylim(0, 1)
+  ax.set_yticks([0, 0.25, 0.5, 0.75, 1])
+
+  plt.savefig('plotdemo.png')
   return
 
 if __name__ == "__main__":
-    POP_CONSTRAINT = 0.02
+    POP_CONSTRAINT = 0.1
     arguments_parser = argparse.ArgumentParser()
     arguments_parser.add_argument('--state_graph_file', type=str, required=True)
     arguments_parser.add_argument('--plan_id', type=str, required=True)
     arguments_parser.add_argument('--iterations', type=int, required=True)
     args = arguments_parser.parse_args()
     generated_plan = generate_new_districting_plan(args.state_graph_file, args.plan_id, args.iterations, POP_CONSTRAINT)
-    calculate_district_election_winner(generated_plan)
+    # calculate_district_election_winner(generated_plan)
     # Save plan to file path?
