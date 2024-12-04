@@ -136,37 +136,43 @@ export default function MapPg() {
       return;
     }
 
-    const stateCodeMapping = {
-      45: "SC", // South Carolina
-      24: "MD", // Maryland
+    const handleHeatmapChange = async () => {
+      const stateCodeMapping = {
+        45: "SC", // South Carolina
+        24: "MD", // Maryland
+      };
+      console.log("in heatmap, store.selectedStateCode: ", store.selectedStateCode);
+      const stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+      console.log("stateAbbreviation: ", stateAbbreviation);
+      var heatmapData = null;
+      if( store.selectedHeatmap === "none"){
+        console.log("none heatmap handler");
+      }
+      else if(store.selectedHeatmap === "demographic"){
+        console.log("demographic heatmap handler");
+        const demographicGroup = store.selectedDemographic;
+        heatmapData = await fetch_demographic_heatmap(stateAbbreviation, demographicGroup);
+      }else if(store.selectedHeatmap === "economicIncome"){
+        console.log("economicPoverty heatmap handler");
+        heatmapData = await fetch_economicIncome_heatmap(stateAbbreviation);
+      }else if(store.selectedHeatmap === "economicRegions"){
+        console.log("economicRegions heatmap handler");
+        heatmapData = await fetch_economicRegions_heatmap(stateAbbreviation);
+      }else if(store.selectedHeatmap === "economicPoverty"){
+        console.log("economicPoverty heatmap handler");
+        heatmapData = await fetch_economicPoverty_heatmap(stateAbbreviation);
+      }else if(store.selectedHeatmap === "politicalIncome"){
+        console.log("politicalIncome heatmap handler");
+      }
+  
+      console.log("heatmapData: ", heatmapData);
+      if (stateAbbreviation === "SC") {
+        setGeojsonSouthCarolina(heatmapData);
+      } else if (stateAbbreviation === "MD") {
+        setGeojsonMaryland(heatmapData);
+      }
     };
-    const stateAbbreviation = stateCodeMapping[store.selectedStateCode];
-    var heatmapData = null;
-    if( store.selectedHeatmap === "none"){
-      console.log("none heatmap handler");
-    }
-    else if(store.selectedHeatmap === "demographic"){
-      console.log("demographic heatmap handler");
-      const demographicGroup = store.selectedDemographic;
-      heatmapData = fetch_demographic_heatmap(stateAbbreviation, demographicGroup);
-
-    }else if(store.selectedHeatmap === "economicIncome"){
-      console.log("economicPoverty heatmap handler");
-      heatmapData = fetch_economicIncome_heatmap(stateAbbreviation);
-    }else if(store.selectedHeatmap === "economicRegions"){
-      console.log("economicRegions heatmap handler");
-      heatmapData = fetch_economicRegions_heatmap(stateAbbreviation);
-    }else if(store.selectedHeatmap === "economicPoverty"){
-      console.log("economicPoverty heatmap handler");
-      heatmapData = fetch_economicPoverty_heatmap(stateAbbreviation);
-    }else if(store.selectedHeatmap === "politicalIncome"){
-      console.log("politicalIncome heatmap handler");
-    }
-    if (stateAbbreviation === "SC") {
-      setGeojsonSouthCarolina(heatmapData);
-    } else if (stateAbbreviation === "MD") {
-      setGeojsonMaryland(heatmapData);
-    }
+    handleHeatmapChange();
   }, [store.selectedHeatmap, store.selectedMapView, store.selectedDemographic, store.selectedStateCode]);
 
   useEffect(() => {}, [hoverState]);
@@ -404,6 +410,7 @@ export default function MapPg() {
         const state_data = await fetch_state_demographics("MD");
         console.log("Maryland demographics data:", state_data.data);
         store.setSelectedStateCode(24);
+        console.log("store.selectedStateCode: ", store.selectedStateCode);
         setState(state_data.data);
       } 
       else if (properties.NAME === "South Carolina") {
@@ -417,6 +424,7 @@ export default function MapPg() {
         const state_data = await fetch_state_demographics("SC");
         console.log("South Carolina demographics data:", state_data.data);
         store.setSelectedStateCode(45);
+        console.log("store.selectedStateCode: ", store.selectedStateCode);
         setState(state_data.data);
       }
     }else

@@ -51,7 +51,7 @@ function MapStoreContextProvider(props) {
             case MapStoreReducerAction.SET_SELECTED_STATE_CODE: {
                 setStore((prevStore) => ({
                     ...prevStore,
-                    selectedstateCode: payload, // Update the selected state
+                    selectedStateCode: payload, // Update the selected state
                 }));
                 return;
             }
