@@ -12,10 +12,7 @@ import { useState } from "react";
 
 export default function DataPg({ state }) {
   const [activeTab, setActiveTab] = useState("summary");
-  // console.log("DataPg state:", state);
-
-  //Objects are not valid as a React child (found: object with keys {0_35K, 35K_60K, 60K-100K, 100K_125K, 125K_150K, 150K_MORE}). If you meant to render a collection of children, use an array instead.
-  const incomeDistributionData = Object.entries(state.hous_INCOME_DIS).map(
+  const incomeDistributionData = Object.entries(state.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
       range: range.replace(/_/g, "-"), // Format the range
       percentage,                     // Use the percentage value
