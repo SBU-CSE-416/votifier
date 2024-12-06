@@ -9,32 +9,7 @@ import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
 import { MapStoreContext } from "../../stores/MapStore";
 
-const initialState = {
-  box1: {
-    title: "State Name",
-    value: "",
-  },
-  box2: {
-    title: "Population",
-    value: "0",
-  },
-  box3: {
-    title: "Median Household Income",
-    value: "0",
-  },
-  box4: {
-    title: "Political Lean",
-    value: "NaN",
-  },
-  box5: {
-    title: "Total Precinct",
-    value: "0",
-  },
-  box6: {
-    title: "Voting Population",
-    value: "0",
-  },
-};
+
 function MapResizer({store }) {
   const map = useMap();
 
@@ -49,7 +24,7 @@ function MapResizer({store }) {
 export default function MapPg() {
   const { store } = useContext(MapStoreContext);
 
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(null);
   const [stateSummaryData, setStateSummaryData] = useState(null);
   const [hoverState, setHoverState] = useState({ districtName: "" });
   const [showDistricts, setShowDistricts] = useState(false);
@@ -98,8 +73,9 @@ export default function MapPg() {
   }, []);
   const fetchHeatmapData = async (state_abbreviation, demographic_group) => {
     try {
+      const demoENUM = demographic_group.toUpperCase();
       const res = await axios.get(
-        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demographic_group}`
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demoENUM}`
       );
       return res.data;
     } catch (error) {
@@ -342,7 +318,7 @@ export default function MapPg() {
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
-    setState(initialState);
+    setState(null);
     setHoverState({ districtName: "" });
     store.setDataVisibility(false);
     store.setMapView("districts");
