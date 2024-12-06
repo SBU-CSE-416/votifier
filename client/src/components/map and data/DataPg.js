@@ -1,11 +1,11 @@
 import RacialBarChart from "./RacialChart";
-import HistogramChart from "./HistogramChart";
-import HouseholdIncomeHistogram from "./HouseholdIncomeHistogram";
+import HistogramChart from "./StateSummaryBarChart";
+import StateSummaryBarChart from "./StateSummaryBarChart";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
 import VotingGraph from "./VotingGraph";
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
-import GeneralInfoBox from "./GeneralInfoBox"
+import SummaryTable from "./SummaryTable"
 import "../../stylesheets/map and data/DataPg.css";
 import { useState } from "react";
 
@@ -14,8 +14,8 @@ export default function DataPg({ stateSummaryData }) {
   const [activeTab, setActiveTab] = useState("summary");
   const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
-      range: range.replace(/_/g, "-"), // Format the range
-      percentage,                     // Use the percentage value
+      range: range.replace(/_/g, "-"), 
+      percentage,                    
     })
   );
   console.log("Data: ", incomeDistributionData)
@@ -24,7 +24,7 @@ export default function DataPg({ stateSummaryData }) {
     <div id="info">
       <div className="datapg-container">
         <div className="data-genernal-info">
-          <GeneralInfoBox stateSummaryData={stateSummaryData} />
+          <SummaryTable stateSummaryData={stateSummaryData} />
         </div>
         <div className="data-navbar">
           <div
@@ -55,7 +55,7 @@ export default function DataPg({ stateSummaryData }) {
         <div className="data-charts-container">
           {activeTab === "summary" && (
             <div className="data-charts">
-              <HistogramChart
+              <StateSummaryBarChart
                 data={incomeDistributionData}
                 w={500}
                 h={250}

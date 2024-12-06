@@ -14,7 +14,6 @@ public class StateSummary {
     private String NAME;
     private double TOTAL_POPULATION;
 
-    // Racial demographics in percentage
     private double WHITE_PERCENT;
     private double BLACK_PERCENT;
     private double HISPANIC_PERCENT;
@@ -23,14 +22,12 @@ public class StateSummary {
     private double ISLANDER_PERCENT;
     private double OTHER_RACE_PERCENT;
 
-    // Voting data
     private double TOTAL_VOTES;
     private double DEM_VOTES;
     private double DEM_PERCENT;
     private double REP_VOTES;
     private double REP_PERCENT;
 
-    // Household data
     private double TOTAL_HOUSEHOLDS;
     private Map<String, Double> HOUSEHOLD_INCOME_DISTRIBUTION;
 

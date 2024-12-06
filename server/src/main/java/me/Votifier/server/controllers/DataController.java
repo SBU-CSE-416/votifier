@@ -36,11 +36,9 @@ public class DataController {
 
     @GetMapping("/{stateAbbreviation}/summary")
     public ResponseEntity<Resource> getStateSummary(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
-        // Note: This method will eventually be changed, since we will be accessing the cache/database for this data instead of locally
         return gatherSummaryDataFromCache(stateAbbreviation);
     }
 
-    // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     @Autowired
     private StateSummaryRepository stateSummaryRepository;
 

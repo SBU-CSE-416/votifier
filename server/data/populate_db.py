@@ -135,4 +135,4 @@ with open(maryland_state_summary_path, 'r') as file:
 
 collection.insert_one(summary_data)
 
-print("South Carolina Summary data inserted")
+print("Maryland Summary data inserted")
