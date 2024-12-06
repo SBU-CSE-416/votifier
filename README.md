@@ -12,7 +12,7 @@ CLIENT SIDE
 
 SERVER SIDE
 - start mongodb.exe
-- cd into server/data, run `initialize.py` to fill out the db in mongodb
+- cd into server/data, run `populate_db.py` to fill out the db in mongodb
 - cd into the server, run the cmd `./mvnw spring-boot:run`
 - (note for Kaitlyn, the above cmd works in powershell, not git bash for laptop)
 
