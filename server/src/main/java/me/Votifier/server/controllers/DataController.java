@@ -14,11 +14,16 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.web.bind.annotation.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.NameFilter;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 
 import me.Votifier.server.services.DataService;
 
 import me.Votifier.server.model.StateAbbreviation;
 import me.Votifier.server.model.repository.StateSummaryRepository;
+import me.Votifier.server.model.repository.DistrictsSummaryRepository;
+import me.Votifier.server.model.documents.DistrictsSummary.DistrictData;
 import me.Votifier.server.model.documents.StateSummary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
 
@@ -37,6 +42,10 @@ public class DataController {
     @GetMapping("/{stateAbbreviation}/summary")
     public ResponseEntity<Resource> getStateSummary(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
         return gatherSummaryDataFromCache(stateAbbreviation);
+    }
+    @GetMapping("/{stateAbbreviation}/districts/summary")
+    public ResponseEntity<Resource> getDistrictsSummary(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
+        return gatherDistrictsDataFromCache(stateAbbreviation);
     }
 
     @Autowired
@@ -64,6 +73,42 @@ public class DataController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Autowired
+    private DistrictsSummaryRepository districtsSummaryRepository;
+
+    @Cacheable(value = "districtsSummaries", key = "#stateAbbreviation")
+    public ResponseEntity<Resource> gatherDistrictsDataFromCache(StateAbbreviation stateAbbreviation) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+    
+            me.Votifier.server.model.documents.DistrictsSummary districtsSummary = districtsSummaryRepository.findByName(stateName);
+    
+            if (districtsSummary == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            SerializeConfig config = new SerializeConfig();
+            
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+            
+            String jsonResponse = JSON.toJSONString(districtsSummary, config);
+    
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+    
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing districts summary: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
 
     // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     public Resource getResourceFromLocal(Path filePath) throws UnknownFileException {
