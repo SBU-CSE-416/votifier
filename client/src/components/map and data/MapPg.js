@@ -27,11 +27,6 @@ export default function MapPg() {
   const [state, setState] = useState(null);
   const [stateSummaryData, setStateSummaryData] = useState(null);
   const [hoverState, setHoverState] = useState({ districtName: "" });
-  const [showDistricts, setShowDistricts] = useState(false);
-  const [showPrecincts, setShowPrecincts] = useState(false);
-
-  //LeftSideMenu selectors
-  const [selectedStateCode, setStateCode] = useState(null);
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
   const [geojsonSouthCarolina, setGeojsonSouthCarolina] = useState(null);
@@ -71,7 +66,8 @@ export default function MapPg() {
 
     fetchData();
   }, []);
-  const fetchHeatmapData = async (state_abbreviation, demographic_group) => {
+
+  const fetch_demographic_heatmap = async (state_abbreviation, demographic_group) => {
     try {
       const demoENUM = demographic_group.toUpperCase();
       const res = await axios.get(
@@ -79,45 +75,92 @@ export default function MapPg() {
       );
       return res.data;
     } catch (error) {
-      console.error("Error fetching heatmap data:", error);
+      console.error("Error fetching demographic heatmap data:", error);
       return null;
     }
   };
-  useEffect(() => {
-    const loadHeatmap = async () => {
-      if (store.selectedHeatmap === "demographic" && selectedStateCode) {
-        const stateCodeMapping = {
-          45: "SC", // South Carolina
-          24: "MD", // Maryland
-        };
+
+  const fetch_economicIncome_heatmap = async (state_abbreviation) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/economic-income`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching economicIncome heatmap data:", error);
+      return null;
+    }
+  };
+
+  const fetch_economicRegions_heatmap = async (state_abbreviation) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/economic-regions`
+      );
+      return res.data;
+    } catch (error) {
+      console.error("Error fetching economicRegions heatmap data:", error);
+      return null;
+    }
+  };
+
+  const fetch_economicPoverty_heatmap = async (state_abbreviation) => {
+    try{
+      const res = await axios.get(
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/economic-poverty`
+      );
+      return res.data;
+    } catch (error) { 
+      console.error("Error fetching economicPoverty heatmap data:", error);
+      return null;
+    }
+  };
+
+
+  useEffect(() => { 
+    console.log("handleHeatMapChange:", store.selectedHeatmap);
+    if(store.selectedMapView !== "precincts"){
+      return;
+    }
+
+    const handleHeatmapChange = async () => {
+      const stateCodeMapping = {
+        45: "SC", // South Carolina
+        24: "MD", // Maryland
+      };
+      console.log("in heatmap, store.selectedStateCode: ", store.selectedStateCode);
+      const stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+      console.log("stateAbbreviation: ", stateAbbreviation);
+      var heatmapData = null;
+      if( store.selectedHeatmap === "none"){
+        console.log("none heatmap handler");
+      }
+      else if(store.selectedHeatmap === "demographic"){
+        console.log("demographic heatmap handler");
+        const demographicGroup = store.selectedDemographic;
+        heatmapData = await fetch_demographic_heatmap(stateAbbreviation, demographicGroup);
+      }else if(store.selectedHeatmap === "economicIncome"){
+        console.log("economicPoverty heatmap handler");
+        heatmapData = await fetch_economicIncome_heatmap(stateAbbreviation);
+      }else if(store.selectedHeatmap === "economicRegions"){
+        console.log("economicRegions heatmap handler");
+        heatmapData = await fetch_economicRegions_heatmap(stateAbbreviation);
+      }else if(store.selectedHeatmap === "economicPoverty"){
+        console.log("economicPoverty heatmap handler");
+        heatmapData = await fetch_economicPoverty_heatmap(stateAbbreviation);
+      }else if(store.selectedHeatmap === "politicalIncome"){
+        console.log("politicalIncome heatmap handler");
+      }
   
-        const stateAbbreviation = stateCodeMapping[selectedStateCode];
-        const demographicGroup = "WHITE";
-  
-        const heatmapData = await fetchHeatmapData(stateAbbreviation, demographicGroup);
-  
-        if (stateAbbreviation === "SC") {
-          setGeojsonSouthCarolina(heatmapData);
-        } else if (stateAbbreviation === "MD") {
-          setGeojsonMaryland(heatmapData);
-        }
+      console.log("heatmapData: ", heatmapData);
+      if (stateAbbreviation === "SC") {
+        setGeojsonSouthCarolina(heatmapData);
+      } else if (stateAbbreviation === "MD") {
+        setGeojsonMaryland(heatmapData);
       }
     };
-  
-    loadHeatmap();
-  }, [store.selectedHeatmap, selectedStateCode]);
-    
-  console.log("showPrecincts", showPrecincts);
-  useEffect(() => {
-    if (store.selectedMapView === "districts") {
-      setShowDistricts(true);
-      setShowPrecincts(false);
-    } 
-    else if (store.selectedMapView === "precincts") {
-      setShowDistricts(false);
-      setShowPrecincts(true);
-    }
-  }, [store.selectedMapView]);
+    handleHeatmapChange();
+  }, [store.selectedHeatmap, store.selectedMapView, store.selectedDemographic, store.selectedStateCode]);
 
   useEffect(() => {}, [hoverState]);
 
@@ -316,6 +359,18 @@ export default function MapPg() {
     }
   };
 
+  function MapResizer({store }) {
+    const map = useMap();
+  
+    useEffect(() => {
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 0);
+    }, [store.isDataVisible, map]);
+  
+    return null;
+  }
+
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
     setState(null);
@@ -323,9 +378,7 @@ export default function MapPg() {
     store.setDataVisibility(false);
     store.setMapView("districts");
     setDisableNavigation(false);
-    setShowDistricts(false);
-    setShowPrecincts(false);
-    setStateCode(null);
+    store.setSelectedStateCode(null);
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
@@ -369,15 +422,11 @@ export default function MapPg() {
         const mdPrecinctDataRes = await fetchPrecinctBoundary("MD");
         console.log("precinct, MD data:", mdPrecinctDataRes.data);
         setGeojsonMarylandPrecinct(mdPrecinctDataRes.data);
-        setShowPrecincts(true);
-        setShowDistricts(false);
         console.log("MD precinct boundary data from server:", mdPrecinctDataRes.data);
       } else if (properties.NAME === "South Carolina") {
         const scPrecinctDataRes = await fetchPrecinctBoundary("SC");
         console.log("precinct, SC data:", scPrecinctDataRes);
         setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
-        setShowPrecincts(true);
-        setShowDistricts(false);
         console.log("SC precinct boundary data from server:", scPrecinctDataRes.data);
       }
     }
@@ -390,8 +439,6 @@ export default function MapPg() {
     <div style={{ display: "flex" }}>
       {
         <LeftSideMenu
-          selectedStateCode={selectedStateCode}
-          setStateCode={selectedStateCode}
           onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
         />
