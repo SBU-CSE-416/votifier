@@ -135,4 +135,28 @@ with open(maryland_state_summary_path, 'r') as file:
 
 collection.insert_one(summary_data)
 
-print("South Carolina Summary data inserted")
+print("Maryland Summary data inserted")
+
+
+collection = db["districts_summary"]
+
+collection.delete_many({})
+
+sc_election_cong_path = "states/south_carolina/congressional_districts/summary/sc_congressional_districts_summary.json"
+
+with open(sc_election_cong_path, 'r') as file:
+    sc_election_cong_data = json.load(file)
+
+collection.insert_one(sc_election_cong_data)
+
+print("South Carolina Congressional Districts Summary data inserted")
+
+
+md_election_cong_path = "states/maryland/congressional_districts/summary/md_congressional_districts_summary.json"
+
+with open(md_election_cong_path, 'r') as file:
+    md_election_cong_data = json.load(file)
+
+collection.insert_one(md_election_cong_data)
+
+print("Maryland Congressional Districts Summary data inserted")
