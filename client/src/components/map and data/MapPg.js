@@ -9,37 +9,23 @@ import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
 import { MapStoreContext } from "../../stores/MapStore";
 
-const initialState = {
-  box1: {
-    title: "State Name",
-    value: "",
-  },
-  box2: {
-    title: "Population",
-    value: "0",
-  },
-  box3: {
-    title: "Median Household Income",
-    value: "0",
-  },
-  box4: {
-    title: "Political Lean",
-    value: "NaN",
-  },
-  box5: {
-    title: "Total Precinct",
-    value: "0",
-  },
-  box6: {
-    title: "Voting Population",
-    value: "0",
-  },
-};
 
+function MapResizer({store }) {
+  const map = useMap();
+
+  useEffect(() => {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 0);
+  }, [store.isDataVisible, map]);
+
+  return null;
+}
 export default function MapPg() {
   const { store } = useContext(MapStoreContext);
 
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(null);
+  const [stateSummaryData, setStateSummaryData] = useState(null);
   const [hoverState, setHoverState] = useState({ districtName: "" });
 
   const [geojsonMaryland, setGeojsonMaryland] = useState(null);
@@ -83,8 +69,9 @@ export default function MapPg() {
 
   const fetch_demographic_heatmap = async (state_abbreviation, demographic_group) => {
     try {
+      const demoENUM = demographic_group.toUpperCase();
       const res = await axios.get(
-        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demographic_group}`
+        `http://localhost:8000/api/map/${state_abbreviation}/heatmap/demographic/${demoENUM}`
       );
       return res.data;
     } catch (error) {
@@ -270,7 +257,7 @@ export default function MapPg() {
       fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
       weight: 0.5,
       opacity: 1,
-      color: featureType === "precinct" ? "#000000" : "#FFFFFF",
+      color: "#FFFFFF",
       dashArray: "",
       fillOpacity: featureType === "precinct" ? 0.5 : 0.7,
     };
@@ -340,7 +327,7 @@ export default function MapPg() {
       );
   };
 
-  const fetch_precinct_boundary = async (state_abbreviation) => {
+  const fetchPrecinctBoundary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
         `http://localhost:8000/api/map/${state_abbreviation}/boundary/precincts`
@@ -351,7 +338,7 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_district_boundary = async (state_abbreviation) => {
+  const fetchDistrictBoundary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
         `http://localhost:8000/api/map/${state_abbreviation}/boundary/districts`
@@ -361,7 +348,7 @@ export default function MapPg() {
       console.error("Error fetching data:", error);
     }
   };
-  const fetch_state_demographics = async (state_abbreviation) => {
+  const fetchStateSummary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
         `http://localhost:8000/api/data/${state_abbreviation}/summary`
@@ -386,7 +373,7 @@ export default function MapPg() {
 
   const handleResetView = (map) => {
     map.setView(defaultView, defaultZoom);
-    setState(initialState);
+    setState(null);
     setHoverState({ districtName: "" });
     store.setDataVisibility(false);
     store.setMapView("districts");
@@ -400,44 +387,44 @@ export default function MapPg() {
 
     if (store.selectedMapView === "districts") {
       if (properties.NAME === "Maryland") {
-        const md_district_res = await fetch_district_boundary("MD");
+        const md_district_res = await fetchDistrictBoundary("MD");
         console.log(
           "MD districts boundary data from server:",
           md_district_res.data
         );
         setGeojsonMarylandCongress(md_district_res.data);
 
-        const state_data = await fetch_state_demographics("MD");
-        console.log("Maryland demographics data:", state_data.data);
-        store.setSelectedStateCode(24);
-        console.log("store.selectedStateCode: ", store.selectedStateCode);
-        setState(state_data.data);
+        const state_summary_data = await fetchStateSummary("MD");
+        console.log("Maryland demographics data:", state_summary_data.data);
+        setStateCode(24);
+        setStateSummaryData(state_summary_data.data);
+        setShowDistricts(true);
       } 
       else if (properties.NAME === "South Carolina") {
-        const sc_district_res = await fetch_district_boundary("SC");
+        const sc_district_res = await fetchDistrictBoundary("SC");
         console.log(
           "SC districts boundary data from server:",
           sc_district_res.data
         );
         setGeojsonSouthCarolinaCongress(sc_district_res.data);
 
-        const state_data = await fetch_state_demographics("SC");
-        console.log("South Carolina demographics data:", state_data.data);
-        store.setSelectedStateCode(45);
-        console.log("store.selectedStateCode: ", store.selectedStateCode);
-        setState(state_data.data);
+        const state_summary_data = await fetchStateSummary("SC");
+        console.log("South Carolina demographics data:", state_summary_data.data);
+        setStateCode(45);
+        setStateSummaryData(state_summary_data.data);
+        setShowDistricts(true);
       }
     }else
     if (store.selectedMapView === "precincts") {
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
-        const mdPrecinctDataRes = await fetch_precinct_boundary("MD");
+        const mdPrecinctDataRes = await fetchPrecinctBoundary("MD");
         console.log("precinct, MD data:", mdPrecinctDataRes.data);
         setGeojsonMarylandPrecinct(mdPrecinctDataRes.data);
         console.log("MD precinct boundary data from server:", mdPrecinctDataRes.data);
       } else if (properties.NAME === "South Carolina") {
-        const scPrecinctDataRes = await fetch_precinct_boundary("SC");
+        const scPrecinctDataRes = await fetchPrecinctBoundary("SC");
         console.log("precinct, SC data:", scPrecinctDataRes);
         setGeojsonSouthCarolinaPrecinct(scPrecinctDataRes.data);
         console.log("SC precinct boundary data from server:", scPrecinctDataRes.data);
@@ -523,7 +510,7 @@ export default function MapPg() {
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-      {store.isDataVisible && <DataPg state={state} />}
+      {store.isDataVisible && <DataPg stateSummaryData={stateSummaryData} />}
     </div>
   );
 }

@@ -1,24 +1,21 @@
 import RacialBarChart from "./RacialChart";
-import HistogramChart from "./HistogramChart";
-import HouseholdIncomeHistogram from "./HouseholdIncomeHistogram";
+import HistogramChart from "./StateSummaryBarChart";
+import StateSummaryBarChart from "./StateSummaryBarChart";
 import EcologicalInferenceChart from "./EcologicalInferenceChart"
 import VotingGraph from "./VotingGraph";
 import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
-import GeneralInfoBox from "./GeneralInfoBox"
+import SummaryTable from "./SummaryTable"
 import "../../stylesheets/map and data/DataPg.css";
 import { useState } from "react";
 
 
-export default function DataPg({ state }) {
+export default function DataPg({ stateSummaryData }) {
   const [activeTab, setActiveTab] = useState("summary");
-  // console.log("DataPg state:", state);
-
-  //Objects are not valid as a React child (found: object with keys {0_35K, 35K_60K, 60K-100K, 100K_125K, 125K_150K, 150K_MORE}). If you meant to render a collection of children, use an array instead.
-  const incomeDistributionData = Object.entries(state.hous_INCOME_DIS).map(
+  const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
-      range: range.replace(/_/g, "-"), // Format the range
-      percentage,                     // Use the percentage value
+      range: range.replace(/_/g, "-"), 
+      percentage,                    
     })
   );
   console.log("Data: ", incomeDistributionData)
@@ -27,7 +24,7 @@ export default function DataPg({ state }) {
     <div id="info">
       <div className="datapg-container">
         <div className="data-genernal-info">
-          <GeneralInfoBox state={state} />
+          <SummaryTable stateSummaryData={stateSummaryData} />
         </div>
         <div className="data-navbar">
           <div
@@ -58,7 +55,7 @@ export default function DataPg({ state }) {
         <div className="data-charts-container">
           {activeTab === "summary" && (
             <div className="data-charts">
-              <HistogramChart
+              <StateSummaryBarChart
                 data={incomeDistributionData}
                 w={500}
                 h={250}
