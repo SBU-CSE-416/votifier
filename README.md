@@ -5,6 +5,7 @@ Dependencies
 - npm
 - pymongo
 - apache maven
+- java jdk 17 or higher
 
 Requirements
 - cd into client directory, run `npm install`
