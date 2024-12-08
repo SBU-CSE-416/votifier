@@ -1,5 +1,11 @@
 Instructions on how to run the project locally.
 
+Dependencies
+- node.js
+- npm
+- pymongo
+- apache maven
+
 Requirements
 - cd into client directory, run `npm install`
 - cd into server directory, run `npm install`
