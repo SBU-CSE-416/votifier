@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import json
+import pymongo
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["votifier"]
@@ -79,13 +80,17 @@ if geojson_data["type"] == "FeatureCollection":
     # Insert each feature (precinct) as a separate document
     for feature in features:
         feature["NAME"] = "South Carolina"  # Add state name to each feature
-        collection.insert_one(feature)
+        try:
+            collection.insert_one(feature)
+        except pymongo.errors.WriteError as e:
+            # Log or ignore the error based on your requirements
+            pass
 
     print(f"Inserted {len(features)} precincts into MongoDB.")
 else:
     print("GeoJSON file is not a FeatureCollection.")
 
-collection.create_index([("geometry", "2dsphere")])
+collection.create_index([("geometry")])
 
 print("South Carolina Precinct GeoJSON data inserted index created")
 

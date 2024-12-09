@@ -396,9 +396,9 @@ export default function MapPg() {
 
         const state_summary_data = await fetchStateSummary("MD");
         console.log("Maryland demographics data:", state_summary_data.data);
-        setStateCode(24);
+        // setStateCode(24);
         setStateSummaryData(state_summary_data.data);
-        setShowDistricts(true);
+        // setShowDistricts(true);
       } 
       else if (properties.NAME === "South Carolina") {
         const sc_district_res = await fetchDistrictBoundary("SC");
@@ -410,9 +410,9 @@ export default function MapPg() {
 
         const state_summary_data = await fetchStateSummary("SC");
         console.log("South Carolina demographics data:", state_summary_data.data);
-        setStateCode(45);
+        // setStateCode(45);
         setStateSummaryData(state_summary_data.data);
-        setShowDistricts(true);
+        // setShowDistricts(true);
       }
     }else
     if (store.selectedMapView === "precincts") {
