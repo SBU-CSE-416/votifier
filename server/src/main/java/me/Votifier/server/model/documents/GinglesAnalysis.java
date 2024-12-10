@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Map;
 
-@Document(collection = "gingles")
+@Document(collection = "gingles_racial_data")
 public class GinglesAnalysis {
     @Id
     private String id;
