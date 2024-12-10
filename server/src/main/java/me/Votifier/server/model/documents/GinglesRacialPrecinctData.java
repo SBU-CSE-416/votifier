@@ -2,8 +2,8 @@ package me.Votifier.server.model.documents;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
-public class GinglePrecinctData {
-    public GinglePrecinctData() {
+public class GinglesRacialPrecinctData {
+    public GinglesRacialPrecinctData() {
         // No-args constructor
     }
     
@@ -16,17 +16,8 @@ public class GinglePrecinctData {
     @Field("DEMOCRATIC_VOTE_SHARE")
     private double DEMOCRATIC_VOTE_SHARE;
 
-    @Field("WHITE_PERCENT")
-    private double WHITE_PERCENT;
-
-    @Field("BLACK_PERCENT")
-    private double BLACK_PERCENT;
-
-    @Field("ASIAN_PERCENT")
-    private double ASIAN_PERCENT;
-
-    @Field("HISPANIC_PERCENT")
-    private double HISPANIC_PERCENT;
+    @Field("RACE_PERCENT")
+    private double RACE_PERCENT;
 
     @Field("AVG_HOUSEHOLD_INCOME")
     private double AVG_HOUSEHOLD_INCOME;
@@ -59,38 +50,13 @@ public class GinglePrecinctData {
         this.DEMOCRATIC_VOTE_SHARE = DEMOCRATIC_VOTE_SHARE;
     }
 
-    public double getWHITE_PERCENT() {
-        return WHITE_PERCENT;
+    public double getRACE_PERCENT() {
+        return this.RACE_PERCENT;
     }
 
-    public void setWHITE_PERCENT(double WHITE_PERCENT) {
-        this.WHITE_PERCENT = WHITE_PERCENT;
+    public void setRACE_PERCENT(double RACE_PERCENT) {
+        this.RACE_PERCENT = RACE_PERCENT;
     }
-
-    public double getBLACK_PERCENT() {
-        return BLACK_PERCENT;
-    }
-
-    public void setBLACK_PERCENT(double BLACK_PERCENT) {
-        this.BLACK_PERCENT = BLACK_PERCENT;
-    }
-
-    public double getASIAN_PERCENT() {
-        return ASIAN_PERCENT;
-    }
-
-    public void setASIAN_PERCENT(double ASIAN_PERCENT) {
-        this.ASIAN_PERCENT = ASIAN_PERCENT;
-    }
-
-    public double getHISPANIC_PERCENT() {
-        return HISPANIC_PERCENT;
-    }
-
-    public void setHISPANIC_PERCENT(double HISPANIC_PERCENT) {
-        this.HISPANIC_PERCENT = HISPANIC_PERCENT;
-    }
-
     public double getAVG_HOUSEHOLD_INCOME() {
         return AVG_HOUSEHOLD_INCOME;
     }
