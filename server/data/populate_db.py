@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import json
 import pymongo
+from tqdm import tqdm
 
 client = MongoClient("mongodb://localhost:27017/")
 db = client["votifier"]
@@ -77,8 +78,8 @@ with open(south_carolina_precincts_path, 'r') as file:
 if geojson_data["type"] == "FeatureCollection":
     features = geojson_data.get("features", [])
     
-    # Insert each feature (precinct) as a separate document
-    for feature in features:
+    # Use tqdm to iterate with a progress bar
+    for feature in tqdm(features, desc="Inserting South Carolina precincts"):
         feature["NAME"] = "South Carolina"  # Add state name to each feature
         try:
             collection.insert_one(feature)
@@ -90,8 +91,8 @@ if geojson_data["type"] == "FeatureCollection":
 else:
     print("GeoJSON file is not a FeatureCollection.")
 
-collection.create_index([("geometry")])
-
+# After inserting, create the index
+collection.create_index([("geometry", "2dsphere")])
 print("South Carolina Precinct GeoJSON data inserted index created")
 
 maryland_precincts_path = 'states/maryland/geodata/maryland_precincts.geojson'
@@ -105,9 +106,9 @@ with open(maryland_precincts_path, 'r') as file:
 if geojson_data["type"] == "FeatureCollection":
     features = geojson_data.get("features", [])
     
-    # Insert each feature (precinct) as a separate document
-    for feature in features:
-        feature["NAME"] = "Maryland"  # Add state name to each feature
+    
+    for feature in tqdm(features, desc="Inserting Maryland precincts"):
+        feature["NAME"] = "Maryland"
         collection.insert_one(feature)
 
     print(f"Inserted {len(features)} precincts into MongoDB.")
@@ -165,3 +166,26 @@ with open(md_election_cong_path, 'r') as file:
 collection.insert_one(md_election_cong_data)
 
 print("Maryland Congressional Districts Summary data inserted")
+
+
+collection = db["gingles"]
+
+collection.delete_many({})
+
+sc_gingles_path = "states/south_carolina/gingles/sc_gingles_precinct_analysis.json"
+
+with open(sc_gingles_path, 'r') as file:
+    sc_gingles_data = json.load(file)
+
+collection.insert_one(sc_gingles_data)
+
+print("South Carolina Gingles data inserted")
+
+md_gingles_path = "states/maryland/gingles/md_gingles_precinct_analysis.json"
+
+with open(md_gingles_path, 'r') as file:
+    md_gingles_data = json.load(file)
+
+collection.insert_one(md_gingles_data)
+
+print("Maryland Gingles data inserted")
