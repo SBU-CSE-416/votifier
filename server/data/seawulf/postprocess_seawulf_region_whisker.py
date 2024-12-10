@@ -98,9 +98,9 @@ def postprocessing_process(ensemble_id, state_abbr, region_type, plan_count):
     }
 
     finalized_region_whisker_json = {
+        "NAME": state_name,
         "ENSEMBLE_ID": ensemble_id,
         "TOT_PLANS": plan_count,
-        "STATE": state_abbr,
         "REGION_TYPE": region_type.upper(),
         "labels" : labels,
         "data": group_box_and_whisker_data

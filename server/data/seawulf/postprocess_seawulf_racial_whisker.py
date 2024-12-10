@@ -98,9 +98,9 @@ def postprocessing_process(ensemble_id, state_abbr, racial_group, plan_count):
     }
 
     finalized_racial_whisker_json = {
+        "NAME": state_name,
         "ENSEMBLE_ID": ensemble_id,
         "TOT_PLANS": plan_count,
-        "STATE": state_abbr,
         "RACIAL_GROUP": racial_group.upper(),
         "labels" : labels,
         "data": group_box_and_whisker_data
