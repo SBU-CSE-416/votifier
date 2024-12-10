@@ -7,19 +7,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public enum RacialGroup {
-    WHITE("White", "WHT_NHSP22"),
-    BLACK("Black/African American", "BLK_NHSP22"),
-    HISPANIC_LATINO("Hispanic/Latino", "HIS_POP22"),
-    ASIAN("Asian", "ASN_NHSP22"),
-    PACIFIC_ISLANDER("Hawaiian/Other Pacific Islander", "HPI_NHSP22"),
-    NATIVE_AMERICAN("Native American/Alaskan Native", "AIA_NHSP22");
+    WHITE("White", "WHT_NHSP22", "WHITE"),
+    BLACK("Black/African American", "BLK_NHSP22", "BLACK"),
+    HISPANIC_LATINO("Hispanic/Latino", "HIS_POP22", "HISPANIC"),
+    ASIAN("Asian", "ASN_NHSP22", "ASIAN"),;
     
     private final String formattedRacialGroupName;
     private final String identifier;
+    private final String ginglesIdentifer;
     
-    RacialGroup(String formattedRacialGroupName, String identifier) {
+    RacialGroup(String formattedRacialGroupName, String identifier, String ginglesIdentifer) {
         this.formattedRacialGroupName = formattedRacialGroupName;
         this.identifier = identifier;
+        this.ginglesIdentifer = ginglesIdentifer;
     }
     
     public String getFormattedRacialGroupName() {
@@ -30,6 +30,9 @@ public enum RacialGroup {
         return identifier;
     }
 
+    public String getGinglesIdentifer() {
+        return ginglesIdentifer;
+    }
     private static final Map<String, RacialGroup> formattedRacialGroupNameToEnum = Arrays.stream(values())
         .collect(Collectors.toMap(RacialGroup::getFormattedRacialGroupName, Function.identity()));
 
