@@ -179,7 +179,7 @@ with open(sc_gingles_path, 'r') as file:
 
 collection.insert_one(sc_gingles_data)
 
-print("South Carolina Gingles data inserted")
+print("South Carolina Gingles Racial data inserted")
 
 md_gingles_path = "states/maryland/gingles/md_gingles_precinct_analysis.json"
 
@@ -188,7 +188,29 @@ with open(md_gingles_path, 'r') as file:
 
 collection.insert_one(md_gingles_data)
 
-print("Maryland Gingles data inserted")
+print("Maryland Gingles Racial data inserted")
+
+collection = db["gingles_economic_data"]
+
+collection.delete_many({})
+
+sc_gingles_economic_path = "states/south_carolina/gingles/sc_gingles_precinct_income_analysis.json"
+
+with open(sc_gingles_economic_path, 'r') as file:
+    sc_gingles_economic_data = json.load(file)
+
+collection.insert_one(sc_gingles_economic_data)
+
+print("South Carolina Gingles Economic data inserted")
+
+md_gingles_economic_path = "states/maryland/gingles/md_gingles_precinct_income_analysis.json"
+
+with open(md_gingles_economic_path, 'r') as file:
+    md_gingles_economic_data = json.load(file)
+
+collection.insert_one(md_gingles_economic_data)
+
+print("Maryland Gingles Economic data inserted")
 
 collection = db["economic_data"]
 

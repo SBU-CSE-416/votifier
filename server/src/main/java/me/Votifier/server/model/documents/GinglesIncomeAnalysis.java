@@ -4,9 +4,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Map;
+import java.util.List;
 
-@Document(collection = "gingles_racial_data")
-public class GinglesAnalysis {
+@Document(collection = "gingles_economic_data")
+public class GinglesIncomeAnalysis {
     @Id
     private String id;
 
@@ -18,12 +19,12 @@ public class GinglesAnalysis {
     
     @Field("candidates")
     private Map<String, String> candidates;
-    
 
     @Field("data")
-    private GinglesData data;
+    private List<GinglesIncomePrecinctData> data;
 
     //getters and setters
+
     public String getId() {
         return id;
     }
@@ -48,11 +49,11 @@ public class GinglesAnalysis {
         this.election = election;
     }
 
-    public GinglesData getData() {
+    public List<GinglesIncomePrecinctData> getData() {
         return data;
     }
 
-    public void setData(GinglesData data) {
+    public void setData(List<GinglesIncomePrecinctData> data) {
         this.data = data;
     }
 
@@ -63,5 +64,5 @@ public class GinglesAnalysis {
     public void setCandidates(Map<String, String> candidates) {
         this.candidates = candidates;
     }
-    
+
 }
