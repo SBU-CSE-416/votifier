@@ -6,6 +6,7 @@ import VotingGraph from "./graphs/VotingGraph";
 import MedianIncomeBoxPlot from "./graphs/MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
 import SummaryTable from "./SummaryTable"
+import GinglesGraph from "./graphs/GinglesGraph";
 import "../../stylesheets/map and data/DataPg.css";
 import { useState } from "react";
 
@@ -69,7 +70,7 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "gingles" && (
             <div className="data-charts">
-              <h2>Coming Soon</h2>
+              <GinglesGraph/>
             </div>
           )}
           {activeTab === "ei-analysis" && (
