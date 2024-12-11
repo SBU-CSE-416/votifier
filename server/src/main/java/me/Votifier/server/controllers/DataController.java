@@ -56,14 +56,14 @@ public class DataController {
     public ResponseEntity<Resource> getGinglesAnalysisByRace(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
         return gatherGinglesDataFromCache(stateAbbreviation, racialGroup);
     }
-    @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
-    public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
-        return gatherBoxplotDataFromCache(stateAbbreviation, racialGroup);
-    }
-    @GetMapping("/{stateAbbreviation}/boxplot/economics/{economicGroup}")
-    public ResponseEntity<Resource> getBoxplotByEconomicGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("economciGroup") EconomicGroup economicGroup) {
-        return gatherBoxplotDataFromCache(stateAbbreviation, economicGroup);
-    }
+    // @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
+    // public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
+    //     return gatherBoxplotDataFromCache(stateAbbreviation, racialGroup);
+    // }
+    // @GetMapping("/{stateAbbreviation}/boxplot/economics/{economicGroup}")
+    // public ResponseEntity<Resource> getBoxplotByEconomicGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("economciGroup") EconomicGroup economicGroup) {
+    //     return gatherBoxplotDataFromCache(stateAbbreviation, economicGroup);
+    // }
 
     @GetMapping("/{stateAbbreviation}/gingles/economic/{regionType}")
     public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable(value = "regionType") RegionType regionType) {
