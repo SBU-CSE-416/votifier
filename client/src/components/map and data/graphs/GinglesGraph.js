@@ -7,7 +7,7 @@ export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
-    const [regionType, setRegionType] = useState("URBAN");
+    const [regionType, setRegionType] = useState("NONE");
 
     const fetch_gingles_racial = async (stateAbbreviation, racialGroup) => {
         try{
@@ -102,6 +102,56 @@ export default function GinglesGraph() {
                         </label>
                         </> : null}
                     </div>
+                </div>
+            </>
+            : null}
+            {selectedGingles === "income" ? 
+            <>
+                <div className="select-container">
+                    <label>Region Type</label>
+                    <div>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="NONE" 
+                                checked={regionType === "NONE"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            None
+                        </label>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="RURAL" 
+                                checked={regionType === "RURAL"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            Rural
+                        </label>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="SUBURBAN" 
+                                checked={regionType === "SUBURBAN"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            Suburban
+                        </label>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="URBAN" 
+                                checked={regionType === "URBAN"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            Urban
+                        </label>
+                    </div>
+
                 </div>
             </>
             : null}
