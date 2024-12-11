@@ -1,8 +1,10 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
+import { MapStoreContext } from "../../../stores/MapStore";
 
 export default function GinglesGraph() {
+    const { store } = useContext(MapStoreContext);
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
     const [regionType, setRegionType] = useState("URBAN");
@@ -77,7 +79,8 @@ export default function GinglesGraph() {
                             />
                             Black
                         </label>
-                        <label>
+                        {store.selectedStateCode === 24? <>
+                            <label>
                             <input 
                                 type="radio" 
                                 name="racialGroup" 
@@ -97,6 +100,7 @@ export default function GinglesGraph() {
                             />
                             Hispanic
                         </label>
+                        </> : null}
                     </div>
                 </div>
             </>
