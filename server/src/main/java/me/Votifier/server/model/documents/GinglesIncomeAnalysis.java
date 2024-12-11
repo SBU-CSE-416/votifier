@@ -23,6 +23,8 @@ public class GinglesIncomeAnalysis {
     @Field("data")
     private List<GinglesIncomePrecinctData> data;
 
+    @Field("lines")
+    private Lines lines;
     //getters and setters
 
     public String getId() {
@@ -56,6 +58,13 @@ public class GinglesIncomeAnalysis {
     public void setData(List<GinglesIncomePrecinctData> data) {
         this.data = data;
     }
+    public Lines getLines() {
+        return lines;
+    }
+
+    public void setLines(Lines lines) {
+        this.lines = lines;
+    }
 
     public Map<String, String> getCandidates() {
         return candidates;
@@ -63,6 +72,54 @@ public class GinglesIncomeAnalysis {
 
     public void setCandidates(Map<String, String> candidates) {
         this.candidates = candidates;
+    }
+    public static class Lines {
+        @Field("democratic")
+        private LineData democratic;
+
+        @Field("republican")
+        private LineData republican;
+
+        // Getters and Setters
+        public LineData getDemocratic() {
+            return democratic;
+        }
+
+        public void setDemocratic(LineData democratic) {
+            this.democratic = democratic;
+        }
+
+        public LineData getRepublican() {
+            return republican;
+        }
+
+        public void setRepublican(LineData republican) {
+            this.republican = republican;
+        }
+    }
+    public static class LineData {
+        @Field("x")
+        private List<Double> x;
+
+        @Field("y")
+        private List<Double> y;
+
+        // Getters and Setters
+        public List<Double> getX() {
+            return x;
+        }
+
+        public void setX(List<Double> x) {
+            this.x = x;
+        }
+
+        public List<Double> getY() {
+            return y;
+        }
+
+        public void setY(List<Double> y) {
+            this.y = y;
+        }
     }
 
 }

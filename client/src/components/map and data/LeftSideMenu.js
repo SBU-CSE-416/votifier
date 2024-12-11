@@ -101,7 +101,7 @@ export default function LeftSideMenu(props) {
             <>
               <div className="left-label">
                 <label>
-                  <span>Select Racial Group for Heatmap</span>
+                  <span>Selected Racial Group for Heatmap</span>
                 </label>
               </div>
               <div className="left-dropdown">

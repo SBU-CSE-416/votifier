@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public enum RacialGroup {
     WHITE("White", "WHT_NHSP22", "WHITE"),
     BLACK("Black/African American", "BLK_NHSP22", "BLACK"),
-    HISPANIC_LATINO("Hispanic/Latino", "HIS_POP22", "HISPANIC"),
+    HISPANIC("Hispanic/Latino", "HIS_POP22", "HISPANIC"),
     ASIAN("Asian", "ASN_NHSP22", "ASIAN"),;
     
     private final String formattedRacialGroupName;

@@ -65,7 +65,7 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "ensemble-data" && (
             <div className="data-charts">
-              <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} />
+              {/* <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} /> */}
             </div>
           )}
           {activeTab === "gingles" && (
