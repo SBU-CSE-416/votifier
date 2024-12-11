@@ -1,6 +1,8 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+//THIS FILE IS CURRENTLY UNUSED
+
 const candidateSupportData = [
   { supportLevel: 0.0, 'Less than $10,000': 12, '$10,000 - $39,999': 8, '$40,000 - $79,999': 10, 'More than $80,000': 5 },
   { supportLevel: 0.1, 'Less than $10,000': 20, '$10,000 - $39,999': 15, '$40,000 - $79,999': 12, 'More than $80,000': 8 },

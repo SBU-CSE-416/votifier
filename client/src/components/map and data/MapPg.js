@@ -283,7 +283,7 @@ export default function MapPg() {
       highlightFeature(layer);
       const bounds = layer.getBounds();
       map.fitBounds(bounds, {
-        maxZoom: 7.5, 
+        maxZoom:10, 
       });
       onFeatureClick(feature);
     };
@@ -439,7 +439,6 @@ export default function MapPg() {
     <div style={{ display: "flex" }}>
       {
         <LeftSideMenu
-          onFeatureClick={onFeatureClick}
           handleResetView={handleResetView}
         />
       }
