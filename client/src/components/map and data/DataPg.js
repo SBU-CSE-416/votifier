@@ -1,10 +1,10 @@
-import RacialBarChart from "./RacialChart";
-import HistogramChart from "./StateSummaryBarChart";
-import StateSummaryBarChart from "./StateSummaryBarChart";
-import EcologicalInferenceChart from "./EcologicalInferenceChart"
-import VotingGraph from "./VotingGraph";
-import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
-import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
+import RacialBarChart from "./graphs/RacialChart";
+import HistogramChart from "./graphs/StateSummaryBarChart";
+import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
+import EcologicalInferenceChart from "./graphs/EcologicalInferenceChart"
+import VotingGraph from "./graphs/VotingGraph";
+import MedianIncomeBoxPlot from "./graphs/MedianIncomeBoxPlot"
+import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
 import SummaryTable from "./SummaryTable"
 import "../../stylesheets/map and data/DataPg.css";
 import { useState } from "react";
@@ -18,7 +18,6 @@ export default function DataPg({ stateSummaryData }) {
       percentage,                    
     })
   );
-  console.log("Data: ", incomeDistributionData)
 
   return (
     <div id="info">
