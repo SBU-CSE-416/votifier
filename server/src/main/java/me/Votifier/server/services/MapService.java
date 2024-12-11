@@ -86,6 +86,7 @@ public class MapService {
                 throw new InvalidRacialGroupException();
             }
             Map<String, String> assignedPrecincts = new HashMap<>();
+
             List<JSONObject> precincts = precinctsPopulationGroupsJson.toJavaList(JSONObject.class);
             for(JSONObject precinct : precincts) {
                 String uniquePrecinctId = precinct.getString("UNIQUE_ID");
@@ -111,14 +112,29 @@ public class MapService {
                 assignedPrecincts.put(uniquePrecinctId, assignedPrecinctHexColor);
             }
 
-            for(Feature precinct : precinctsBoundariesJson.getFeatures()) {
-                Map<String, String> precinctProperties = precinct.getProperties();
-                String precinctId = precinctProperties.get("UNIQUE_ID");
-                precinctProperties.put("ASSIGNED_COLOR", assignedPrecincts.get(precinctId));
-                precinct.setProperties(precinctProperties);
+            List<Map<String, String>> simplifiedPrecincts = new ArrayList<>();
+
+            // For returning just the unique id and assigned color
+            for (JSONObject precinct : precincts) {
+                String uniquePrecinctId = precinct.getString("UNIQUE_ID");
+                String assignedColor = assignedPrecincts.get(uniquePrecinctId);
+
+                Map<String, String> simplifiedEntry = new HashMap<>();
+                simplifiedEntry.put("UNIQUE_ID", uniquePrecinctId);
+                simplifiedEntry.put("ASSIGNED_COLOR", assignedColor);
+                simplifiedPrecincts.add(simplifiedEntry);
             }
 
-            String stringJson = JSON.toJSONString(precinctsBoundariesJson, SerializerFeature.PrettyFormat);
+            // For returning unique id, geometry, and assigned color
+            // for(Feature precinct : precinctsBoundariesJson.getFeatures()) {
+            //     Map<String, String> precinctProperties = precinct.getProperties();
+            //     String precinctId = precinctProperties.get("UNIQUE_ID");
+            //     precinctProperties.put("ASSIGNED_COLOR", assignedPrecincts.get(precinctId));
+            //     precinct.setProperties(precinctProperties);
+            // }
+
+            // String stringJson = JSON.toJSONString(precinctsBoundariesJson, SerializerFeature.PrettyFormat);
+            String stringJson = JSON.toJSONString(simplifiedPrecincts, SerializerFeature.PrettyFormat);
             Resource resource = new ByteArrayResource(stringJson.getBytes());
             return ResponseEntity.status(HttpStatus.OK).contentType(org.springframework.http.MediaType.parseMediaType("application/geo+json")).body(resource);
         }

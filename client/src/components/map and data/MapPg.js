@@ -134,6 +134,7 @@ export default function MapPg() {
       var heatmapData = null;
       if( store.selectedHeatmap === "none"){
         console.log("none heatmap handler");
+        return;
       }
       else if(store.selectedHeatmap === "demographic"){
         console.log("demographic heatmap handler");
@@ -153,6 +154,7 @@ export default function MapPg() {
       }
   
       console.log("heatmapData: ", heatmapData);
+
       if (stateAbbreviation === "SC") {
         setGeojsonSouthCarolina(heatmapData);
       } else if (stateAbbreviation === "MD") {
@@ -445,7 +447,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: store.isDataVisible ? "41vw" : "86vw",
+          width: store.isDataVisible ? "42vw" : "86vw",
         }}
       >
         <MapContainer
