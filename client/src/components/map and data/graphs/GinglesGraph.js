@@ -8,12 +8,14 @@ export default function GinglesGraph() {
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
     const [regionType, setRegionType] = useState("NONE");
+    const [json, setJson] = useState(null);
 
     const fetch_gingles_racial = async (stateAbbreviation, racialGroup) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
             const json = await response.json();
             console.log("Gingles racial data:", json);
+            return json;
         } catch (error){
             console.error(error.message);
         }
@@ -24,6 +26,7 @@ export default function GinglesGraph() {
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
             const json = await response.json();
             console.log("Gingles income data:", json);
+            return json;
         } catch (error){
             console.error(error.message);
         }
@@ -34,6 +37,7 @@ export default function GinglesGraph() {
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
             const json = await response.json();
             console.log("Gingles income by region data:", json);
+            return json;
         } catch (error){
             console.error(error.message);
         }
@@ -41,8 +45,26 @@ export default function GinglesGraph() {
 
     var Test = fetch_gingles_economic("SC");
 
+    const check_state = async () => {
+        const stateCodeMapping = {
+        45: "SC", // South Carolina
+        24: "MD", // Maryland
+        };
+        stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+        if (selectedGingles==="race"){
+            setJson(fetch_gingles_racial(stateAbbreviation, racialGroup));
+        }
+        else if (selectedGingles==="income"){
+            setJson(fetch_gingles_economic(stateAbbreviation));
+        }
+        else if (selectedGingles==="income-race"){
+            setJson(fetch_gingles_economic_by_region(stateAbbreviation, regionType));
+        }
+    }
+
     return (
         <div>
+            {/* Drop down options for Gingles Analysis */}
             <div className="select-container">
                 <label>Selected Gingles Option</label>
                 <select 
@@ -54,7 +76,9 @@ export default function GinglesGraph() {
                     <option value="income-race">precinct income/race</option>
                 </select>
             </div>
-            {selectedGingles === "race" ? 
+
+            {/* Radial buttons for precinct-race GUI-12 OR precinct-income-race GUI-14*/}
+            {(selectedGingles === "race" || selectedGingles === "income-race") ? 
             <>
                 <div className="select-container">
                     <label>Racial Group</label>
@@ -105,6 +129,8 @@ export default function GinglesGraph() {
                 </div>
             </>
             : null}
+
+            {/* Radial Buttons for precinct-income GUI-13 */}
             {selectedGingles === "income" ? 
             <>
                 <div className="select-container">
