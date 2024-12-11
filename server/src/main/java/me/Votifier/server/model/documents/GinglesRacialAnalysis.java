@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import java.util.Map;
+import java.util.List;
 
 @Document(collection = "gingles_racial_data")
 public class GinglesRacialAnalysis {
@@ -22,6 +23,10 @@ public class GinglesRacialAnalysis {
 
     @Field("data")
     private GinglesRacialData data;
+
+    @Field("lines")
+    private Lines lines;
+    
 
     //getters and setters
     public String getId() {
@@ -63,5 +68,60 @@ public class GinglesRacialAnalysis {
     public void setCandidates(Map<String, String> candidates) {
         this.candidates = candidates;
     }
-    
+    public Lines getLines() {
+        return lines;
+    }
+
+    public void setLines(Lines lines) {
+        this.lines = lines;
+    }
+
+    public static class Lines {
+        @Field("democratic")
+        private LineData democratic;
+
+        @Field("republican")
+        private LineData republican;
+
+        // Getters and Setters
+        public LineData getDemocratic() {
+            return democratic;
+        }
+
+        public void setDemocratic(LineData democratic) {
+            this.democratic = democratic;
+        }
+
+        public LineData getRepublican() {
+            return republican;
+        }
+
+        public void setRepublican(LineData republican) {
+            this.republican = republican;
+        }
+    }
+    public static class LineData {
+        @Field("x")
+        private List<Double> x;
+
+        @Field("y")
+        private List<Double> y;
+
+        // Getters and Setters
+        public List<Double> getX() {
+            return x;
+        }
+
+        public void setX(List<Double> x) {
+            this.x = x;
+        }
+
+        public List<Double> getY() {
+            return y;
+        }
+
+        public void setY(List<Double> y) {
+            this.y = y;
+        }
+    }
 }
