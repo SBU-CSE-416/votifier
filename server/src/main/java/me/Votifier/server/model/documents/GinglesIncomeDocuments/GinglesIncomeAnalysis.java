@@ -1,8 +1,9 @@
-package me.Votifier.server.model.documents;
+package me.Votifier.server.model.documents.GinglesIncomeDocuments;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.util.Map;
 import java.util.List;
 

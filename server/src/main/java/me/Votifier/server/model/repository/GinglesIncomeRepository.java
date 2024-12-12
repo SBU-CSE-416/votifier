@@ -3,7 +3,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import me.Votifier.server.model.documents.GinglesIncomeAnalysis;
+import me.Votifier.server.model.documents.GinglesIncomeDocuments.GinglesIncomeAnalysis;
 @Repository
 public interface GinglesIncomeRepository extends MongoRepository<GinglesIncomeAnalysis, String> {
     @Query(value = "{ 'NAME': ?0, 'data.REGION_TYPE': ?1 }", 
