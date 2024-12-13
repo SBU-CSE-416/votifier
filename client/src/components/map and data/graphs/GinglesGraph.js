@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
-import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis, VictoryLegend } from "victory";
+import { Chart, registerables } from 'chart.js';
+import { Chart as ChartJS } from 'react-chartjs-2';
+import { point } from "leaflet";
+Chart.register(...registerables);
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
@@ -21,6 +23,9 @@ export default function GinglesGraph() {
     const [xAxisGraphTitle, setXAxisGraphTitle] = useState("");
     const yAxisGraphTitle = "Vote Share (%)";
     const [graphTitle, setGraphTitle] = useState("");
+    const [republicanCandidate, setRepublicanCandidate] = useState("");
+    const [democraticCandidate, setDemocraticCandidate] = useState("");
+    const [election, setElection] = useState("");
     
     useEffect(() => {
         check_state();
@@ -120,6 +125,10 @@ export default function GinglesGraph() {
         console.log("RETRIEVED GINGLES:",response);
         setJson(response);
 
+        setRepublicanCandidate(response?.candidates?.Republican);
+        setDemocraticCandidate(response?.candidates?.Democratic);
+        setElection(response?.election);
+
         console.log("X Axis Name:", xAxisName);
         if(selectedGingles==="race"){
             setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
@@ -181,6 +190,65 @@ export default function GinglesGraph() {
         console.log("Democratic Data:", democraticData);
     }
 
+    const combinedData = {
+        labels: republicanLine.map(d => d.x),
+        datasets: [
+            {
+                label: 'Republican Vote Share',
+                data: republicanData,
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                type: 'scatter'
+            },
+            {
+                label: 'Democratic Vote Share',
+                data: democraticData,
+                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                type: 'scatter'
+            },
+            {
+                label: 'Republican Trend Line',
+                data: republicanLine.map(d => ({ x: d.x, y: d.y })),
+                borderColor: 'red',
+                fill: false,
+                type: 'line',
+                pointRadius: 0
+            },
+            {
+                label: 'Democratic Trend Line',
+                data: democraticLine.map(d => ({ x: d.x, y: d.y })),
+                borderColor: 'blue',
+                fill: false,
+                type: 'line',
+                pointRadius: 0
+            }
+        ]
+    };
+
+    const options = {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: xAxisGraphTitle,
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: yAxisGraphTitle,
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+            },
+        },
+    };
+
     return (
         <div>
             {/* Drop down options for Gingles Analysis */}
@@ -196,53 +264,12 @@ export default function GinglesGraph() {
                 </select>
             </div>
 
-            {republicanData.length>0 && (
+            {republicanData.length > 0 && (
                 <div className="graph-container">
                     <h2>{graphTitle}</h2>
-                    <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
-                        <VictoryAxis
-                            label={xAxisGraphTitle}
-                            style={{
-                                axisLabel: { padding: 30 },
-                            }}
-                        />
-                        <VictoryAxis
-                            dependentAxis
-                            label={yAxisGraphTitle}
-                            style={{
-                                axisLabel: { padding: 40 },
-                            }}
-                        />
-                        <VictoryLegend x={125} y={50}
-                        title={"Legend"}
-                        centerTitle
-                        orientation="horizontal"
-                        gutter={20}
-                        style={{ border: { stroke: "black" }, title: {fontSize: 20 } }}
-                        data={[
-                            { name: "Republican Vote Share", symbol: { fill: "red" } },
-                            { name: "Democratic Vote Share", symbol: { fill: "blue" } },
-                            { name: "Republican Trend Line", symbol: { stroke: "red" } },
-                            { name: "Democratic Trend Line", symbol: { stroke: "blue" } },
-                        ]}
-                        />
-                        <VictoryScatter
-                            data={republicanData}
-                            style={{ data: { fill: "red", opacity:0.3 } }}
-                        />
-                        <VictoryScatter
-                            data={democraticData}
-                            style={{ data: { fill: "blue", opacity:0.3 } }}
-                        />
-                        <VictoryLine
-                            data={republicanLine}
-                            style={{ data: { stroke: "red" } }}
-                        />
-                        <VictoryLine
-                            data={democraticLine}
-                            style={{ data: { stroke: "blue" } }}
-                        />
-                    </VictoryChart>
+                    <p>{election}</p>
+                    <p>{republicanCandidate} vs {democraticCandidate}</p>
+                    <ChartJS type='scatter' data={combinedData} options={options} />
                 </div>
             )}
 
