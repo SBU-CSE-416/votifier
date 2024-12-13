@@ -9,7 +9,7 @@ Dependencies
 - python (pip)
 
 Requirements
-- cd into client directory, run `npm install`
+- cd into client directory, run `npm install`, `npm install react-chartjs-2 chart.js`
 - cd into server directory, run `npm install`
 - cd into server dir, run `pip install pymongo`, `pip install tqdm`
 - ensure JDK 17 or higher is installed
