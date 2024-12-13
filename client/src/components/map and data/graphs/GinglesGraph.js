@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
-import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme } from "victory";
+import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis } from "victory";
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
@@ -18,6 +18,8 @@ export default function GinglesGraph() {
     const [xAxisName, setXAxisName] = useState("");
     const yAxisNameDem = "DEMOCRATIC_VOTE_SHARE";
     const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
+    const [xAxisGraphTitle, setXAxisGraphTitle] = useState("");
+    const yAxisGraphTitle = "Vote Share (%)";
 
     useEffect(() => {
         check_state();
@@ -27,6 +29,7 @@ export default function GinglesGraph() {
         console.log("Updated JSON:", JSON);
     }, [JSON]);
 
+    //GUI-12
     const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
@@ -38,6 +41,7 @@ export default function GinglesGraph() {
         }
     };
 
+    //GUI-13 (None)
     const fetch_gingles_income = async (stateAbbreviation) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
@@ -49,6 +53,7 @@ export default function GinglesGraph() {
         }
     }
 
+    //GUI-13 (Specific regions)
     const fetch_gingles_income_by_region = async (stateAbbreviation, regionType) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
@@ -60,6 +65,7 @@ export default function GinglesGraph() {
         }
     }
 
+    //GUI-14
     const fetch_gingles_income_race = async (stateAbbreviation, racialGroup) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics-and-economic/${racialGroup}`);
@@ -82,21 +88,25 @@ export default function GinglesGraph() {
             console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
             response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
+            setXAxisGraphTitle(`Percent ${racialGroup}`);
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
             if (regionType==="NONE"){
                 console.log(" income gingles for state:", stateAbbreviation);
                 response = await fetch_gingles_income(stateAbbreviation);
+                setXAxisGraphTitle("Average Household Income");
             }
             else{
                 console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
                 response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
+                setXAxisGraphTitle(`${regionType} Average Household Income`);
             }
         }
         else if (selectedGingles==="income-race"){
             //TODO
             setXAxisName("RACE_INCOME_PERCENT");
+            setXAxisGraphTitle(`Percent ${racialGroup} Income`);
             console.log("income-race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
             response = await fetch_gingles_income_race(stateAbbreviation, racialGroup);
         }
@@ -182,6 +192,19 @@ export default function GinglesGraph() {
 
             {republicanData.length>0 && (
                 <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
+                    <VictoryAxis
+                        label={xAxisGraphTitle}
+                        style={{
+                            axisLabel: { padding: 30 },
+                        }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        label={yAxisGraphTitle}
+                        style={{
+                            axisLabel: { padding: 40 },
+                        }}
+                    />
                     <VictoryScatter
                         data={republicanData}
                         style={{ data: { fill: "red", opacity:0.3 } }}
