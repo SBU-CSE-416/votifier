@@ -1,4 +1,4 @@
-package me.Votifier.server.model.documents;
+package me.Votifier.server.model.documents.GinglesIncomeDocuments;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -17,6 +17,9 @@ public class GinglesIncomePrecinctData {
 
     @Field("AVG_HOUSEHOLD_INCOME")
     private double AVG_HOUSEHOLD_INCOME;
+
+    @Field("REGION_TYPE")
+    private String REGION_TYPE;
 
     //getters and setters
 
@@ -50,5 +53,13 @@ public class GinglesIncomePrecinctData {
 
     public void setAVG_HOUSEHOLD_INCOME(double AVG_HOUSEHOLD_INCOME) {
         this.AVG_HOUSEHOLD_INCOME = AVG_HOUSEHOLD_INCOME;
+    }
+
+    public String getREGION_TYPE() {
+        return REGION_TYPE;
+    }
+
+    public void setREGION_TYPE(String REGION_TYPE) {
+        this.REGION_TYPE = REGION_TYPE;
     }
 }

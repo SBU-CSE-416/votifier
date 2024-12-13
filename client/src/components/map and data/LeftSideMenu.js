@@ -101,7 +101,7 @@ export default function LeftSideMenu(props) {
             <>
               <div className="left-label">
                 <label>
-                  <span>Select Racial Group for Heatmap</span>
+                  <span>Selected Racial Group for Heatmap</span>
                 </label>
               </div>
               <div className="left-dropdown">
@@ -110,13 +110,10 @@ export default function LeftSideMenu(props) {
                   onChange={(event) => store.setSelectedDemographic(event.target.value)}
                   className="dropdown-select"
                 >
-                  <option value="white">White</option>
-                  <option value="black">Black/African American</option>
-                  <option value="hispanic">Hispanic/Latino</option>
-                  <option value="asian">Asian</option>
-                  <option value="native">Hawaiian/Other Pacific Islander</option>
-                  <option value="asian">Native American/Alaskan Native</option>
-                  <option value="other">Other</option>
+                  <option value="WHITE">White</option>
+                  <option value="BLACK">Black/African American</option>
+                  <option value="ASIAN">Asian</option>
+                  <option value="HISPANIC">Hispanic/Latino</option>
                 </select>
               </div>
             </>

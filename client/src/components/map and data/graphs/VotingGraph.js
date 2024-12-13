@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'recharts';
+//THIS FILE IS CURRENTLY UNUSED
 
 const VotingGraph = () => {
   const dataA = [

@@ -1,12 +1,13 @@
-package me.Votifier.server.model.documents;
+package me.Votifier.server.model.documents.GinglesRacialIncomeDocuments;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
 import java.util.Map;
 
 @Document(collection = "gingles_racial_data")
-public class GinglesRacialAnalysis {
+public class GinglesRacialIncomeAnalysis {
     @Id
     private String id;
 
@@ -21,7 +22,11 @@ public class GinglesRacialAnalysis {
     
 
     @Field("data")
-    private GinglesRacialData data;
+    private GinglesRacialIncomeData data;
+
+    @Field("income_lines")
+    private GinglesRacialIncomeLineData income_lines;
+    
 
     //getters and setters
     public String getId() {
@@ -48,11 +53,11 @@ public class GinglesRacialAnalysis {
         this.election = election;
     }
 
-    public GinglesRacialData getData() {
+    public GinglesRacialIncomeData getData() {
         return data;
     }
 
-    public void setData(GinglesRacialData data) {
+    public void setData(GinglesRacialIncomeData data) {
         this.data = data;
     }
 
@@ -63,5 +68,14 @@ public class GinglesRacialAnalysis {
     public void setCandidates(Map<String, String> candidates) {
         this.candidates = candidates;
     }
+    public GinglesRacialIncomeLineData getLines() {
+        return income_lines;
+    }
+
+    public void setIncomeLines(GinglesRacialIncomeLineData income_lines) {
+        this.income_lines = income_lines;
+    }
+
     
 }
+

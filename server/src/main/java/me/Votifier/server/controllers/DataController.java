@@ -26,11 +26,11 @@ import me.Votifier.server.model.RegionType;
 import me.Votifier.server.model.repository.StateSummaryRepository;
 import me.Votifier.server.model.repository.DistrictsSummaryRepository;
 import me.Votifier.server.model.documents.DistrictsSummary.DistrictData;
-import me.Votifier.server.model.documents.GinglesRacialAnalysis;
+import me.Votifier.server.model.documents.GinglesIncomeDocuments.GinglesIncomeAnalysis;
+import me.Votifier.server.model.documents.GinglesRacialDocuments.GinglesRacialAnalysis;
+import me.Votifier.server.model.documents.GinglesRacialIncomeDocuments.GinglesRacialIncomeAnalysis;
 import me.Votifier.server.model.documents.StateSummary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
-import me.Votifier.server.model.repository.GinglesRacialRepository;
-import me.Votifier.server.model.documents.GinglesIncomeAnalysis;
 
 import org.springframework.cache.annotation.Cacheable;
 
@@ -56,6 +56,10 @@ public class DataController {
     public ResponseEntity<Resource> getGinglesAnalysisByRace(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
         return gatherGinglesDataFromCache(stateAbbreviation, racialGroup);
     }
+    @GetMapping("/{stateAbbreviation}/gingles/demographics-and-economic/{racialGroup}")
+    public ResponseEntity<Resource> getGinglesRacialIncomeAnalysisByRace(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
+        return gatherGinglesRacialIncomeDataFromCache(stateAbbreviation, racialGroup);
+    }
     // @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
     // public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
     //     return gatherBoxplotDataFromCache(stateAbbreviation, racialGroup);
@@ -68,10 +72,6 @@ public class DataController {
     @GetMapping("/{stateAbbreviation}/gingles/economic/{regionType}")
     public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable(value = "regionType") RegionType regionType) {
         return gatherGinglesIncomeDataFromCache(stateAbbreviation, regionType);
-    }
-    @GetMapping("/{stateAbbreviation}/gingles/economic")
-    public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
-        return gatherGinglesIncomeDataFromCache(stateAbbreviation);
     }
 
     @Autowired
@@ -168,6 +168,40 @@ public class DataController {
         }
     }
 
+    @Autowired
+    private me.Votifier.server.model.repository.GinglesRacialIncomeRepository ginglesRacialIncomeRepository;
+
+    @Cacheable(value = "ginglesRacialIncomeAnalysis", key = "#stateAbbreviation + '-' + #racialGroup.ginglesIdentifer")
+    public ResponseEntity<Resource> gatherGinglesRacialIncomeDataFromCache(StateAbbreviation stateAbbreviation, RacialGroup racialGroup) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            String racialGroupName = racialGroup.getGinglesIdentifer();
+    
+            GinglesRacialIncomeAnalysis ginglesAnalysis = ginglesRacialIncomeRepository.findByNameAndRace(stateName, racialGroupName);
+    
+            if (ginglesAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            SerializeConfig config = new SerializeConfig();
+            
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+            String jsonResponse = JSON.toJSONString(ginglesAnalysis, config);
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+    
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing gingles analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Autowired me.Votifier.server.model.repository.GinglesIncomeRepository ginglesIncomeRepository;
 
     @Cacheable(value = "ginglesIncomeAnalysis", key = "#stateAbbreviation + '-' + #regionType.type")
@@ -175,48 +209,11 @@ public class DataController {
         try {
             String stateName = stateAbbreviation.getFullStateName();
             GinglesIncomeAnalysis ginglesIncomeAnalysis = null;
-            System.out.print("Region Type: " + regionType);
-            if (regionType == null) {
-                ginglesIncomeAnalysis = ginglesIncomeRepository.findByName(stateName);
-
-            } else {
-                String regionTypeName = regionType.getType();
-                ginglesIncomeAnalysis = ginglesIncomeRepository.findByNameAndRegionType(stateName, regionTypeName);
-            }
             
-
-    
-            if (ginglesIncomeAnalysis == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            SerializeConfig config = new SerializeConfig();
+            String regionTypeName = regionType.getType();
+            System.out.print("Region Type: " + regionType.getType());
+            ginglesIncomeAnalysis = ginglesIncomeRepository.findByNameAndRegionType(stateName, regionTypeName);
             
-            config.addFilter(DistrictData.class, new NameFilter() {
-                @Override
-                public String process(Object object, String name, Object value) {
-                    return name.toUpperCase();
-                }
-            });
-            String jsonResponse = JSON.toJSONString(ginglesIncomeAnalysis, config);
-            System.out.println("Serialized JSON: " + jsonResponse);
-            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
-    
-            return ResponseEntity.status(HttpStatus.OK)
-                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                    .body(resource);
-        } catch (Exception e) {
-            System.out.println("Error fetching or serializing gingles income analysis: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    @Cacheable(value = "ginglesIncomeAnalysis", key = "#stateAbbreviation + '-' + economic")
-    public ResponseEntity<Resource> gatherGinglesIncomeDataFromCache(StateAbbreviation stateAbbreviation) {
-        try {
-            String stateName = stateAbbreviation.getFullStateName();
-            GinglesIncomeAnalysis ginglesIncomeAnalysis = null;
-            ginglesIncomeAnalysis = ginglesIncomeRepository.findByName(stateName);
     
             if (ginglesIncomeAnalysis == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -240,6 +237,7 @@ public class DataController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     public Resource getResourceFromLocal(Path filePath) throws UnknownFileException {
