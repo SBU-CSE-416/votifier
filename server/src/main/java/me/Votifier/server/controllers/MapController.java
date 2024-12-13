@@ -1,5 +1,9 @@
 package me.Votifier.server.controllers;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -8,7 +12,12 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.web.bind.annotation.*;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -90,6 +99,7 @@ public class MapController {
     public ResponseEntity<Resource> getHeatmapEconomicPoverty(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
         return mapService.colorHeatmapEconomicPoverty(stateAbbreviation);
     }
+
 
     @Autowired
     private PrecinctsBoundaryRepository precinctsBoundaryRepository;

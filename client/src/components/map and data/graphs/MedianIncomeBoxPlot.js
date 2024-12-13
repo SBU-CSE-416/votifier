@@ -3,7 +3,7 @@ import { VictoryChart, VictoryBoxPlot, VictoryTheme } from 'victory';
 
 const MedianIncomeBoxPlot = ({w, h, title}) => (
   <div>
-    <h2 style={{ textAlign: 'center', marginBottom: '0px' }}>
+    {/* <h2 style={{ textAlign: 'center', marginBottom: '0px' }}>
       {title || "Median Income Distribution"}
     </h2>
     <VictoryChart
@@ -25,7 +25,7 @@ const MedianIncomeBoxPlot = ({w, h, title}) => (
         median: { stroke: "#000" }     
       }}
     />
-  </VictoryChart>
+  </VictoryChart> */}
   </div>
   
 );
