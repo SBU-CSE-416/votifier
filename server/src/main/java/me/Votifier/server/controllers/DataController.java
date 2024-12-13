@@ -73,10 +73,6 @@ public class DataController {
     public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable(value = "regionType") RegionType regionType) {
         return gatherGinglesIncomeDataFromCache(stateAbbreviation, regionType);
     }
-    @GetMapping("/{stateAbbreviation}/gingles/economic")
-    public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
-        return gatherGinglesIncomeDataFromCache(stateAbbreviation);
-    }
 
     @Autowired
     private StateSummaryRepository stateSummaryRepository;
@@ -213,48 +209,11 @@ public class DataController {
         try {
             String stateName = stateAbbreviation.getFullStateName();
             GinglesIncomeAnalysis ginglesIncomeAnalysis = null;
-            System.out.print("Region Type: " + regionType);
-            if (regionType == null) {
-                ginglesIncomeAnalysis = ginglesIncomeRepository.findByName(stateName);
-
-            } else {
-                String regionTypeName = regionType.getType();
-                ginglesIncomeAnalysis = ginglesIncomeRepository.findByNameAndRegionType(stateName, regionTypeName);
-            }
             
-
-    
-            if (ginglesIncomeAnalysis == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-            SerializeConfig config = new SerializeConfig();
+            String regionTypeName = regionType.getType();
+            System.out.print("Region Type: " + regionType.getType());
+            ginglesIncomeAnalysis = ginglesIncomeRepository.findByNameAndRegionType(stateName, regionTypeName);
             
-            config.addFilter(DistrictData.class, new NameFilter() {
-                @Override
-                public String process(Object object, String name, Object value) {
-                    return name.toUpperCase();
-                }
-            });
-            String jsonResponse = JSON.toJSONString(ginglesIncomeAnalysis, config);
-            System.out.println("Serialized JSON: " + jsonResponse);
-            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
-    
-            return ResponseEntity.status(HttpStatus.OK)
-                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
-                    .body(resource);
-        } catch (Exception e) {
-            System.out.println("Error fetching or serializing gingles income analysis: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    @Cacheable(value = "ginglesIncomeAnalysis", key = "#stateAbbreviation + '-' + economic")
-    public ResponseEntity<Resource> gatherGinglesIncomeDataFromCache(StateAbbreviation stateAbbreviation) {
-        try {
-            String stateName = stateAbbreviation.getFullStateName();
-            GinglesIncomeAnalysis ginglesIncomeAnalysis = null;
-            ginglesIncomeAnalysis = ginglesIncomeRepository.findByName(stateName);
     
             if (ginglesIncomeAnalysis == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -278,6 +237,7 @@ public class DataController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     public Resource getResourceFromLocal(Path filePath) throws UnknownFileException {

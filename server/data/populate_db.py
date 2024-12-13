@@ -91,7 +91,8 @@ if geojson_data["type"] == "FeatureCollection":
 else:
     print("GeoJSON file is not a FeatureCollection.")
 
-# After inserting, create the index
+
+# # After inserting, create the index
 collection.create_index([("geometry", "2dsphere")])
 print("South Carolina Precinct GeoJSON data inserted index created")
 
