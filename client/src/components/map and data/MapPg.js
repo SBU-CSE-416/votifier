@@ -446,7 +446,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: store.isDataVisible ? "42vw" : "86vw",
+          width: store.isDataVisible ? "41vw" : "86vw",
         }}
       >
         <MapContainer

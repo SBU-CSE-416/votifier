@@ -1,48 +1,183 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
+import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis } from "victory";
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
-    const [regionType, setRegionType] = useState("URBAN");
+    const [regionType, setRegionType] = useState("NONE");
+    const [JSON, setJson] = useState(null);
 
-    const fetch_gingles_racial = async (stateAbbreviation, racialGroup) => {
+    const [republicanData, setRepublicanData] = useState([]);
+    const [democraticData, setDemocraticData] = useState([]);
+    const [republicanLine, setRepublicanLine] = useState([]);
+    const [democraticLine, setDemocraticLine] = useState([]);
+    const [xAxisName, setXAxisName] = useState("");
+    const yAxisNameDem = "DEMOCRATIC_VOTE_SHARE";
+    const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
+    const [xAxisGraphTitle, setXAxisGraphTitle] = useState("");
+    const yAxisGraphTitle = "Vote Share (%)";
+
+    useEffect(() => {
+        check_state();
+    }, [selectedGingles, racialGroup, regionType]);
+
+    useEffect(() => {
+        console.log("Updated JSON:", JSON);
+    }, [JSON]);
+
+    //GUI-12
+    const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
             const json = await response.json();
             console.log("Gingles racial data:", json);
+            return json;
         } catch (error){
             console.error(error.message);
         }
     };
 
-    const fetch_gingles_economic = async (stateAbbreviation) => {
+    //GUI-13 (None)
+    const fetch_gingles_income = async (stateAbbreviation) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
             const json = await response.json();
             console.log("Gingles income data:", json);
+            return json;
         } catch (error){
             console.error(error.message);
         }
     }
 
-    const fetch_gingles_economic_by_region = async (stateAbbreviation, regionType) => {
+    //GUI-13 (Specific regions)
+    const fetch_gingles_income_by_region = async (stateAbbreviation, regionType) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
             const json = await response.json();
             console.log("Gingles income by region data:", json);
+            return json;
         } catch (error){
             console.error(error.message);
         }
     }
 
-    var Test = fetch_gingles_economic("SC");
+    //GUI-14
+    const fetch_gingles_income_race = async (stateAbbreviation, racialGroup) => {
+        try{
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics-and-economic/${racialGroup}`);
+            const json = await response.json();
+            console.log("Gingles income-race data:", json);
+            return json;
+        } catch (error){
+            console.error(error.message);
+        }
+    }
+
+    const check_state = async () => {
+        const stateCodeMapping = {
+        45: "SC", // South Carolina
+        24: "MD", // Maryland
+        };
+        var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+        let response;
+        if (selectedGingles==="race"){
+            console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
+            response = await fetch_gingles_race(stateAbbreviation, racialGroup);
+            setXAxisName("RACE_PERCENT");
+            setXAxisGraphTitle(`Percent ${racialGroup}`);
+        }
+        else if (selectedGingles==="income"){
+            setXAxisName("AVG_HOUSEHOLD_INCOME");
+            if (regionType==="NONE"){
+                console.log(" income gingles for state:", stateAbbreviation);
+                response = await fetch_gingles_income(stateAbbreviation);
+                setXAxisGraphTitle("Average Household Income");
+            }
+            else{
+                console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
+                response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
+                setXAxisGraphTitle(`${regionType} Average Household Income`);
+            }
+        }
+        else if (selectedGingles==="income-race"){
+            //TODO
+            setXAxisName("RACE_INCOME_PERCENT");
+            setXAxisGraphTitle(`Percent ${racialGroup} Income`);
+            console.log("income-race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
+            response = await fetch_gingles_income_race(stateAbbreviation, racialGroup);
+        }
+
+        console.log("RETRIEVED GINGLES:",response);
+        setJson(response);
+
+        console.log("X Axis Name:", xAxisName);
+        if(selectedGingles==="race"){
+            setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+            setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.[racialGroup]?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
+            })) || []);
+        }
+        else if(selectedGingles==="income"){
+            setRepublicanData(response?.data?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+            setRepublicanLine(response?.lines?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines.republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines.democratic.y[i],
+            })) || []);
+        }
+        else if(selectedGingles==="income-race"){
+            setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+            setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.[racialGroup]?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
+            })) || []);
+        }
+ 
+
+        console.log("Republican Data:", republicanData);
+        console.log("Democratic Data:", democraticData);
+    }
 
     return (
         <div>
+            {/* Drop down options for Gingles Analysis */}
             <div className="select-container">
                 <label>Selected Gingles Option</label>
                 <select 
@@ -54,7 +189,43 @@ export default function GinglesGraph() {
                     <option value="income-race">precinct income/race</option>
                 </select>
             </div>
-            {selectedGingles === "race" ? 
+
+            {republicanData.length>0 && (
+                <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
+                    <VictoryAxis
+                        label={xAxisGraphTitle}
+                        style={{
+                            axisLabel: { padding: 30 },
+                        }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        label={yAxisGraphTitle}
+                        style={{
+                            axisLabel: { padding: 40 },
+                        }}
+                    />
+                    <VictoryScatter
+                        data={republicanData}
+                        style={{ data: { fill: "red", opacity:0.3 } }}
+                    />
+                    <VictoryScatter
+                        data={democraticData}
+                        style={{ data: { fill: "blue", opacity:0.3 } }}
+                    />
+                    <VictoryLine
+                        data={republicanLine}
+                        style={{ data: { stroke: "red" } }}
+                    />
+                    <VictoryLine
+                        data={democraticLine}
+                        style={{ data: { stroke: "blue" } }}
+                    />
+                </VictoryChart>
+            )}
+
+            {/* Radial buttons for precinct-race GUI-12 OR precinct-income-race GUI-14*/}
+            {(selectedGingles === "race" || selectedGingles === "income-race") ? 
             <>
                 <div className="select-container">
                     <label>Racial Group</label>
@@ -105,7 +276,58 @@ export default function GinglesGraph() {
                 </div>
             </>
             : null}
-            <h2>Coming sooon</h2>
+
+            {/* Radial Buttons for precinct-income GUI-13 */}
+            {selectedGingles === "income" ? 
+            <>
+                <div className="select-container">
+                    <label>Region Type</label>
+                    <div>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="NONE" 
+                                checked={regionType === "NONE"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            None
+                        </label>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="RURAL" 
+                                checked={regionType === "RURAL"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            Rural
+                        </label>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="SUBURBAN" 
+                                checked={regionType === "SUBURBAN"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            Suburban
+                        </label>
+                        <label>
+                            <input 
+                                type="radio" 
+                                name="regionType" 
+                                value="URBAN" 
+                                checked={regionType === "URBAN"} 
+                                onChange={(event) => setRegionType(event.target.value)} 
+                            />
+                            Urban
+                        </label>
+                    </div>
+
+                </div>
+            </>
+            : null}
         </div>
     );
 }
