@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
-import java.util.List;
 
 @Document(collection = "gingles_economic_data")
 public class GinglesIncomeAnalysis {
@@ -22,10 +21,10 @@ public class GinglesIncomeAnalysis {
     private Map<String, String> candidates;
 
     @Field("data")
-    private List<GinglesIncomePrecinctData> data;
+    private GinglesIncomeData data;
 
     @Field("lines")
-    private Lines lines;
+    private GinglesIncomeLineData lines;
     //getters and setters
 
     public String getId() {
@@ -52,18 +51,18 @@ public class GinglesIncomeAnalysis {
         this.election = election;
     }
 
-    public List<GinglesIncomePrecinctData> getData() {
+    public GinglesIncomeData getData() {
         return data;
     }
 
-    public void setData(List<GinglesIncomePrecinctData> data) {
+    public void setData(GinglesIncomeData data) {
         this.data = data;
     }
-    public Lines getLines() {
+    public GinglesIncomeLineData getLines() {
         return lines;
     }
 
-    public void setLines(Lines lines) {
+    public void setLines(GinglesIncomeLineData lines) {
         this.lines = lines;
     }
 
@@ -74,53 +73,6 @@ public class GinglesIncomeAnalysis {
     public void setCandidates(Map<String, String> candidates) {
         this.candidates = candidates;
     }
-    public static class Lines {
-        @Field("democratic")
-        private LineData democratic;
-
-        @Field("republican")
-        private LineData republican;
-
-        // Getters and Setters
-        public LineData getDemocratic() {
-            return democratic;
-        }
-
-        public void setDemocratic(LineData democratic) {
-            this.democratic = democratic;
-        }
-
-        public LineData getRepublican() {
-            return republican;
-        }
-
-        public void setRepublican(LineData republican) {
-            this.republican = republican;
-        }
-    }
-    public static class LineData {
-        @Field("x")
-        private List<Double> x;
-
-        @Field("y")
-        private List<Double> y;
-
-        // Getters and Setters
-        public List<Double> getX() {
-            return x;
-        }
-
-        public void setX(List<Double> x) {
-            this.x = x;
-        }
-
-        public List<Double> getY() {
-            return y;
-        }
-
-        public void setY(List<Double> y) {
-            this.y = y;
-        }
-    }
+    
 
 }

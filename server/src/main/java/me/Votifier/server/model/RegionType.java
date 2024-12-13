@@ -1,9 +1,10 @@
 package me.Votifier.server.model;
 
 public enum RegionType {
-    RURAL("rural"),
-    URBAN("urban"),
-    SUBURBAN("suburban");
+    ALL ("ALL"),
+    RURAL("RURAL"),
+    URBAN("URBAN"),
+    SUBURBAN("SUBURBAN"),;
 
     private final String type;
 
