@@ -13,7 +13,8 @@ export default function GinglesGraph() {
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
-    const [ginglesLines, setGinglesLines] = useState([]);
+    const [republicanLine, setRepublicanLine] = useState([]);
+    const [democraticLine, setDemocraticLine] = useState([]);
     const [xAxisName, setXAxisName] = useState("");
     const yAxisNameDem = "DEMOCRATIC_VOTE_SHARE";
     const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
@@ -113,6 +114,14 @@ export default function GinglesGraph() {
                 x: data[xAxisName],
                 y: data[yAxisNameDem],
             })) || []);
+            setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.[racialGroup]?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
+            })) || []);
         }
         else if(selectedGingles==="income"){
             setRepublicanData(response?.data?.map((data) => ({
@@ -123,6 +132,14 @@ export default function GinglesGraph() {
                 x: data[xAxisName],
                 y: data[yAxisNameDem],
             })) || []);
+            setRepublicanLine(response?.lines?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
+            })) || []);
         }
         else if(selectedGingles==="income-race"){
             setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
@@ -132,6 +149,14 @@ export default function GinglesGraph() {
             setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
                 x: data[xAxisName],
                 y: data[yAxisNameDem],
+            })) || []);
+            setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.[racialGroup]?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
             })) || []);
         }
  
@@ -156,7 +181,7 @@ export default function GinglesGraph() {
             </div>
 
             {republicanData.length>0 && (
-                <VictoryChart theme={VictoryTheme.material} domainPadding={20}>
+                <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
                     <VictoryScatter
                         data={republicanData}
                         style={{ data: { fill: "red" } }}
@@ -165,18 +190,14 @@ export default function GinglesGraph() {
                         data={democraticData}
                         style={{ data: { fill: "blue" } }}
                     />
-                    {/* <VictoryLine
-                        data={JSON.lines?.republican}
-                        x={xAxisName}
-                        y={yAxisNameRep}
+                    <VictoryLine
+                        data={republicanLine}
                         style={{ data: { stroke: "red" } }}
                     />
                     <VictoryLine
-                        data={JSON.lines?.democratic}
-                        x={xAxisName}
-                        y={yAxisNameDem}
+                        data={democraticLine}
                         style={{ data: { stroke: "blue" } }}
-                    /> */}
+                    />
                 </VictoryChart>
             )}
 
