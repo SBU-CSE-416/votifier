@@ -61,9 +61,9 @@ def region_results_updater(partition):
             rounded_rural = round(rural_percentage)
             rounded_sum = rounded_urban + rounded_suburban + rounded_rural
             region_percentages = {
-                  "URBAN_PERCENTAGE": rounded_urban,
-                  "SUBURBAN_PERCENTAGE": rounded_suburban,
-                  "RURAL_PERCENTAGE": rounded_rural
+                  "URBAN_PERCENT": rounded_urban,
+                  "SUBURBAN_PERCENT": rounded_suburban,
+                  "RURAL_PERCENT": rounded_rural
             }
             if rounded_sum == 99 or rounded_sum == 101:
                 decimal_portions = {}
@@ -82,9 +82,9 @@ def region_results_updater(partition):
         else:
             # Edge case but should be OK
             region_percentages = {
-                "URBAN_PERCENTAGE": 0,
-                "SUBURBAN_PERCENTAGE": 0,
-                "RURAL_PERCENTAGE": 100
+                "URBAN_PERCENT": 0,
+                "SUBURBAN_PERCENT": 0,
+                "RURAL_PERCENT": 100
             }
         results[district] = region_percentages
     return results
@@ -94,17 +94,91 @@ def economic_results_updater(partition):
     for district, nodes in partition.parts.items():
         precinct_weighted_sums = []
         precinct_households = []
+        precinct_households_0_35K = []
+        precinct_households_35K_60K = []
+        precinct_households_60K_100K = []
+        precinct_households_100K_125K = []
+        precinct_households_125K_150K = []
+        precinct_households_150K_MORE = []
         for precinct_node in nodes:
           precinct_avg_household_income = partition.graph.nodes[precinct_node]["AVG_HOUSEHOLD_INCOME"]
           precinct_tot_households = partition.graph.nodes[precinct_node]["TOT_HOUS22"]
+          precinct_households_count_0_35K = partition.graph.nodes[precinct_node]["0_35K"]
+          precinct_households_count_35K_60K = partition.graph.nodes[precinct_node]["35K_60K"]
+          precinct_households_count_60K_100K = partition.graph.nodes[precinct_node]["60K_100K"]
+          precinct_households_count_100K_125K = partition.graph.nodes[precinct_node]["100K_125K"]
+          precinct_households_count_125K_150K = partition.graph.nodes[precinct_node]["125K_150K"]
+          precinct_households_count_150K_MORE = partition.graph.nodes[precinct_node]["150K_MORE"]
+          precinct_households_0_35K.append(precinct_households_count_0_35K)
+          precinct_households_35K_60K.append(precinct_households_count_35K_60K)
+          precinct_households_60K_100K.append(precinct_households_count_60K_100K)
+          precinct_households_100K_125K.append(precinct_households_count_100K_125K)
+          precinct_households_125K_150K.append(precinct_households_count_125K_150K)
+          precinct_households_150K_MORE.append(precinct_households_count_150K_MORE)
           precinct_households.append(precinct_tot_households)
           precinct_weighted_sums.append(precinct_avg_household_income * precinct_tot_households)
         district_average_income_total = sum(precinct_weighted_sums)
         district_households_count = int(sum(precinct_households))
+        district_0_35K_count = (sum(precinct_households_0_35K))
+        percent_0_35K = round((district_0_35K_count / district_households_count) * 100)
+
+        district_35K_60K_count = (sum(precinct_households_35K_60K))
+        percent_35K_60K = round((district_35K_60K_count / district_households_count) * 100)
+
+        district_60K_100K_count = (sum(precinct_households_60K_100K))
+        percent_60K_100K = round((district_60K_100K_count / district_households_count) * 100)
+
+        district_100K_125K_count = (sum(precinct_households_100K_125K))
+        percent_100K_125K = round((district_100K_125K_count / district_households_count) * 100)
+
+        district_125K_150K_count = (sum(precinct_households_125K_150K))
+        percent_125K_150K = round((district_125K_150K_count / district_households_count) * 100)
+
+        district_150K_MORE_count = (sum(precinct_households_150K_MORE))
+        percent_150K_MORE = round((district_150K_MORE_count / district_households_count) * 100)
+
+        rounded_sum = percent_0_35K + percent_35K_60K + percent_60K_100K + percent_100K_125K + percent_125K_150K + percent_150K_MORE
+
+        percentages = {
+          "0_35K_PERCENT": percent_0_35K,
+          "35K_60K_PERCENT": percent_35K_60K,
+          "60K_100K_PERCENT": percent_60K_100K,
+          "100K_125K_PERCENT": percent_100K_125K,
+          "125K_150K_PERCENT": percent_125K_150K,
+          "150K_MORE_PERCENT": percent_150K_MORE
+        }
+
+        if rounded_sum == 99 or rounded_sum == 101:
+          decimal_portions = {}
+          for economic_group, percentage in percentages.items():
+            # Calculate decimal portion by subtracting the int part from percentage
+            decimal_value = percentage - int(percentage)
+            # Store the decimal portion in dict with corresponding region type
+            decimal_portions[economic_group] = decimal_value
+            decimal_region = None
+          if rounded_sum == 99: 
+            decimal_region = max(decimal_portions, key=decimal_portions.get)
+            percentages[decimal_region] += 1
+          if rounded_sum == 101: 
+            decimal_region = min(decimal_portions, key=decimal_portions.get)
+            percentages[decimal_region] -= 1
+
         district_average_household_income = round(district_average_income_total / district_households_count)
         results[district] = {
           "AVG_HOUSEHOLD_INCOME": district_average_household_income,
           "TOT_HOUSEHOLDS": district_households_count,
+          "0_35K_COUNT": district_0_35K_count,
+          "35K_60K_COUNT": district_35K_60K_count,
+          "60K_100K_COUNT": district_60K_100K_count,
+          "100K_125K_COUNT": district_100K_125K_count,
+          "125K_150K_COUNT": district_125K_150K_count,
+          "150K_MORE_COUNT": district_150K_MORE_count,
+          "0_35K_PERCENT": percentages["0_35K_PERCENT"],
+          "35K_60K_PERCENT": percentages["35K_60K_PERCENT"],
+          "60K_100K_PERCENT": percentages["60K_100K_PERCENT"],
+          "100K_125K_PERCENT": percentages["100K_125K_PERCENT"],
+          "125K_150K_PERCENT": percentages["125K_150K_PERCENT"],
+          "150K_MORE_PERCENT": percentages["150K_MORE_PERCENT"]
         }
     return results
 
@@ -206,10 +280,10 @@ def generate_new_districting_plan(state_graph_json_file, ensemble_id, plan_id, n
   population_results = last_partition["population"]
 
   racial_groups_df = pd.DataFrame({
-    "WHITE_PERCENTAGE": racial_results_white,
-    "BLACK_PERCENTAGE": racial_results_black,
-    "ASIAN_PERCENTAGE": racial_results_asian,
-    "HISPANIC_PERCENTAGE": racial_results_hispanic
+    "WHITE_PERCENT": racial_results_white,
+    "BLACK_PERCENT": racial_results_black,
+    "ASIAN_PERCENT": racial_results_asian,
+    "HISPANIC_PERCENT": racial_results_hispanic
   })
   population_results_df = pd.DataFrame.from_dict(population_results, orient="index")
   population_results_dict = {
