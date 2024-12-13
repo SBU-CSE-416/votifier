@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
-import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme } from "victory";
+import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis } from "victory";
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
@@ -13,9 +13,13 @@ export default function GinglesGraph() {
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
+    const [republicanLine, setRepublicanLine] = useState([]);
+    const [democraticLine, setDemocraticLine] = useState([]);
     const [xAxisName, setXAxisName] = useState("");
     const yAxisNameDem = "DEMOCRATIC_VOTE_SHARE";
     const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
+    const [xAxisGraphTitle, setXAxisGraphTitle] = useState("");
+    const yAxisGraphTitle = "Vote Share (%)";
 
     useEffect(() => {
         check_state();
@@ -25,7 +29,8 @@ export default function GinglesGraph() {
         console.log("Updated JSON:", JSON);
     }, [JSON]);
 
-    const fetch_gingles_racial = async (stateAbbreviation, racialGroup) => {
+    //GUI-12
+    const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
             const json = await response.json();
@@ -36,7 +41,8 @@ export default function GinglesGraph() {
         }
     };
 
-    const fetch_gingles_economic = async (stateAbbreviation) => {
+    //GUI-13 (None)
+    const fetch_gingles_income = async (stateAbbreviation) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
             const json = await response.json();
@@ -47,11 +53,24 @@ export default function GinglesGraph() {
         }
     }
 
-    const fetch_gingles_economic_by_region = async (stateAbbreviation, regionType) => {
+    //GUI-13 (Specific regions)
+    const fetch_gingles_income_by_region = async (stateAbbreviation, regionType) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
             const json = await response.json();
             console.log("Gingles income by region data:", json);
+            return json;
+        } catch (error){
+            console.error(error.message);
+        }
+    }
+
+    //GUI-14
+    const fetch_gingles_income_race = async (stateAbbreviation, racialGroup) => {
+        try{
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics-and-economic/${racialGroup}`);
+            const json = await response.json();
+            console.log("Gingles income-race data:", json);
             return json;
         } catch (error){
             console.error(error.message);
@@ -67,22 +86,29 @@ export default function GinglesGraph() {
         let response;
         if (selectedGingles==="race"){
             console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
-            response = await fetch_gingles_racial(stateAbbreviation, racialGroup);
+            response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
+            setXAxisGraphTitle(`Percent ${racialGroup}`);
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
             if (regionType==="NONE"){
                 console.log(" income gingles for state:", stateAbbreviation);
-                response = await fetch_gingles_economic(stateAbbreviation);
+                response = await fetch_gingles_income(stateAbbreviation);
+                setXAxisGraphTitle("Average Household Income");
             }
             else{
                 console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
-                response = await fetch_gingles_economic_by_region(stateAbbreviation, regionType);
+                response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
+                setXAxisGraphTitle(`${regionType} Average Household Income`);
             }
         }
         else if (selectedGingles==="income-race"){
             //TODO
+            setXAxisName("RACE_INCOME_PERCENT");
+            setXAxisGraphTitle(`Percent ${racialGroup} Income`);
+            console.log("income-race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
+            response = await fetch_gingles_income_race(stateAbbreviation, racialGroup);
         }
 
         console.log("RETRIEVED GINGLES:",response);
@@ -98,6 +124,14 @@ export default function GinglesGraph() {
                 x: data[xAxisName],
                 y: data[yAxisNameDem],
             })) || []);
+            setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.[racialGroup]?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
+            })) || []);
         }
         else if(selectedGingles==="income"){
             setRepublicanData(response?.data?.map((data) => ({
@@ -108,7 +142,34 @@ export default function GinglesGraph() {
                 x: data[xAxisName],
                 y: data[yAxisNameDem],
             })) || []);
+            setRepublicanLine(response?.lines?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines.republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines.democratic.y[i],
+            })) || []);
         }
+        else if(selectedGingles==="income-race"){
+            setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+            setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].republican.y[i],
+            })) || []);
+            setDemocraticLine(response?.lines?.[racialGroup]?.democratic?.x.map((x, i) => ({
+                x,
+                y: response.lines[racialGroup].democratic.y[i],
+            })) || []);
+        }
+ 
 
         console.log("Republican Data:", republicanData);
         console.log("Democratic Data:", democraticData);
@@ -130,27 +191,36 @@ export default function GinglesGraph() {
             </div>
 
             {republicanData.length>0 && (
-                <VictoryChart theme={VictoryTheme.material} domainPadding={20}>
+                <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
+                    <VictoryAxis
+                        label={xAxisGraphTitle}
+                        style={{
+                            axisLabel: { padding: 30 },
+                        }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        label={yAxisGraphTitle}
+                        style={{
+                            axisLabel: { padding: 40 },
+                        }}
+                    />
                     <VictoryScatter
                         data={republicanData}
-                        style={{ data: { fill: "red" } }}
+                        style={{ data: { fill: "red", opacity:0.3 } }}
                     />
                     <VictoryScatter
                         data={democraticData}
-                        style={{ data: { fill: "blue" } }}
+                        style={{ data: { fill: "blue", opacity:0.3 } }}
                     />
-                    {/* <VictoryLine
-                        data={JSON.lines?.republican}
-                        x={xAxisName}
-                        y={yAxisNameRep}
+                    <VictoryLine
+                        data={republicanLine}
                         style={{ data: { stroke: "red" } }}
                     />
                     <VictoryLine
-                        data={JSON.lines?.democratic}
-                        x={xAxisName}
-                        y={yAxisNameDem}
+                        data={democraticLine}
                         style={{ data: { stroke: "blue" } }}
-                    /> */}
+                    />
                 </VictoryChart>
             )}
 
