@@ -13,6 +13,7 @@ export default function GinglesGraph() {
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
+    const [ginglesLines, setGinglesLines] = useState([]);
     const [xAxisName, setXAxisName] = useState("");
     const yAxisNameDem = "DEMOCRATIC_VOTE_SHARE";
     const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
@@ -25,7 +26,7 @@ export default function GinglesGraph() {
         console.log("Updated JSON:", JSON);
     }, [JSON]);
 
-    const fetch_gingles_racial = async (stateAbbreviation, racialGroup) => {
+    const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
             const json = await response.json();
@@ -36,7 +37,7 @@ export default function GinglesGraph() {
         }
     };
 
-    const fetch_gingles_economic = async (stateAbbreviation) => {
+    const fetch_gingles_income = async (stateAbbreviation) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
             const json = await response.json();
@@ -47,11 +48,22 @@ export default function GinglesGraph() {
         }
     }
 
-    const fetch_gingles_economic_by_region = async (stateAbbreviation, regionType) => {
+    const fetch_gingles_income_by_region = async (stateAbbreviation, regionType) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
             const json = await response.json();
             console.log("Gingles income by region data:", json);
+            return json;
+        } catch (error){
+            console.error(error.message);
+        }
+    }
+
+    const fetch_gingles_income_race = async (stateAbbreviation, racialGroup) => {
+        try{
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics-and-economic/${racialGroup}`);
+            const json = await response.json();
+            console.log("Gingles income-race data:", json);
             return json;
         } catch (error){
             console.error(error.message);
@@ -67,22 +79,25 @@ export default function GinglesGraph() {
         let response;
         if (selectedGingles==="race"){
             console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
-            response = await fetch_gingles_racial(stateAbbreviation, racialGroup);
+            response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
             if (regionType==="NONE"){
                 console.log(" income gingles for state:", stateAbbreviation);
-                response = await fetch_gingles_economic(stateAbbreviation);
+                response = await fetch_gingles_income(stateAbbreviation);
             }
             else{
                 console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
-                response = await fetch_gingles_economic_by_region(stateAbbreviation, regionType);
+                response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
             }
         }
         else if (selectedGingles==="income-race"){
             //TODO
+            setXAxisName("RACE_INCOME_PERCENT");
+            console.log("income-race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
+            response = await fetch_gingles_income_race(stateAbbreviation, racialGroup);
         }
 
         console.log("RETRIEVED GINGLES:",response);
@@ -109,6 +124,17 @@ export default function GinglesGraph() {
                 y: data[yAxisNameDem],
             })) || []);
         }
+        else if(selectedGingles==="income-race"){
+            setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+        }
+ 
 
         console.log("Republican Data:", republicanData);
         console.log("Democratic Data:", democraticData);
