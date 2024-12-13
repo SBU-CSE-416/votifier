@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
-import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis } from "victory";
+import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis, VictoryLegend } from "victory";
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
@@ -20,7 +20,8 @@ export default function GinglesGraph() {
     const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
     const [xAxisGraphTitle, setXAxisGraphTitle] = useState("");
     const yAxisGraphTitle = "Vote Share (%)";
-
+    const [graphTitle, setGraphTitle] = useState("");
+    
     useEffect(() => {
         check_state();
     }, [selectedGingles, racialGroup, regionType]);
@@ -42,6 +43,8 @@ export default function GinglesGraph() {
     };
 
     //GUI-13 (None)
+
+    // /server/data/states/south_carolina/gingles/sc_gingles_precinct_income_analysis.json
     const fetch_gingles_income = async (stateAbbreviation) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
@@ -89,6 +92,7 @@ export default function GinglesGraph() {
             response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
             setXAxisGraphTitle(`Percent ${racialGroup}`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${racialGroup} in ${stateAbbreviation} Precincts`);
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
@@ -96,11 +100,13 @@ export default function GinglesGraph() {
                 console.log(" income gingles for state:", stateAbbreviation);
                 response = await fetch_gingles_income(stateAbbreviation);
                 setXAxisGraphTitle("Average Household Income");
+                setGraphTitle(`Gingles 2/3 Analysis for Avg Household Income ${stateAbbreviation} Precincts`);
             }
             else{
                 console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
                 response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
                 setXAxisGraphTitle(`${regionType} Average Household Income`);
+                setGraphTitle(`Gingles 2/3 Analysis for ${regionType} Avg Household Income ${stateAbbreviation} Precincts`);
             }
         }
         else if (selectedGingles==="income-race"){
@@ -191,37 +197,53 @@ export default function GinglesGraph() {
             </div>
 
             {republicanData.length>0 && (
-                <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
-                    <VictoryAxis
-                        label={xAxisGraphTitle}
-                        style={{
-                            axisLabel: { padding: 30 },
-                        }}
-                    />
-                    <VictoryAxis
-                        dependentAxis
-                        label={yAxisGraphTitle}
-                        style={{
-                            axisLabel: { padding: 40 },
-                        }}
-                    />
-                    <VictoryScatter
-                        data={republicanData}
-                        style={{ data: { fill: "red", opacity:0.3 } }}
-                    />
-                    <VictoryScatter
-                        data={democraticData}
-                        style={{ data: { fill: "blue", opacity:0.3 } }}
-                    />
-                    <VictoryLine
-                        data={republicanLine}
-                        style={{ data: { stroke: "red" } }}
-                    />
-                    <VictoryLine
-                        data={democraticLine}
-                        style={{ data: { stroke: "blue" } }}
-                    />
-                </VictoryChart>
+                <div className="graph-container">
+                    <h2>{graphTitle}</h2>
+                    <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
+                        <VictoryAxis
+                            label={xAxisGraphTitle}
+                            style={{
+                                axisLabel: { padding: 30 },
+                            }}
+                        />
+                        <VictoryAxis
+                            dependentAxis
+                            label={yAxisGraphTitle}
+                            style={{
+                                axisLabel: { padding: 40 },
+                            }}
+                        />
+                        <VictoryLegend x={125} y={50}
+                        title={"Legend"}
+                        centerTitle
+                        orientation="horizontal"
+                        gutter={20}
+                        style={{ border: { stroke: "black" }, title: {fontSize: 20 } }}
+                        data={[
+                            { name: "Republican Vote Share", symbol: { fill: "red" } },
+                            { name: "Democratic Vote Share", symbol: { fill: "blue" } },
+                            { name: "Republican Trend Line", symbol: { stroke: "red" } },
+                            { name: "Democratic Trend Line", symbol: { stroke: "blue" } },
+                        ]}
+                        />
+                        <VictoryScatter
+                            data={republicanData}
+                            style={{ data: { fill: "red", opacity:0.3 } }}
+                        />
+                        <VictoryScatter
+                            data={democraticData}
+                            style={{ data: { fill: "blue", opacity:0.3 } }}
+                        />
+                        <VictoryLine
+                            data={republicanLine}
+                            style={{ data: { stroke: "red" } }}
+                        />
+                        <VictoryLine
+                            data={democraticLine}
+                            style={{ data: { stroke: "blue" } }}
+                        />
+                    </VictoryChart>
+                </div>
             )}
 
             {/* Radial buttons for precinct-race GUI-12 OR precinct-income-race GUI-14*/}
