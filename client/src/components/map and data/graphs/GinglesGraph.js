@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
-import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme, VictoryAxis } from "victory";
+import { Chart, registerables } from 'chart.js';
+import { Chart as ChartJS } from 'react-chartjs-2';
+import { point } from "leaflet";
+Chart.register(...registerables);
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
@@ -20,7 +22,11 @@ export default function GinglesGraph() {
     const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
     const [xAxisGraphTitle, setXAxisGraphTitle] = useState("");
     const yAxisGraphTitle = "Vote Share (%)";
-
+    const [graphTitle, setGraphTitle] = useState("");
+    const [republicanCandidate, setRepublicanCandidate] = useState("");
+    const [democraticCandidate, setDemocraticCandidate] = useState("");
+    const [election, setElection] = useState("");
+    
     useEffect(() => {
         check_state();
     }, [selectedGingles, racialGroup, regionType]);
@@ -42,6 +48,8 @@ export default function GinglesGraph() {
     };
 
     //GUI-13 (None)
+
+    // /server/data/states/south_carolina/gingles/sc_gingles_precinct_income_analysis.json
     const fetch_gingles_income = async (stateAbbreviation) => {
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
@@ -89,6 +97,7 @@ export default function GinglesGraph() {
             response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
             setXAxisGraphTitle(`Percent ${racialGroup}`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${racialGroup} in ${stateAbbreviation} Precincts`);
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
@@ -96,11 +105,13 @@ export default function GinglesGraph() {
                 console.log(" income gingles for state:", stateAbbreviation);
                 response = await fetch_gingles_income(stateAbbreviation);
                 setXAxisGraphTitle("Average Household Income");
+                setGraphTitle(`Gingles 2/3 Analysis for Avg Household Income ${stateAbbreviation} Precincts`);
             }
             else{
                 console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
                 response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
                 setXAxisGraphTitle(`${regionType} Average Household Income`);
+                setGraphTitle(`Gingles 2/3 Analysis for ${regionType} Avg Household Income ${stateAbbreviation} Precincts`);
             }
         }
         else if (selectedGingles==="income-race"){
@@ -113,6 +124,10 @@ export default function GinglesGraph() {
 
         console.log("RETRIEVED GINGLES:",response);
         setJson(response);
+
+        setRepublicanCandidate(response?.candidates?.Republican);
+        setDemocraticCandidate(response?.candidates?.Democratic);
+        setElection(response?.election);
 
         console.log("X Axis Name:", xAxisName);
         if(selectedGingles==="race"){
@@ -175,6 +190,65 @@ export default function GinglesGraph() {
         console.log("Democratic Data:", democraticData);
     }
 
+    const combinedData = {
+        labels: republicanLine.map(d => d.x),
+        datasets: [
+            {
+                label: 'Republican Vote Share',
+                data: republicanData,
+                backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                type: 'scatter'
+            },
+            {
+                label: 'Democratic Vote Share',
+                data: democraticData,
+                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                type: 'scatter'
+            },
+            {
+                label: 'Republican Trend Line',
+                data: republicanLine.map(d => ({ x: d.x, y: d.y })),
+                borderColor: 'red',
+                fill: false,
+                type: 'line',
+                pointRadius: 0
+            },
+            {
+                label: 'Democratic Trend Line',
+                data: democraticLine.map(d => ({ x: d.x, y: d.y })),
+                borderColor: 'blue',
+                fill: false,
+                type: 'line',
+                pointRadius: 0
+            }
+        ]
+    };
+
+    const options = {
+        scales: {
+            x: {
+                type: 'linear',
+                position: 'bottom',
+                title: {
+                    display: true,
+                    text: xAxisGraphTitle,
+                },
+            },
+            y: {
+                title: {
+                    display: true,
+                    text: yAxisGraphTitle,
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+            },
+        },
+    };
+
     return (
         <div>
             {/* Drop down options for Gingles Analysis */}
@@ -190,38 +264,13 @@ export default function GinglesGraph() {
                 </select>
             </div>
 
-            {republicanData.length>0 && (
-                <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
-                    <VictoryAxis
-                        label={xAxisGraphTitle}
-                        style={{
-                            axisLabel: { padding: 30 },
-                        }}
-                    />
-                    <VictoryAxis
-                        dependentAxis
-                        label={yAxisGraphTitle}
-                        style={{
-                            axisLabel: { padding: 40 },
-                        }}
-                    />
-                    <VictoryScatter
-                        data={republicanData}
-                        style={{ data: { fill: "red", opacity:0.3 } }}
-                    />
-                    <VictoryScatter
-                        data={democraticData}
-                        style={{ data: { fill: "blue", opacity:0.3 } }}
-                    />
-                    <VictoryLine
-                        data={republicanLine}
-                        style={{ data: { stroke: "red" } }}
-                    />
-                    <VictoryLine
-                        data={democraticLine}
-                        style={{ data: { stroke: "blue" } }}
-                    />
-                </VictoryChart>
+            {republicanData.length > 0 && (
+                <div className="graph-container">
+                    <h2>{graphTitle}</h2>
+                    <p>{election}</p>
+                    <p>{republicanCandidate} vs {democraticCandidate}</p>
+                    <ChartJS type='scatter' data={combinedData} options={options} />
+                </div>
             )}
 
             {/* Radial buttons for precinct-race GUI-12 OR precinct-income-race GUI-14*/}
