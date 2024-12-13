@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
+import { VictoryChart, VictoryScatter, VictoryLine, VictoryTheme } from "victory";
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
     const [regionType, setRegionType] = useState("NONE");
-    const [json, setJson] = useState(null);
+    const [JSON, setJson] = useState(null);
+
+    const [republicanData, setRepublicanData] = useState([]);
+    const [democraticData, setDemocraticData] = useState([]);
+    const [xAxisName, setXAxisName] = useState("");
+    const yAxisNameDem = "DEMOCRATIC_VOTE_SHARE";
+    const yAxisNameRep = "REPUBLICAN_VOTE_SHARE";    
+
+    useEffect(() => {
+        check_state();
+    }, [selectedGingles, racialGroup, regionType]);
+
+    useEffect(() => {
+        console.log("Updated JSON:", JSON);
+    }, [JSON]);
 
     const fetch_gingles_racial = async (stateAbbreviation, racialGroup) => {
         try{
@@ -43,23 +58,60 @@ export default function GinglesGraph() {
         }
     }
 
-    var Test = fetch_gingles_economic("SC");
-
     const check_state = async () => {
         const stateCodeMapping = {
         45: "SC", // South Carolina
         24: "MD", // Maryland
         };
-        stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+        var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+        let response;
         if (selectedGingles==="race"){
-            setJson(fetch_gingles_racial(stateAbbreviation, racialGroup));
+            console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
+            response = await fetch_gingles_racial(stateAbbreviation, racialGroup);
+            setXAxisName("RACE_PERCENT");
         }
         else if (selectedGingles==="income"){
-            setJson(fetch_gingles_economic(stateAbbreviation));
+            setXAxisName("AVG_HOUSEHOLD_INCOME");
+            if (regionType==="NONE"){
+                console.log(" income gingles for state:", stateAbbreviation);
+                response = await fetch_gingles_economic(stateAbbreviation);
+            }
+            else{
+                console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
+                response = await fetch_gingles_economic_by_region(stateAbbreviation, regionType);
+            }
         }
         else if (selectedGingles==="income-race"){
-            setJson(fetch_gingles_economic_by_region(stateAbbreviation, regionType));
+            //TODO
         }
+
+        console.log("RETRIEVED GINGLES:",response);
+        setJson(response);
+
+        console.log("X Axis Name:", xAxisName);
+        if(selectedGingles==="race"){
+            setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+        }
+        else if(selectedGingles==="income"){
+            setRepublicanData(response?.data?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameRep],
+            })) || []);
+            setDemocraticData(response?.data?.map((data) => ({
+                x: data[xAxisName],
+                y: data[yAxisNameDem],
+            })) || []);
+        }
+
+        console.log("Republican Data:", republicanData);
+        console.log("Democratic Data:", democraticData);
     }
 
     return (
@@ -76,6 +128,31 @@ export default function GinglesGraph() {
                     <option value="income-race">precinct income/race</option>
                 </select>
             </div>
+
+            {republicanData.length>0 && (
+                <VictoryChart theme={VictoryTheme.material} domainPadding={20}>
+                    <VictoryScatter
+                        data={republicanData}
+                        style={{ data: { fill: "red" } }}
+                    />
+                    <VictoryScatter
+                        data={democraticData}
+                        style={{ data: { fill: "blue" } }}
+                    />
+                    {/* <VictoryLine
+                        data={JSON.lines?.republican}
+                        x={xAxisName}
+                        y={yAxisNameRep}
+                        style={{ data: { stroke: "red" } }}
+                    />
+                    <VictoryLine
+                        data={JSON.lines?.democratic}
+                        x={xAxisName}
+                        y={yAxisNameDem}
+                        style={{ data: { stroke: "blue" } }}
+                    /> */}
+                </VictoryChart>
+            )}
 
             {/* Radial buttons for precinct-race GUI-12 OR precinct-income-race GUI-14*/}
             {(selectedGingles === "race" || selectedGingles === "income-race") ? 
@@ -181,7 +258,6 @@ export default function GinglesGraph() {
                 </div>
             </>
             : null}
-            <h2>Coming sooon</h2>
         </div>
     );
 }
