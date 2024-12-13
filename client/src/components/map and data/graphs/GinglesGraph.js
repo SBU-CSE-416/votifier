@@ -134,11 +134,11 @@ export default function GinglesGraph() {
             })) || []);
             setRepublicanLine(response?.lines?.republican?.x.map((x, i) => ({
                 x,
-                y: response.lines[racialGroup].republican.y[i],
+                y: response.lines.republican.y[i],
             })) || []);
             setDemocraticLine(response?.lines?.democratic?.x.map((x, i) => ({
                 x,
-                y: response.lines[racialGroup].democratic.y[i],
+                y: response.lines.democratic.y[i],
             })) || []);
         }
         else if(selectedGingles==="income-race"){
@@ -184,11 +184,11 @@ export default function GinglesGraph() {
                 <VictoryChart theme={VictoryTheme.material} domainPadding={20} width={800}>
                     <VictoryScatter
                         data={republicanData}
-                        style={{ data: { fill: "red" } }}
+                        style={{ data: { fill: "red", opacity:0.3 } }}
                     />
                     <VictoryScatter
                         data={democraticData}
-                        style={{ data: { fill: "blue" } }}
+                        style={{ data: { fill: "blue", opacity:0.3 } }}
                     />
                     <VictoryLine
                         data={republicanLine}
