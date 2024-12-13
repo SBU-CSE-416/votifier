@@ -26,11 +26,11 @@ import me.Votifier.server.model.RegionType;
 import me.Votifier.server.model.repository.StateSummaryRepository;
 import me.Votifier.server.model.repository.DistrictsSummaryRepository;
 import me.Votifier.server.model.documents.DistrictsSummary.DistrictData;
-import me.Votifier.server.model.documents.GinglesRacialAnalysis;
+import me.Votifier.server.model.documents.GinglesIncomeDocuments.GinglesIncomeAnalysis;
+import me.Votifier.server.model.documents.GinglesRacialDocuments.GinglesRacialAnalysis;
+import me.Votifier.server.model.documents.GinglesRacialIncomeDocuments.GinglesRacialIncomeAnalysis;
 import me.Votifier.server.model.documents.StateSummary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
-import me.Votifier.server.model.repository.GinglesRacialRepository;
-import me.Votifier.server.model.documents.GinglesIncomeAnalysis;
 
 import org.springframework.cache.annotation.Cacheable;
 
@@ -55,6 +55,10 @@ public class DataController {
     @GetMapping("/{stateAbbreviation}/gingles/demographics/{racialGroup}")
     public ResponseEntity<Resource> getGinglesAnalysisByRace(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
         return gatherGinglesDataFromCache(stateAbbreviation, racialGroup);
+    }
+    @GetMapping("/{stateAbbreviation}/gingles/demographics-and-economic/{racialGroup}")
+    public ResponseEntity<Resource> getGinglesRacialIncomeAnalysisByRace(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
+        return gatherGinglesRacialIncomeDataFromCache(stateAbbreviation, racialGroup);
     }
     // @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
     // public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
@@ -144,6 +148,40 @@ public class DataController {
             String racialGroupName = racialGroup.getGinglesIdentifer();
     
             GinglesRacialAnalysis ginglesAnalysis = ginglesRepository.findByNameAndRace(stateName, racialGroupName);
+    
+            if (ginglesAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            SerializeConfig config = new SerializeConfig();
+            
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+            String jsonResponse = JSON.toJSONString(ginglesAnalysis, config);
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+    
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing gingles analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired
+    private me.Votifier.server.model.repository.GinglesRacialIncomeRepository ginglesRacialIncomeRepository;
+
+    @Cacheable(value = "ginglesRacialIncomeAnalysis", key = "#stateAbbreviation + '-' + #racialGroup.ginglesIdentifer")
+    public ResponseEntity<Resource> gatherGinglesRacialIncomeDataFromCache(StateAbbreviation stateAbbreviation, RacialGroup racialGroup) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            String racialGroupName = racialGroup.getGinglesIdentifer();
+    
+            GinglesRacialIncomeAnalysis ginglesAnalysis = ginglesRacialIncomeRepository.findByNameAndRace(stateName, racialGroupName);
     
             if (ginglesAnalysis == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

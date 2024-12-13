@@ -1,11 +1,13 @@
-package me.Votifier.server.model.documents;
+
+package me.Votifier.server.model.documents.GinglesRacialIncomeDocuments;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
-public class GinglesIncomePrecinctData {
-    public GinglesIncomePrecinctData() {
+public class GinglesRacialIncomePrecinctData {
+    public GinglesRacialIncomePrecinctData() {
         // No-args constructor
     }
+    
     @Field("UNIQUE_ID")
     private String UNIQUE_ID;
 
@@ -15,11 +17,16 @@ public class GinglesIncomePrecinctData {
     @Field("DEMOCRATIC_VOTE_SHARE")
     private double DEMOCRATIC_VOTE_SHARE;
 
+    @Field("RACE_INCOME_PERCENT")
+    private double RACE_INCOME_PERCENT;
+
     @Field("AVG_HOUSEHOLD_INCOME")
     private double AVG_HOUSEHOLD_INCOME;
 
-    //getters and setters
+    @Field("REGION_TYPE")
+    private String REGION_TYPE;
 
+    //getters and setters
     public String getUNIQUE_ID() {
         return UNIQUE_ID;
     }
@@ -44,11 +51,27 @@ public class GinglesIncomePrecinctData {
         this.DEMOCRATIC_VOTE_SHARE = DEMOCRATIC_VOTE_SHARE;
     }
 
+    public double getRACE_INCOME_PERCENT() {
+        return this.RACE_INCOME_PERCENT;
+    }
+
+    public void setRACE_INCOME_PERCENT(double RACE_INCOME_PERCENT) {
+        this.RACE_INCOME_PERCENT = RACE_INCOME_PERCENT;
+    }
     public double getAVG_HOUSEHOLD_INCOME() {
         return AVG_HOUSEHOLD_INCOME;
     }
 
     public void setAVG_HOUSEHOLD_INCOME(double AVG_HOUSEHOLD_INCOME) {
         this.AVG_HOUSEHOLD_INCOME = AVG_HOUSEHOLD_INCOME;
+    }
+
+    public String getREGION_TYPE() {
+        return REGION_TYPE;
+    }
+
+
+    public void setREGION_TYPE(String REGION_TYPE) {
+        this.REGION_TYPE = REGION_TYPE;
     }
 }

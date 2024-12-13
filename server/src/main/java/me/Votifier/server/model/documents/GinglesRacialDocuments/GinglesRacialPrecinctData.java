@@ -1,4 +1,4 @@
-package me.Votifier.server.model.documents;
+package me.Votifier.server.model.documents.GinglesRacialDocuments;
 
 import org.springframework.data.mongodb.core.mapping.Field;
 
