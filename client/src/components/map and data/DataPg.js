@@ -2,6 +2,7 @@ import RacialBarChart from "./graphs/RacialChart";
 import HistogramChart from "./graphs/StateSummaryBarChart";
 import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
 import EcologicalInferenceChart from "./graphs/EcologicalInferenceChart"
+import EcologicalInferenceGraph from "./graphs/EcologicalInferenceGraph";
 import VotingGraph from "./graphs/VotingGraph";
 import MedianIncomeBoxPlot from "./graphs/MedianIncomeBoxPlot"
 import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
@@ -11,7 +12,6 @@ import "../../stylesheets/map and data/DataPg.css";
 import { useState, useContext, useEffect } from "react";
 import { MapStoreContext } from "../../stores/MapStore";
 import DistrictsTable from "./graphs/DistrictsTable";
-
 
 export default function DataPg({ stateSummaryData }) {
   const { store } = useContext(MapStoreContext);
@@ -82,6 +82,7 @@ export default function DataPg({ stateSummaryData }) {
           {activeTab === "ensemble-data" && (
             <div className="data-charts">
               {/* <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} /> */}
+              <p>Coming Soon</p>
             </div>
           )}
           {activeTab === "gingles" && (
@@ -91,7 +92,7 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "ei-analysis" && (
             <div className="data-charts">
-              <h2>Coming Soon</h2>
+              <EcologicalInferenceGraph/>
             </div>
           )}
         </div>
