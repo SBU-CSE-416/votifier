@@ -115,10 +115,11 @@ export default function EcologicalInferenceGraph() {
             </div>
 
             <div className="graph-container">
-                <h2>Republican Data</h2>
+                <h2>Ecological Inference KDE Plots</h2>
+                <p style={{fontWeight:"bold"}}>Republican Data</p>
                 <p>{republicanData.candidate_names}</p>
                 {republicanData && plotKDE(republicanData)}
-                <h2>Democratic Data</h2>
+                <p style={{fontWeight:"bold"}}>Democratic Data</p>
                 <p>{democraticData.candidate_names}</p>
                 {democraticData && plotKDE(democraticData)}
             </div>
