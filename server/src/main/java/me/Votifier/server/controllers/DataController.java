@@ -29,6 +29,7 @@ import me.Votifier.server.model.documents.DistrictsSummary.DistrictData;
 import me.Votifier.server.model.documents.GinglesIncomeDocuments.GinglesIncomeAnalysis;
 import me.Votifier.server.model.documents.GinglesRacialDocuments.GinglesRacialAnalysis;
 import me.Votifier.server.model.documents.GinglesRacialIncomeDocuments.GinglesRacialIncomeAnalysis;
+import me.Votifier.server.model.documents.EcologicalInferenceRacialDocuments.EIRacialAnalysis;
 import me.Votifier.server.model.documents.StateSummary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
 
@@ -59,6 +60,10 @@ public class DataController {
     @GetMapping("/{stateAbbreviation}/gingles/demographics-and-economic/{racialGroup}")
     public ResponseEntity<Resource> getGinglesRacialIncomeAnalysisByRace(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
         return gatherGinglesRacialIncomeDataFromCache(stateAbbreviation, racialGroup);
+    }
+    @GetMapping("/{stateAbbreviation}/ei-analysis/demographics/{racialGroup}/{regionType}")
+    public ResponseEntity<Resource> getRacialEIAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation,@PathVariable("racialGroup") RacialGroup racialGroup, @PathVariable("regionType") RegionType regionType) {
+        return gatherRacialEIAnalysisDataFromCache(stateAbbreviation,racialGroup, regionType);
     }
     // @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
     // public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
@@ -238,6 +243,85 @@ public class DataController {
         }
     }
 
+    @Autowired me.Votifier.server.model.repository.EIRacialRepository eiRacialRepository;
+
+    @Cacheable(value = "eiRacialAnalysis", key = "#stateAbbreviation + '-' + #regionType.type")
+
+    public ResponseEntity<Resource> gatherRacialEIAnalysisDataFromCache(StateAbbreviation stateAbbreviation, RacialGroup racialGroup, RegionType regionType) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            EIRacialAnalysis eiRacialAnalysis = null;
+            
+            String regionTypeName = regionType.getType();
+            System.out.print("Region Type: " + regionType.getType());
+
+            System.out.print("Racial Group: " + racialGroup.getGinglesIdentifer());
+
+            String raceName = racialGroup.getGinglesIdentifer();
+            if (raceName.equals("WHITE")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiRacialRepository.findWhiteByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiRacialRepository.findWhiteByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findWhiteByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findWhiteByNameAndUrban(stateName);
+                }
+            } else if (raceName.equals("BLACK")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiRacialRepository.findBlackByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiRacialRepository.findBlackByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findBlackByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findBlackByNameAndUrban(stateName);
+                }
+            } else if (raceName.equals("ASIAN")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiRacialRepository.findAsianByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiRacialRepository.findAsianByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findAsianByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findAsianByNameAndUrban(stateName);
+                }
+            } else if (raceName.equals("HISPANIC")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiRacialRepository.findHispanicByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiRacialRepository.findHispanicByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findHispanicByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiRacialRepository.findHispanicByNameAndUrban(stateName);
+                }
+            }
+    
+            if (eiRacialAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            SerializeConfig config = new SerializeConfig();
+            
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+            String jsonResponse = JSON.toJSONString(eiRacialAnalysis, config);
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+    
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing ei racial analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     // Note: This method will eventually be removed, since we will be accessing the cache/database for this data instead of locally
     public Resource getResourceFromLocal(Path filePath) throws UnknownFileException {
