@@ -342,3 +342,48 @@ md_region_type_data_doc = {
 collection.insert_one(md_region_type_data_doc)
 
 print("Maryland Region Type data inserted")
+
+collection = db["racial_ecological_inference_data"]
+
+collection.delete_many({})
+
+sc_ecological_inference_data_path = "states/south_carolina/ecological_inference/ecological_inference.json"
+
+with open(sc_ecological_inference_data_path, 'r') as file:
+    sc_ecological_inference_data = json.load(file)
+
+collection.insert_one(sc_ecological_inference_data)
+
+print("South Carolina Racial Ecological Inference data inserted")
+
+md_ecological_inference_data_path = "states/maryland/ecological_inference/ecological_inference.json"
+
+with open(md_ecological_inference_data_path, 'r') as file:
+    md_ecological_inference_data = json.load(file)
+
+collection.insert_one(md_ecological_inference_data)
+
+print("Maryland Racial Ecological Inference data inserted")
+
+collection = db["economic_ecological_inference_data"]
+
+collection.delete_many({})
+
+sc_economic_ecological_inference_data_path = "states/south_carolina/ecological_inference/ecological_inference_economic.json"
+
+with open(sc_economic_ecological_inference_data_path, 'r') as file:
+    sc_economic_ecological_inference_data = json.load(file)
+
+collection.insert_one(sc_economic_ecological_inference_data)
+
+print("South Carolina Economic Ecological Inference data inserted")
+
+md_economic_ecological_inference_data_path = "states/maryland/ecological_inference/ecological_inference_economic.json"
+
+with open(md_economic_ecological_inference_data_path, 'r') as file:
+    md_economic_ecological_inference_data = json.load(file)
+
+collection.insert_one(md_economic_ecological_inference_data)
+
+print("Maryland Economic Ecological Inference data inserted")
+

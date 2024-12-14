@@ -1,6 +1,8 @@
 import json
 import matplotlib.pyplot as plt
+from matplotlib.ticker import (MultipleLocator, AutoMinorLocator)
 import argparse
+import numpy as np
 
 def is_sequential(lst):
     # Check if the difference between consecutive elements is always 1
@@ -8,7 +10,7 @@ def is_sequential(lst):
 
 def plot_chart(race, state):
     # Load the JSON data from a file
-  file_path = f"box_and_whisker_results_{state}_racial_group_{race}.json"  # Replace with your JSON file path
+  file_path = f"results/ensemble_3/box_and_whisker_results_{state}_racial_group_{race}.json"  # Replace with your JSON file path
   with open(file_path, "r") as file:
       json_data = json.load(file)
 
@@ -18,7 +20,6 @@ def plot_chart(race, state):
   # Extract and sort data for each district by the 2022_DOT_VALUE
   districts = json_data["data"].keys()
   boxplot_data = []
-  red_dot_values = []
 
   for district in districts:
       district_data = json_data["data"][district]
@@ -33,13 +34,13 @@ def plot_chart(race, state):
       })
 
   # Sort districts by their dot value
-  sorted_boxplot_data = sorted(boxplot_data, key=lambda x: x["dot"])
+  # sorted_boxplot_data = sorted(boxplot_data, key=lambda x: x["dot"])
 
   # Set up the plot
   fig, ax = plt.subplots(figsize=(10, 6))
 
   # Plot each district's box-and-whisker manually in sorted order
-  for idx, data in enumerate(sorted_boxplot_data):
+  for idx, data in enumerate(boxplot_data):
       x = idx + 1.0
       # Draw whiskers
       ax.plot([x, x], [data["min"], data["q1"]], color="black")  # Lower whisker
@@ -69,14 +70,18 @@ def plot_chart(race, state):
   plt.title(json_data["labels"]["subtitle"])
   ax.set_xlabel(json_data["labels"]["axis-x"])
   ax.set_ylabel(json_data["labels"]["axis-y"])
-  ax.set_xticks(range(1, len(sorted_boxplot_data) + 1))
-  ax.set_xticklabels([data["district"].lstrip('0') for data in sorted_boxplot_data])
+  ax.set_xticks(range(1, len(boxplot_data) + 1))
+  ax.tick_params(axis='y', which='major', length=12)
+  ax.tick_params(axis='y', which='minor', length=6)
+  ax.set_xticklabels([data["district"].lstrip('0') for data in boxplot_data])
 
   # Add the axis-y ticks
   yticks = json_data["labels"]["axis-y-ticks"]
   ax.set_yticks(json_data["labels"]["axis-y-ticks"])
   if is_sequential(yticks) is False:
-      plt.minorticks_on()
+    ax.yaxis.set_minor_locator(MultipleLocator(1))
+    ax.tick_params(axis='y', which='minor')
+    # plt.minorticks_on()
 
   # Display the legend and plot
   ax.legend()
