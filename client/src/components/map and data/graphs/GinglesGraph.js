@@ -225,7 +225,7 @@ export default function GinglesGraph() {
     };
 
     return (
-        <div>
+        <div style={{width:"100%"}}>
             {/* Drop down options for Gingles Analysis */}
             <div className="select-container" style={{marginBottom:"10px"}}>
                 <label>Selected Gingles Option</label>
