@@ -168,7 +168,7 @@ export default function GinglesGraph() {
         console.log("Democratic Data:", democraticData);
     }
 
-    const combinedData = {
+    const ginglesData = {
         labels: republicanLine.map(d => d.x),
         datasets: [
             {
@@ -230,7 +230,7 @@ export default function GinglesGraph() {
     return (
         <div>
             {/* Drop down options for Gingles Analysis */}
-            <div className="select-container">
+            <div className="select-container" style={{marginBottom:"10px"}}>
                 <label>Selected Gingles Option</label>
                 <select 
                     value={selectedGingles} 
@@ -247,7 +247,7 @@ export default function GinglesGraph() {
                     <h2>{graphTitle}</h2>
                     <p>{election}</p>
                     <p>{republicanCandidate} vs {democraticCandidate}</p>
-                    <ChartJS type='scatter' data={combinedData} options={options} />
+                    <ChartJS type='scatter' data={ginglesData} options={options} />
                 </div>
             )}
 
