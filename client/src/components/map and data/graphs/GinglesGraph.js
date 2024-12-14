@@ -315,7 +315,7 @@ export default function GinglesGraph() {
                                 checked={regionType === "ALL"} 
                                 onChange={(event) => setRegionType(event.target.value)} 
                             />
-                            None
+                            All
                         </label>
                         <label>
                             <input 
