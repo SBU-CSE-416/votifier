@@ -1,5 +1,5 @@
 import React from "react";
-import "../../stylesheets/map and data/GeneralInfoBox.css";
+import "../../stylesheets/map and data/SummaryTable.css";
 import { formatVariable } from "../../utilities/ReformatVariableNamesUtil";
 const SummaryTable = ({ stateSummaryData }) => {
   const filteredStateData = Object.entries(stateSummaryData).filter(

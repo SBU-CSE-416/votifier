@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { MapStoreContext } from "../../../stores/MapStore";
 import { stateCodeMapping } from "../../../utilities/FederalInfomationProcessingStandardEnumUtil";
+import "../../../stylesheets/map and data/graphs/DistrictsTable.css";
 export default function DistrictsTable(){
     const { store } = useContext(MapStoreContext);
     const [districtsData, setDistrictsData] = useState([]);
@@ -27,10 +28,10 @@ export default function DistrictsTable(){
     }
 
     return (
-        <>
-            <table>
+        <div className="info-table-container">
+            <table className="info-table">
                 <thead>
-                    <tr>
+                    <tr className="info-title">
                         <th>District</th>
                         <th>Representative</th>
                         <th>Party</th>
@@ -60,6 +61,6 @@ export default function DistrictsTable(){
                     ))}
                 </tbody>
             </table>
-        </>
+        </div>
     );
 }
