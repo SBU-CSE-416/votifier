@@ -51,12 +51,12 @@ export default function DistrictsTable(){
                             <td>{district.REPRESENTATIVE}</td>
                             <td>{district.PARTY}</td>
                             <td>{district.AVERAGE_HOUSEHOLD_INCOME}</td>
-                            <td>{district.DEM_PERCENT}</td>
-                            <td>{district.REP_PERCENT}</td>
-                            <td>{district.PERCENT_BELOW_POVERTY}</td>
-                            <td>{district.RURAL_PERCENT}</td>
-                            <td>{district.SUBURBAN_PERCENT}</td>
-                            <td>{district.URBAN_PERCENT}</td>
+                            <td>{district.DEM_PERCENT}%</td>
+                            <td>{district.REP_PERCENT}%</td>
+                            <td>{district.PERCENT_BELOW_POVERTY}%</td>
+                            <td>{district.RURAL_PERCENT}%</td>
+                            <td>{district.SUBURBAN_PERCENT}%</td>
+                            <td>{district.URBAN_PERCENT}%</td>
                         </tr>
                     ))}
                 </tbody>
