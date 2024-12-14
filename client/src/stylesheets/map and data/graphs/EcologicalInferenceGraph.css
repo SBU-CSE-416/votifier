@@ -2,3 +2,16 @@
     display: flex;
     flex-direction: column;
 }
+
+.graph-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.graph-container h2,
+.graph-container p {
+    margin: 0;
+    padding: 0;
+}

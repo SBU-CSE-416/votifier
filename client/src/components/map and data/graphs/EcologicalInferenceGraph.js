@@ -3,9 +3,7 @@ import { MapStoreContext } from '../../../stores/MapStore';
 import { stateCodeMapping } from '../../../utilities/FederalInfomationProcessingStandardEnumUtil';
 import '../../../stylesheets/map and data/graphs/EcologicalInferenceGraph.css';
 import { Chart as ChartJS } from 'react-chartjs-2';
-import { calculateKDE, kernelDensityEstimator, epanechnikovKernel } from '../../../utilities/KernelDensityEstimationUtils';
-import { group, index } from 'd3';
-import { point } from 'leaflet';
+import { calculateKDE } from '../../../utilities/KernelDensityEstimationUtils';
 
 export default function EcologicalInferenceGraph() {
     const { store } = useContext(MapStoreContext);
@@ -42,7 +40,6 @@ export default function EcologicalInferenceGraph() {
         var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
         let response;
         if(selectedEI==="race"){
-            //TODO
             console.log("race ei for state,racialGroup,regionType", stateAbbreviation, racialGroup, regionType);
             response = await fetch_ei_race(stateAbbreviation, racialGroup, regionType);
         }
@@ -56,7 +53,6 @@ export default function EcologicalInferenceGraph() {
         if(selectedEI==="race"){
             setRepublicanData(response?.data?.[racialGroup]?.REPUBLICAN?.[regionType]);
             setDemocraticData(response?.data?.[racialGroup]?.DEMOCRATIC?.[regionType]);
-
         }
     }
 
@@ -106,7 +102,7 @@ export default function EcologicalInferenceGraph() {
     }
 
     return (
-        <div>
+        <div style={{width:"100%"}}>
             <div className="select-container">
                 <label>Selected Ecological Inference Option</label>
                 <select
@@ -118,10 +114,12 @@ export default function EcologicalInferenceGraph() {
                 </select>
             </div>
 
-            <div>
-                <p>Republican Data</p>
+            <div className="graph-container">
+                <h2>Republican Data</h2>
+                <p>{republicanData.candidate_names}</p>
                 {republicanData && plotKDE(republicanData)}
-                <p>Democratic Data</p>
+                <h2>Democratic Data</h2>
+                <p>{democraticData.candidate_names}</p>
                 {democraticData && plotKDE(democraticData)}
             </div>
 
