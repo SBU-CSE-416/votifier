@@ -12,6 +12,7 @@ export const MapStoreReducerAction = {
     SET_HEATMAP: "SET_HEATMAP",
     SET_DEMOGRAPHIC: "SET_DEMOGRAPHIC", // for heatmap
     SET_DATA_VISIBILITY: "SET_DATA_VISIBILITY",
+    SET_FIRST_TAB_VIEW: "SET_FIRST_TAB_VIEW", // for data page
 };
 
 // Context Provider
@@ -24,6 +25,7 @@ function MapStoreContextProvider(props) {
         selectedHeatmap: "none", 
         selectedDemographic: "white",
         isDataVisible: false,
+        firstTabView: "summary",
     });
 
     useEffect(() => {
@@ -94,6 +96,14 @@ function MapStoreContextProvider(props) {
                 return;
             }
 
+            case MapStoreReducerAction.SET_FIRST_TAB_VIEW: {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    firstTabView: payload, // Update the first tab view
+                }));
+                return;
+            }
+
             default: {
                 return store;
             }
@@ -127,6 +137,10 @@ function MapStoreContextProvider(props) {
 
     store.setDataVisibility = function (isDataVisible) {
         MapStoreReducer(MapStoreReducerAction.SET_DATA_VISIBILITY, isDataVisible);
+    };
+
+    store.setFirstTabView = function (firstTabView) {
+        MapStoreReducer(MapStoreReducerAction.SET_FIRST_TAB_VIEW, firstTabView);
     };
 
     // Return context provider
