@@ -7,5 +7,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
+}
+
+.graph-container h2,
+.graph-container p {
+    margin: 0;
+    padding: 0;
 }

@@ -1,17 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
+import { formatVariable } from "../../../utilities/ReformatVariableNamesUtil";
 import { Chart, registerables } from 'chart.js';
 import { Chart as ChartJS } from 'react-chartjs-2';
-import { point } from "leaflet";
 Chart.register(...registerables);
 
 export default function GinglesGraph() {
     const { store } = useContext(MapStoreContext);
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
-    const [regionType, setRegionType] = useState("NONE");
-    const [JSON, setJson] = useState(null);
+    const [regionType, setRegionType] = useState("ALL");
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
@@ -31,10 +30,6 @@ export default function GinglesGraph() {
         check_state();
     }, [selectedGingles, racialGroup, regionType]);
 
-    useEffect(() => {
-        console.log("Updated JSON:", JSON);
-    }, [JSON]);
-
     //GUI-12
     const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
         try{
@@ -46,20 +41,6 @@ export default function GinglesGraph() {
             console.error(error.message);
         }
     };
-
-    //GUI-13 (None)
-
-    // /server/data/states/south_carolina/gingles/sc_gingles_precinct_income_analysis.json
-    const fetch_gingles_income = async (stateAbbreviation) => {
-        try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic`);
-            const json = await response.json();
-            console.log("Gingles income data:", json);
-            return json;
-        } catch (error){
-            console.error(error.message);
-        }
-    }
 
     //GUI-13 (Specific regions)
     const fetch_gingles_income_by_region = async (stateAbbreviation, regionType) => {
@@ -96,34 +77,31 @@ export default function GinglesGraph() {
             console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
             response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
-            setXAxisGraphTitle(`Percent ${racialGroup}`);
-            setGraphTitle(`Gingles 2/3 Analysis for ${racialGroup} in ${stateAbbreviation} Precincts`);
+            let formattedRacialGroup = formatVariable(racialGroup);
+            setXAxisGraphTitle(`Percent ${formattedRacialGroup}`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${formattedRacialGroup} in ${stateAbbreviation} Precincts`);
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
-            if (regionType==="NONE"){
-                console.log(" income gingles for state:", stateAbbreviation);
-                response = await fetch_gingles_income(stateAbbreviation);
-                setXAxisGraphTitle("Average Household Income");
-                setGraphTitle(`Gingles 2/3 Analysis for Avg Household Income ${stateAbbreviation} Precincts`);
-            }
-            else{
-                console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
-                response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
-                setXAxisGraphTitle(`${regionType} Average Household Income`);
-                setGraphTitle(`Gingles 2/3 Analysis for ${regionType} Avg Household Income ${stateAbbreviation} Precincts`);
-            }
+            console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
+            response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
+            let formattedRegionType = formatVariable(regionType);
+            setXAxisGraphTitle(`${formattedRegionType} Average Household Income`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${formattedRegionType} Avg Household Income ${stateAbbreviation} Precincts`);
+            console.log("RETRIEVED INCOME GINGLES:",response);
         }
         else if (selectedGingles==="income-race"){
-            //TODO
             setXAxisName("RACE_INCOME_PERCENT");
-            setXAxisGraphTitle(`Percent ${racialGroup} Income`);
+            let formattedRacialGroup = formatVariable(racialGroup);
+            setXAxisGraphTitle(`Percent ${formattedRacialGroup} Income`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${formattedRacialGroup} Income in ${stateAbbreviation} Precincts`);
             console.log("income-race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
             response = await fetch_gingles_income_race(stateAbbreviation, racialGroup);
+            console.log("RETRIEVED INCOME-RACE GINGLES:",response);
+
         }
 
         console.log("RETRIEVED GINGLES:",response);
-        setJson(response);
 
         setRepublicanCandidate(response?.candidates?.Republican);
         setDemocraticCandidate(response?.candidates?.Democratic);
@@ -149,21 +127,21 @@ export default function GinglesGraph() {
             })) || []);
         }
         else if(selectedGingles==="income"){
-            setRepublicanData(response?.data?.map((data) => ({
+            setRepublicanData(response?.data?.[regionType]?.map((data) => ({
                 x: data[xAxisName],
                 y: data[yAxisNameRep],
             })) || []);
-            setDemocraticData(response?.data?.map((data) => ({
+            setDemocraticData(response?.data?.[regionType]?.map((data) => ({
                 x: data[xAxisName],
                 y: data[yAxisNameDem],
             })) || []);
-            setRepublicanLine(response?.lines?.republican?.x.map((x, i) => ({
+            setRepublicanLine(response?.lines?.[regionType]?.republican?.x.map((x, i) => ({
                 x,
-                y: response.lines.republican.y[i],
+                y: response.lines[regionType].republican.y[i],
             })) || []);
-            setDemocraticLine(response?.lines?.democratic?.x.map((x, i) => ({
+            setDemocraticLine(response?.lines?.[regionType]?.democratic?.x.map((x, i) => ({
                 x,
-                y: response.lines.democratic.y[i],
+                y: response.lines[regionType].democratic.y[i],
             })) || []);
         }
         else if(selectedGingles==="income-race"){
@@ -190,7 +168,7 @@ export default function GinglesGraph() {
         console.log("Democratic Data:", democraticData);
     }
 
-    const combinedData = {
+    const ginglesData = {
         labels: republicanLine.map(d => d.x),
         datasets: [
             {
@@ -252,15 +230,15 @@ export default function GinglesGraph() {
     return (
         <div>
             {/* Drop down options for Gingles Analysis */}
-            <div className="select-container">
+            <div className="select-container" style={{marginBottom:"10px"}}>
                 <label>Selected Gingles Option</label>
                 <select 
                     value={selectedGingles} 
                     onChange={(event) => setSelectedGingles(event.target.value)}
                 >
-                    <option value="race">precinct race</option> 
-                    <option value="income">precinct income</option>
-                    <option value="income-race">precinct income/race</option>
+                    <option value="race">Precinct Race</option> 
+                    <option value="income">Precinct Income</option>
+                    <option value="income-race">Precinct Income/Race</option>
                 </select>
             </div>
 
@@ -269,7 +247,7 @@ export default function GinglesGraph() {
                     <h2>{graphTitle}</h2>
                     <p>{election}</p>
                     <p>{republicanCandidate} vs {democraticCandidate}</p>
-                    <ChartJS type='scatter' data={combinedData} options={options} />
+                    <ChartJS type='scatter' data={ginglesData} options={options} />
                 </div>
             )}
 
@@ -336,8 +314,8 @@ export default function GinglesGraph() {
                             <input 
                                 type="radio" 
                                 name="regionType" 
-                                value="NONE" 
-                                checked={regionType === "NONE"} 
+                                value="ALL" 
+                                checked={regionType === "ALL"} 
                                 onChange={(event) => setRegionType(event.target.value)} 
                             />
                             None

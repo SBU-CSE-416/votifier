@@ -34,33 +34,6 @@ export default function LeftSideMenu(props) {
           </div>
           <div className="left-label">
             <label>
-              <span>Selected District Plan</span>
-            </label>
-          </div>
-          <div className="left-dropdown">
-          
-          <select 
-                value={store.selectedDistrictPlan}
-                onChange={(event) => store.setDistrictPlan(event.target.value)}
-                className="dropdown-select"
-              >
-                <optgroup label="Official Plans">
-                  <option value="2022 Congressional Districts">2022 Official Plan</option>
-                </optgroup>
-                <optgroup label="Ensemble A">
-                  <option value="ensembleA_plan1">Plan 1</option>
-                  <option value="ensembleA_plan2">Plan 2</option>
-                  <option value="ensembleA_plan3">Plan 3</option>
-                </optgroup>
-                <optgroup label="Ensemble B">
-                  <option value="ensembleA_plan1">Plan 1</option>
-                  <option value="ensembleA_plan2">Plan 2</option>
-                  <option value="ensembleA_plan3">Plan 3</option>
-                </optgroup>
-              </select>
-          </div>
-          <div className="left-label">
-            <label>
               <span>Selected Map View</span>
             </label>
           </div>

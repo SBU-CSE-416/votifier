@@ -11,8 +11,8 @@ export const MapStoreReducerAction = {
     SET_SELECTED_PRECINCT: "SET_SELECTED_PRECINCT",
     SET_HEATMAP: "SET_HEATMAP",
     SET_DEMOGRAPHIC: "SET_DEMOGRAPHIC", // for heatmap
-    SET_DISTRICT_PLAN: "SET_DISTRICT_PLAN",
     SET_DATA_VISIBILITY: "SET_DATA_VISIBILITY",
+    SET_FIRST_TAB_VIEW: "SET_FIRST_TAB_VIEW", // for data page
 };
 
 // Context Provider
@@ -24,8 +24,8 @@ function MapStoreContextProvider(props) {
         selectedPrecinct: null,
         selectedHeatmap: "none", 
         selectedDemographic: "white",
-        selectedDistrictPlan: null,
         isDataVisible: false,
+        firstTabView: "summary",
     });
 
     useEffect(() => {
@@ -88,18 +88,18 @@ function MapStoreContextProvider(props) {
                 return;
             }
 
-            case MapStoreReducerAction.SET_DISTRICT_PLAN: { 
-                setStore((prevStore) => ({
-                    ...prevStore,
-                    selectedDistrictPlan: payload, // Update the selected district plan
-                }));
-                return;
-            }
-
             case MapStoreReducerAction.SET_DATA_VISIBILITY: {
                 setStore((prevStore) => ({
                     ...prevStore,
                     isDataVisible: payload, // Update the data visibility
+                }));
+                return;
+            }
+
+            case MapStoreReducerAction.SET_FIRST_TAB_VIEW: {
+                setStore((prevStore) => ({
+                    ...prevStore,
+                    firstTabView: payload, // Update the first tab view
                 }));
                 return;
             }
@@ -135,12 +135,12 @@ function MapStoreContextProvider(props) {
         MapStoreReducer(MapStoreReducerAction.SET_DEMOGRAPHIC, demographic);
     };
 
-    store.setDistrictPlan = function (districtPlan) {
-        MapStoreReducer(MapStoreReducerAction.SET_DISTRICT_PLAN, districtPlan);
-    };
-
     store.setDataVisibility = function (isDataVisible) {
         MapStoreReducer(MapStoreReducerAction.SET_DATA_VISIBILITY, isDataVisible);
+    };
+
+    store.setFirstTabView = function (firstTabView) {
+        MapStoreReducer(MapStoreReducerAction.SET_FIRST_TAB_VIEW, firstTabView);
     };
 
     // Return context provider
