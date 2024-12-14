@@ -1,6 +1,6 @@
 import React from "react";
 import "../../stylesheets/map and data/GeneralInfoBox.css";
-
+import { formatVariable } from "../../utilities/ReformatVariableNamesUtil";
 const SummaryTable = ({ stateSummaryData }) => {
   const filteredStateData = Object.entries(stateSummaryData).filter(
     ([key]) => key !== "house_HOLD_INCOME_DISTRIBUTION" && key !== "id"
@@ -20,7 +20,7 @@ const SummaryTable = ({ stateSummaryData }) => {
             <tr>
               {chunk.map(([key], colIndex) => (
                 <th key={colIndex} className="info-title">
-                  {key.replaceAll("_", " ")}
+                  {formatVariable(key)}
                 </th>
               ))}
             </tr>
