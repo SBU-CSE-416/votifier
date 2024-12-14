@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
+import { formatVariable } from "../../../utilities/ReformatVariableNamesUtil";
 import { Chart, registerables } from 'chart.js';
 import { Chart as ChartJS } from 'react-chartjs-2';
-import { point } from "leaflet";
 Chart.register(...registerables);
 
 export default function GinglesGraph() {
@@ -11,7 +11,6 @@ export default function GinglesGraph() {
     const [selectedGingles, setSelectedGingles] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
     const [regionType, setRegionType] = useState("ALL");
-    const [JSON, setJson] = useState(null);
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
@@ -30,10 +29,6 @@ export default function GinglesGraph() {
     useEffect(() => {
         check_state();
     }, [selectedGingles, racialGroup, regionType]);
-
-    useEffect(() => {
-        console.log("Updated JSON:", JSON);
-    }, [JSON]);
 
     //GUI-12
     const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
@@ -82,21 +77,24 @@ export default function GinglesGraph() {
             console.log(" race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
             response = await fetch_gingles_race(stateAbbreviation, racialGroup);
             setXAxisName("RACE_PERCENT");
-            setXAxisGraphTitle(`Percent ${racialGroup}`);
-            setGraphTitle(`Gingles 2/3 Analysis for ${racialGroup} in ${stateAbbreviation} Precincts`);
+            let formattedRacialGroup = formatVariable(racialGroup);
+            setXAxisGraphTitle(`Percent ${formattedRacialGroup}`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${formattedRacialGroup} in ${stateAbbreviation} Precincts`);
         }
         else if (selectedGingles==="income"){
             setXAxisName("AVG_HOUSEHOLD_INCOME");
             console.log(" income gingles for state,regionType:", stateAbbreviation, regionType);
             response = await fetch_gingles_income_by_region(stateAbbreviation, regionType);
-            setXAxisGraphTitle(`${regionType} Average Household Income`);
-            setGraphTitle(`Gingles 2/3 Analysis for ${regionType} Avg Household Income ${stateAbbreviation} Precincts`);
+            let formattedRegionType = formatVariable(regionType);
+            setXAxisGraphTitle(`${formattedRegionType} Average Household Income`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${formattedRegionType} Avg Household Income ${stateAbbreviation} Precincts`);
             console.log("RETRIEVED INCOME GINGLES:",response);
         }
         else if (selectedGingles==="income-race"){
             setXAxisName("RACE_INCOME_PERCENT");
-            setXAxisGraphTitle(`Percent ${racialGroup} Income`);
-            setGraphTitle(`Gingles 2/3 Analysis for ${racialGroup} Income in ${stateAbbreviation} Precincts`);
+            let formattedRacialGroup = formatVariable(racialGroup);
+            setXAxisGraphTitle(`Percent ${formattedRacialGroup} Income`);
+            setGraphTitle(`Gingles 2/3 Analysis for ${formattedRacialGroup} Income in ${stateAbbreviation} Precincts`);
             console.log("income-race gingles for state,racialGroup:", stateAbbreviation, racialGroup);
             response = await fetch_gingles_income_race(stateAbbreviation, racialGroup);
             console.log("RETRIEVED INCOME-RACE GINGLES:",response);
@@ -104,7 +102,6 @@ export default function GinglesGraph() {
         }
 
         console.log("RETRIEVED GINGLES:",response);
-        setJson(response);
 
         setRepublicanCandidate(response?.candidates?.Republican);
         setDemocraticCandidate(response?.candidates?.Democratic);
