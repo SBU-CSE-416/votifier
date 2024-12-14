@@ -16,6 +16,11 @@ import DistrictsTable from "./graphs/DistrictsTable";
 export default function DataPg({ stateSummaryData }) {
   const { store } = useContext(MapStoreContext);
   const [activeTab, setActiveTab] = useState("summary");
+  useEffect(() => {
+    if(activeTab!=="summary" || store.firstTabView !== "districtsTable"){
+      store.setSelectedDistrict(null);
+    }
+  }, [store.firstTabView, activeTab]);
   const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
       range: range.replace(/_/g, "-"), 
