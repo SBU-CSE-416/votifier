@@ -1,0 +1,35 @@
+.info-table-container {
+    width: 100%;
+}
+
+.info-table {
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-title {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.info-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.info-table tr:hover td {
+    background-color: #f1f1f1; /* Apply hover effect only to table cells (td) */
+}
+
+.info-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.info-table td {
+    font-size: 14px;
+    color: #555;
+}

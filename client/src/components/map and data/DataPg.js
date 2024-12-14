@@ -1,68 +1,101 @@
-import RacialBarChart from "./RacialChart";
-import HistogramChart from "./HistogramChart";
-import EcologicalInferenceChart from "./EcologicalInferenceChart"
-import VotingGraph from "./VotingGraph";
-import MedianIncomeBoxPlot from "./MedianIncomeBoxPlot"
-import IncomeRangeDensityChart from "./IncomeRangeDensityChart"
-import GeneralInfoBox from "./GeneralInfoBox"
-import "../../stylesheets/dataPg.css"
-import { useState } from "react";
-export default function DataPg({state}) {
-    const [activeTab, setActiveTab] = useState("demographics");
-    console.log("State Data: ", state);
-    return(
-        
-    <div id="info" >
-        
-        <div className="datapg-container">
-            <div className="data-genernal-info"> 
-            <GeneralInfoBox 
-                state = {state}
-            />
-            </div>
-              <div className="data-navbar">
-                <div
-                  className={`tab ${activeTab === "demographics" ? "active" : ""}`}
-                  onClick={() => setActiveTab("demographics")}
-                >
-                  Demographics
-                </div>
-                <div
-                  className={`tab ${activeTab === "racial" ? "active" : ""}`}
-                  onClick={() => setActiveTab("racial")}
-                >
-                  Precinct Analysis
-                </div>
-                <div
-                  className={`tab ${activeTab === "economic" ? "active" : ""}`}
-                  onClick={() => setActiveTab("economic")}
-                >
-                  Ecological Inference
-                </div>
-              </div>
-            <div className="data-charts-container">
-                {activeTab === "demographics" && (
-                  <div className="data-charts">
-                    <HistogramChart w = {400} h = {200} title={"Age Distribution"}></HistogramChart>
-                    <RacialBarChart w = {400} h = {200} title={"Population Distribution"}></RacialBarChart>
-                    <MedianIncomeBoxPlot w = {400} h = {200} title={"Median Income Distribution"}></MedianIncomeBoxPlot>
-                  </div>
-                )}
-                {activeTab === "racial" && (
-                  <div className="data-charts">
-                    <VotingGraph w={300} h={150} />
-                  </div>
-                )}
-                {activeTab === "economic" && (
-                  <div className="data-charts">
-                    <EcologicalInferenceChart w={400} h={200} title={"Support for Candidates by Racial Group"} />
-                    <IncomeRangeDensityChart w={400} h={200} title={"Support for Candidates by Racial Group"}/>
-                  </div>
-        )}  
-            </div>
-            
+import RacialBarChart from "./graphs/RacialChart";
+import HistogramChart from "./graphs/StateSummaryBarChart";
+import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
+import EcologicalInferenceChart from "./graphs/EcologicalInferenceChart"
+import VotingGraph from "./graphs/VotingGraph";
+import MedianIncomeBoxPlot from "./graphs/MedianIncomeBoxPlot"
+import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
+import SummaryTable from "./SummaryTable"
+import GinglesGraph from "./graphs/GinglesGraph";
+import "../../stylesheets/map and data/DataPg.css";
+import { useState, useContext, useEffect } from "react";
+import { MapStoreContext } from "../../stores/MapStore";
+import DistrictsTable from "./graphs/DistrictsTable";
+
+
+export default function DataPg({ stateSummaryData }) {
+  const { store } = useContext(MapStoreContext);
+  const [activeTab, setActiveTab] = useState("summary");
+  const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
+    ([range, percentage]) => ({
+      range: range.replace(/_/g, "-"), 
+      percentage,                    
+    })
+  );
+
+  return (
+    <div id="info">
+      <div className="datapg-container">
+        <div className="data-genernal-info">
+          <SummaryTable stateSummaryData={stateSummaryData} />
         </div>
+        <div className="data-navbar">
+          <div
+            className={`tab ${activeTab === "summary" ? "active" : ""}`}
+            onClick={() => setActiveTab("summary")}
+          >
+            {store.firstTabView === "summary" ? "Summary" : "Districts Table"}
+          </div>
+          <div
+            className={`tab ${activeTab === "gingles" ? "active" : ""}`}
+            onClick={() => setActiveTab("gingles")}
+          >
+            Gingles Analysis
+          </div>
+          <div
+            className={`tab ${activeTab === "ei-analysis" ? "active" : ""}`}
+            onClick={() => setActiveTab("ei-analysis")}
+          >
+            EI Analysis
+          </div>
+          <div
+            className={`tab ${activeTab === "ensemble-data" ? "active" : ""}`}
+            onClick={() => setActiveTab("ensemble-data")}
+          >
+            Ensemble Data
+          </div>
+        </div>
+        <div className="data-charts-container">
+          {activeTab === "summary" && (
+            <div className="data-charts">
+              <label>
+                <span>Selected View</span>
+              </label>
+              <select
+                value={store.firstTabView}
+                onChange={(event) => store.setFirstTabView(event.target.value)}
+              >
+                <option value="summary">Summary</option>
+                <option value="districtsTable">Districts Table</option>
+              </select>
+              {store.firstTabView === "summary" ? 
+                <StateSummaryBarChart
+                  data={incomeDistributionData}
+                  w={500}
+                  h={250}
+                  title={"Household Income Distribution"}
+                /> : 
+                <DistrictsTable/>
+              }
+            </div>
+          )}
+          {activeTab === "ensemble-data" && (
+            <div className="data-charts">
+              {/* <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} /> */}
+            </div>
+          )}
+          {activeTab === "gingles" && (
+            <div className="data-charts">
+              <GinglesGraph/>
+            </div>
+          )}
+          {activeTab === "ei-analysis" && (
+            <div className="data-charts">
+              <h2>Coming Soon</h2>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
-        
-    );
+  );
 }
