@@ -24,6 +24,7 @@ export default function EcologicalInferenceGraph() {
         console.log("race ei democratic data:", democraticData);
     }, [republicanData, democraticData]);
 
+    
     //GUI-17
     const fetch_ei_race = async (stateAbbreviation, racialGroup, regionType) => {
         try {
