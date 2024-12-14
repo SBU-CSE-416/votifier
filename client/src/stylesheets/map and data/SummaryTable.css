@@ -1,32 +1,32 @@
-.info-table-container {
+.summary-table-container {
   margin: 20px;
   overflow-x: auto;
 }
 
-.info-table {
+.summary-table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
 }
 
-.info-table th, .info-table td {
+.summary-table th, .summary-table td {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-.info-title {
+.summary-title {
   background-color: #f4f4f4;
   font-weight: bold;
 }
 
-.info-value {
+.summary-value {
   background-color: #fff;
 }
 
-.info-table tr:nth-child(even) {
+.summary-table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.info-table tr:hover {
+.summary-table tr:hover {
   background-color: #f1f1f1;
 }

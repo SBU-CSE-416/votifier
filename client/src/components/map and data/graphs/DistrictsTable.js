@@ -5,7 +5,7 @@ import "../../../stylesheets/map and data/graphs/DistrictsTable.css";
 export default function DistrictsTable(){
     const { store } = useContext(MapStoreContext);
     const [districtsData, setDistrictsData] = useState([]);
-    
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
     useEffect(() => {
         const fetchData = async () => {
             var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
@@ -15,6 +15,11 @@ export default function DistrictsTable(){
         };
         fetchData();
     }, [store.selectedStateCode]);
+
+    useEffect(() => {
+        console.log("Selected District: ", store.selectedDistrict);
+        setSelectedDistrict(store.selectedDistrict);
+    }, [store.selectedDistrict]);
 
     const fetch_districts_summary = async (stateAbbreviation) => {
         try{
@@ -27,11 +32,17 @@ export default function DistrictsTable(){
         }
     }
 
+    const handleRowClick = (district) => {
+        console.log("District clicked: ", district);
+        store.selectedDistrict = district;
+        setSelectedDistrict(district);
+    }
+
     return (
-        <div className="info-table-container">
-            <table className="info-table">
+        <div className="districts-table-container">
+            <table className="districts-table">
                 <thead>
-                    <tr className="info-title">
+                    <tr className="districts-table-title">
                         <th>District</th>
                         <th>Representative</th>
                         <th>Party</th>
@@ -46,7 +57,11 @@ export default function DistrictsTable(){
                 </thead>
                 <tbody>
                     {districtsData.data?.map((district, index) => (
-                        <tr key={index}>
+                        <tr 
+                            key={index}
+                            className={selectedDistrict === district.CONG_DIST ? "highlighted" : ""}
+                            onClick={() => handleRowClick(district.CONG_DIST)}
+                        >
                             <td>{district.CONG_DIST}</td>
                             <td>{district.REPRESENTATIVE}</td>
                             <td>{district.PARTY}</td>
