@@ -10,6 +10,7 @@ import GinglesGraph from "./graphs/GinglesGraph";
 import "../../stylesheets/map and data/DataPg.css";
 import { useState, useContext, useEffect } from "react";
 import { MapStoreContext } from "../../stores/MapStore";
+import DistrictsTable from "./graphs/DistrictsTable";
 
 
 export default function DataPg({ stateSummaryData }) {
@@ -74,7 +75,7 @@ export default function DataPg({ stateSummaryData }) {
                   h={250}
                   title={"Household Income Distribution"}
                 /> : 
-                <p>districts table</p>
+                <DistrictsTable/>
               }
             </div>
           )}

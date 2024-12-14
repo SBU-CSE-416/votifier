@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import "../../../stylesheets/map and data/graphs/GinglesGraph.css";
 import { MapStoreContext } from "../../../stores/MapStore";
 import { formatVariable } from "../../../utilities/ReformatVariableNamesUtil";
+import { stateCodeMapping } from "../../../utilities/FederalInfomationProcessingStandardEnumUtil";
 import { Chart, registerables } from 'chart.js';
 import { Chart as ChartJS } from 'react-chartjs-2';
 Chart.register(...registerables);
@@ -67,10 +68,6 @@ export default function GinglesGraph() {
     }
 
     const check_state = async () => {
-        const stateCodeMapping = {
-        45: "SC", // South Carolina
-        24: "MD", // Maryland
-        };
         var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
         let response;
         if (selectedGingles==="race"){
