@@ -8,10 +8,12 @@ import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
 import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
 import "../../stylesheets/map and data/DataPg.css";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { MapStoreContext } from "../../stores/MapStore";
 
 
 export default function DataPg({ stateSummaryData }) {
+  const { store } = useContext(MapStoreContext);
   const [activeTab, setActiveTab] = useState("summary");
   const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
@@ -31,7 +33,7 @@ export default function DataPg({ stateSummaryData }) {
             className={`tab ${activeTab === "summary" ? "active" : ""}`}
             onClick={() => setActiveTab("summary")}
           >
-            Summary
+            {store.firstTabView === "summary" ? "Summary" : "Districts Table"}
           </div>
           <div
             className={`tab ${activeTab === "gingles" ? "active" : ""}`}
@@ -55,12 +57,25 @@ export default function DataPg({ stateSummaryData }) {
         <div className="data-charts-container">
           {activeTab === "summary" && (
             <div className="data-charts">
-              <StateSummaryBarChart
-                data={incomeDistributionData}
-                w={500}
-                h={250}
-                title={"Household Income Distribution"}
-              />
+              <label>
+                <span>Selected View</span>
+              </label>
+              <select
+                value={store.firstTabView}
+                onChange={(event) => store.setFirstTabView(event.target.value)}
+              >
+                <option value="summary">Summary</option>
+                <option value="districtsTable">Districts Table</option>
+              </select>
+              {store.firstTabView === "summary" ? 
+                <StateSummaryBarChart
+                  data={incomeDistributionData}
+                  w={500}
+                  h={250}
+                  title={"Household Income Distribution"}
+                /> : 
+                <p>districts table</p>
+              }
             </div>
           )}
           {activeTab === "ensemble-data" && (
