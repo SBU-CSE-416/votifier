@@ -13,13 +13,13 @@ const SummaryTable = ({ stateSummaryData }) => {
   }
 
   return (
-    <div className="info-table-container">
+    <div className="summary-table-container">
       {splitData.map((chunk, index) => (
-        <table key={index} className="info-table">
+        <table key={index} className="summary-table">
           <thead>
             <tr>
               {chunk.map(([key], colIndex) => (
-                <th key={colIndex} className="info-title">
+                <th key={colIndex} className="summary-title">
                   {formatVariable(key)}
                 </th>
               ))}
@@ -28,7 +28,7 @@ const SummaryTable = ({ stateSummaryData }) => {
           <tbody>
             <tr>
               {chunk.map(([_, value], colIndex) => (
-                <td key={colIndex} className="info-value">
+                <td key={colIndex} className="summary-value">
                   {typeof value === "number"
                     ? value.toLocaleString() 
                     : typeof value === "object"
