@@ -67,6 +67,10 @@ export default function EcologicalInferenceGraph() {
             setRepublicanData(response?.data?.[racialGroup]?.REPUBLICAN?.[regionType]);
             setDemocraticData(response?.data?.[racialGroup]?.DEMOCRATIC?.[regionType]);
         }
+        else if(selectedEI==="income"){
+            setRepublicanData(response?.data?.[economicGroup]?.REPUBLICAN?.[regionType]);
+            setDemocraticData(response?.data?.[economicGroup]?.DEMOCRATIC?.[regionType]);
+        }
     }
 
     const plotKDE = (json) => {
@@ -196,7 +200,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_0_35K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            0_35K
+                            0-35K
                         </label>
                         <label>
                             <input
@@ -206,7 +210,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_35K_60K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            35K_60K
+                            35K-60K
                         </label>
                         <label>
                             <input
@@ -216,7 +220,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_60K_100K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            60K_100K
+                            60K-100K
                         </label>
                         <label>
                             <input
@@ -226,7 +230,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_100K_125K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            100K_125K
+                            100K-125K
                         </label>
                         <label>
                             <input
@@ -236,7 +240,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_125K_150K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            125K_150K
+                            125K-150K
                         </label>
                         <label>
                             <input
@@ -246,7 +250,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_150K_MORE"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            150K_MORE
+                            150K+
                         </label>
                     </div>
                 </div>

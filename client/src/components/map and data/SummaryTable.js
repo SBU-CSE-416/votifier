@@ -6,7 +6,7 @@ const SummaryTable = ({ stateSummaryData }) => {
     ([key]) => key !== "house_HOLD_INCOME_DISTRIBUTION" && key !== "id"
   );
 
-  const maxColumnsPerTable = 6;
+  const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {
     splitData.push(filteredStateData.slice(i, i + maxColumnsPerTable));
