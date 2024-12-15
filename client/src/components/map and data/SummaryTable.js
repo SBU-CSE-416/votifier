@@ -3,9 +3,15 @@ import "../../stylesheets/map and data/SummaryTable.css";
 import { formatVariable } from "../../utilities/ReformatVariableNamesUtil";
 const SummaryTable = ({ stateSummaryData }) => {
   const filteredStateData = Object.entries(stateSummaryData).filter(
-    ([key]) => key !== "house_HOLD_INCOME_DISTRIBUTION" && key !== "id"
-  );
+    ([key]) => 
+      key !== "house_HOLD_INCOME_DISTRIBUTION" && 
+      key !== "id" &&
+      key !== "poverty_LEVEL" &&
+      key !== "native_AMERICAN_PERCENT" &&
+      key !== "islander_PERCENT"
 
+  );
+  console.log("filteredStateData: ", filteredStateData);
   const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {
