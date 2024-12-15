@@ -253,7 +253,7 @@ export default function GinglesGraph() {
             {(selectedGingles === "race" || selectedGingles === "income-race") ? 
             <>
                 <div className="select-container">
-                    <label>Racial Group</label>
+                    <label style={{fontWeight:"bold"}}>Racial Group</label>
                     <div>
                         <label>
                             <input 
@@ -306,7 +306,7 @@ export default function GinglesGraph() {
             {selectedGingles === "income" ? 
             <>
                 <div className="select-container">
-                    <label>Region Type</label>
+                    <label style={{fontWeight:"bold"}}>Region Type</label>
                     <div>
                         <label>
                             <input 

@@ -6,6 +6,7 @@ export default function DistrictsTable(){
     const { store } = useContext(MapStoreContext);
     const [districtsData, setDistrictsData] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
+    
     useEffect(() => {
         const fetchData = async () => {
             var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
