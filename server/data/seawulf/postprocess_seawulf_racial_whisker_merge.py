@@ -5,19 +5,11 @@ import numpy as np
 from seawulf_constants import *
 
 def postprocessing_process(ensemble_id, state_abbr):
-    
     ensemble_filepath = f"results/ensemble_{ensemble_id}"
     PATH_WHITE = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_racial_group_WHITE.json"
     PATH_BLACK = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_racial_group_BLACK.json"
     PATH_ASIAN = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_racial_group_ASIAN.json"
     PATH_HISPANIC = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_racial_group_HISPANIC.json"
-
-    # PATH_URBAN = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_region_type_WHITE.json"
-    # PATH_SUBURBAN = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_region_type_WHITE.json"
-    # PATH_RURAL = f"{ensemble_filepath}/box_and_whisker_results_{state_abbr}_region_type_WHITE.json"
-
-    # TODO: paths for economic groups
-    
     race_json_files = []
     if state_abbr == "SC":
         with open(PATH_WHITE, 'r') as white_file:
@@ -39,29 +31,20 @@ def postprocessing_process(ensemble_id, state_abbr):
         race_json_files.append(black_json)  
         race_json_files.append(asian_json)
         race_json_files.append(hispanic_json) 
-
     combined_json = {
         "NAME" : race_json_files[0]['NAME'],
-        "ENSEMBLE_ID" : race_json_files[0]['ENSEMBLE_ID'],
-        "TOT_PLANS" : race_json_files[0]['TOT_PLANS'],
+        "ENSEMBLE_ID" : ensemble_id,
         "data": {}
     }
-
     for race_json_file in race_json_files:
         combined_json["data"][race_json_file["RACIAL_GROUP"]] = {
             "labels" : race_json_file["labels"],
             "data" : race_json_file["data"]
         }
-    
     finalized_json_str = json.dumps(combined_json, indent=4)
-    output_path = f"{ensemble_filepath}/racial_boxplots.json"
+    output_path = f"{ensemble_filepath}/racial_boxplots_{ensemble_id}.json"
     with open(output_path, 'w') as output_file:
             output_file.write(finalized_json_str)
-    
-    # finalized_racial_whisker_json_str = json.dumps(pathx, indent=4)
-    # finalized_path = f"results/ensemble_{ensemble_id}/box_and_whisker_results_{state_abbr}_racial_group_{racial_group.upper()}.json"
-    # with open(finalized_path, 'w') as json_file:
-    #     json_file.write(finalized_racial_whisker_json_str)
     return
 
 if __name__ == "__main__":

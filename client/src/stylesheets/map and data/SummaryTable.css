@@ -12,11 +12,13 @@
 .summary-table th, .summary-table td {
   border: 1px solid #ddd;
   padding: 8px;
+  font-size: 14px;
 }
 
 .summary-title {
   background-color: #f4f4f4;
   font-weight: bold;
+  font-size: 14px;
 }
 
 .summary-value {
