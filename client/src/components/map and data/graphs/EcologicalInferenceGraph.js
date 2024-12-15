@@ -10,14 +10,14 @@ export default function EcologicalInferenceGraph() {
     const [selectedEI, setSelectedEI] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
     const [regionType, setRegionType] = useState("ALL");
-    const [incomeGroup, setIncomeGroup] = useState("LOW");
+    const [economicGroup, setEconomicGroup] = useState("_0_35K");
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
 
     useEffect(() => {
         check_state();
-    },[selectedEI, racialGroup, regionType, incomeGroup]);
+    },[selectedEI, racialGroup, regionType, economicGroup]);
 
     useEffect(() => {
         console.log("race ei republican data:", republicanData);
@@ -36,6 +36,17 @@ export default function EcologicalInferenceGraph() {
         }
     }
 
+    const fetch_ei_economic = async (stateAbbreviation, economicGroup, regionType) => {
+        try{
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/ei-analysis/economics/${economicGroup}/${regionType}`);
+            const json = await response.json();
+            console.log("Ecological Inference Economical Data: ", json);
+            return json;
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
     const check_state = async () => {
         var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
         let response;
@@ -45,7 +56,8 @@ export default function EcologicalInferenceGraph() {
         }
         else if(selectedEI==="income"){
             //TODO
-            console.log("income ei for state,incomeGroup,regionType", stateAbbreviation, incomeGroup, regionType);
+            response = await fetch_ei_economic(stateAbbreviation, economicGroup, regionType);
+            console.log("income ei for state,economicGroup,regionType", stateAbbreviation, economicGroup, regionType);
         }
 
         console.log("RETRIEVE EI:", response);
@@ -178,32 +190,62 @@ export default function EcologicalInferenceGraph() {
                         <label>
                             <input
                                 type="radio"
-                                name="incomeGroup"
-                                value="LOW"
-                                checked={incomeGroup === "LOW"}
-                                onChange={(event) => setIncomeGroup(event.target.value)}
+                                name="economicGroup"
+                                value="_0_35K"
+                                checked={economicGroup === "_0_35K"}
+                                onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            Low
+                            0_35K
                         </label>
                         <label>
                             <input
                                 type="radio"
-                                name="incomeGroup"
-                                value="MIDDLE"
-                                checked={incomeGroup === "MIDDLE"}
-                                onChange={(event) => setIncomeGroup(event.target.value)}
+                                name="economicGroup"
+                                value="_35K_60K"
+                                checked={economicGroup === "_35K_60K"}
+                                onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            Middle
+                            35K_60K
                         </label>
                         <label>
                             <input
                                 type="radio"
-                                name="incomeGroup"
-                                value="HIGH"
-                                checked={incomeGroup === "HIGH"}
-                                onChange={(event) => setIncomeGroup(event.target.value)}
+                                name="economicGroup"
+                                value="_60K_100K"
+                                checked={economicGroup === "_60K_100K"}
+                                onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            High
+                            60K_100K
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="economicGroup"
+                                value="_100K_125K"
+                                checked={economicGroup === "_100K_125K"}
+                                onChange={(event) => setEconomicGroup(event.target.value)}
+                            />
+                            100K_125K
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="economicGroup"
+                                value="_125K_150K"
+                                checked={economicGroup === "_125K_150K"}
+                                onChange={(event) => setEconomicGroup(event.target.value)}
+                            />
+                            125K_150K
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="economicGroup"
+                                value="_150K_MORE"
+                                checked={economicGroup === "_150K_MORE"}
+                                onChange={(event) => setEconomicGroup(event.target.value)}
+                            />
+                            150K_MORE
                         </label>
                     </div>
                 </div>
