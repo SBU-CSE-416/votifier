@@ -1,0 +1,40 @@
+.districts-table-container {
+    width: 100%;
+}
+
+.districts-table {
+    text-align: left;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.districts-table-title {
+    background-color: #d3d3d3;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.districts-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.districts-table tr:hover td {
+    background-color: #f1f1f1; /* Apply hover effect only to table cells (td) */
+    cursor: pointer;
+}
+
+.districts-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+}
+
+.districts-table td {
+    font-size: 14px;
+    color: #555;
+}
+
+.districts-table tr.highlighted td{
+    background-color: #ebecff !important;
+}

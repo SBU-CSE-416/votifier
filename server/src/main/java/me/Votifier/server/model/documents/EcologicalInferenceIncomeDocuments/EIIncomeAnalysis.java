@@ -1,13 +1,14 @@
-package me.Votifier.server.model.documents.GinglesRacialDocuments;
+package me.Votifier.server.model.documents.EcologicalInferenceIncomeDocuments;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.Map;
-
-@Document(collection = "gingles_racial_data")
-public class GinglesRacialAnalysis {
+@Document(collection = "economic_ecological_inference_data")
+public class EIIncomeAnalysis {
+    public EIIncomeAnalysis() {
+        // No-args constructor
+    }
     @Id
     private String id;
 
@@ -16,19 +17,12 @@ public class GinglesRacialAnalysis {
 
     @Field("election")
     private String election;
-    
-    @Field("candidates")
-    private Map<String, String> candidates;
-    
 
     @Field("data")
-    private GinglesRacialData data;
-
-    @Field("lines")
-    private GinglesRacialLineData lines;
-    
+    private EIIncomeData data;
 
     //getters and setters
+
     public String getId() {
         return id;
     }
@@ -44,7 +38,7 @@ public class GinglesRacialAnalysis {
     public void setNAME(String NAME) {
         this.NAME = NAME;
     }
-
+    
     public String getElection() {
         return election;
     }
@@ -53,28 +47,13 @@ public class GinglesRacialAnalysis {
         this.election = election;
     }
 
-    public GinglesRacialData getData() {
+    public EIIncomeData getData() {
         return data;
     }
 
-    public void setData(GinglesRacialData data) {
+    public void setData(EIIncomeData data) {
         this.data = data;
     }
-
-    public Map<String, String> getCandidates() {
-        return candidates;
-    }
-
-    public void setCandidates(Map<String, String> candidates) {
-        this.candidates = candidates;
-    }
-    public GinglesRacialLineData getLines() {
-        return lines;
-    }
-
-    public void setLines(GinglesRacialLineData lines) {
-        this.lines = lines;
-    }
-
     
 }
+

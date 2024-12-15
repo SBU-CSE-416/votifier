@@ -1,18 +1,20 @@
-import RacialBarChart from "./graphs/RacialChart";
-import HistogramChart from "./graphs/StateSummaryBarChart";
 import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
-import EcologicalInferenceChart from "./graphs/EcologicalInferenceChart"
-import VotingGraph from "./graphs/VotingGraph";
-import MedianIncomeBoxPlot from "./graphs/MedianIncomeBoxPlot"
-import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
+import EcologicalInferenceGraph from "./graphs/EcologicalInferenceGraph";
 import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
 import "../../stylesheets/map and data/DataPg.css";
-import { useState } from "react";
-
+import { useState, useContext, useEffect } from "react";
+import { MapStoreContext } from "../../stores/MapStore";
+import DistrictsTable from "./graphs/DistrictsTable";
 
 export default function DataPg({ stateSummaryData }) {
+  const { store } = useContext(MapStoreContext);
   const [activeTab, setActiveTab] = useState("summary");
+  useEffect(() => {
+    if(activeTab!=="summary" || store.firstTabView !== "districtsTable"){
+      store.setSelectedDistrict(null);
+    }
+  }, [store.firstTabView, activeTab]);
   const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
     ([range, percentage]) => ({
       range: range.replace(/_/g, "-"), 
@@ -31,7 +33,7 @@ export default function DataPg({ stateSummaryData }) {
             className={`tab ${activeTab === "summary" ? "active" : ""}`}
             onClick={() => setActiveTab("summary")}
           >
-            Summary
+            {store.firstTabView === "summary" ? "Summary" : "Districts Table"}
           </div>
           <div
             className={`tab ${activeTab === "gingles" ? "active" : ""}`}
@@ -55,17 +57,31 @@ export default function DataPg({ stateSummaryData }) {
         <div className="data-charts-container">
           {activeTab === "summary" && (
             <div className="data-charts">
-              <StateSummaryBarChart
-                data={incomeDistributionData}
-                w={500}
-                h={250}
-                title={"Household Income Distribution"}
-              />
+              <label>
+                <span>Selected View</span>
+              </label>
+              <select
+                value={store.firstTabView}
+                onChange={(event) => store.setFirstTabView(event.target.value)}
+              >
+                <option value="summary">Summary</option>
+                <option value="districtsTable">Districts Table</option>
+              </select>
+              {store.firstTabView === "summary" ? 
+                <StateSummaryBarChart
+                  data={incomeDistributionData}
+                  w={500}
+                  h={250}
+                  title={"Household Income Distribution"}
+                /> : 
+                <DistrictsTable/>
+              }
             </div>
           )}
           {activeTab === "ensemble-data" && (
             <div className="data-charts">
               {/* <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} /> */}
+              <p>Coming Soon</p>
             </div>
           )}
           {activeTab === "gingles" && (
@@ -75,7 +91,9 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "ei-analysis" && (
             <div className="data-charts">
-              <h2>Coming Soon</h2>
+              <EcologicalInferenceGraph/>
+
+              {/* <EcologicalInferenceChart/> */}
             </div>
           )}
         </div>
