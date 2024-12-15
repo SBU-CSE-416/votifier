@@ -20,6 +20,7 @@ import com.alibaba.fastjson.serializer.SerializeConfig;
 import com.alibaba.fastjson.TypeReference;
 
 import me.Votifier.server.services.DataService;
+import me.Votifier.server.model.EconomicGroup;
 import me.Votifier.server.model.RacialGroup;
 import me.Votifier.server.model.StateAbbreviation;
 import me.Votifier.server.model.RegionType;
@@ -30,6 +31,7 @@ import me.Votifier.server.model.documents.GinglesIncomeDocuments.GinglesIncomeAn
 import me.Votifier.server.model.documents.GinglesRacialDocuments.GinglesRacialAnalysis;
 import me.Votifier.server.model.documents.GinglesRacialIncomeDocuments.GinglesRacialIncomeAnalysis;
 import me.Votifier.server.model.documents.EcologicalInferenceRacialDocuments.EIRacialAnalysis;
+import me.Votifier.server.model.documents.EcologicalInferenceIncomeDocuments.EIIncomeAnalysis;
 import me.Votifier.server.model.documents.StateSummary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
 
@@ -64,6 +66,10 @@ public class DataController {
     @GetMapping("/{stateAbbreviation}/ei-analysis/demographics/{racialGroup}/{regionType}")
     public ResponseEntity<Resource> getRacialEIAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation,@PathVariable("racialGroup") RacialGroup racialGroup, @PathVariable("regionType") RegionType regionType) {
         return gatherRacialEIAnalysisDataFromCache(stateAbbreviation,racialGroup, regionType);
+    }
+    @GetMapping("/{stateAbbreviation}/ei-analysis/economics/{economicGroup}/{regionType}")
+    public ResponseEntity<Resource> getIncomeEIAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation,@PathVariable("economicGroup") EconomicGroup economicGroup, @PathVariable("regionType") RegionType regionType) {
+        return gatherIncomeEIAnalysisDataFromCache(stateAbbreviation,economicGroup, regionType);
     }
     // @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
     // public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
@@ -319,6 +325,112 @@ public class DataController {
                     .body(resource);
         } catch (Exception e) {
             System.out.println("Error fetching or serializing ei racial analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired me.Votifier.server.model.repository.EIIncomeRepository eiIncomeRepository;
+
+    @Cacheable(value = "eiIncomeAnalysis", key = "#stateAbbreviation + '-' + #regionType.type")
+    public ResponseEntity<Resource> gatherIncomeEIAnalysisDataFromCache(StateAbbreviation stateAbbreviation, EconomicGroup economicGroup, RegionType regionType) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            EIIncomeAnalysis eiRacialAnalysis = null;
+            
+            String regionTypeName = regionType.getType();
+            System.out.println("Region Type: " + regionType.getType());
+
+            System.out.println("Income Group: " + economicGroup.getGroup());
+
+            System.out.println("State Name: " + stateName);
+
+            String economicGroupName = economicGroup.getGroup();
+            if (economicGroupName.equals("0_35K")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome0_35KByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome0_35KByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome0_35KByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome0_35KByNameAndUrban(stateName);
+                }
+            } else if (economicGroupName.equals("35K_60K")) {
+                if (regionTypeName.equals("ALL")) {
+                    System.out.println("Finding 35K_60K by All");
+                    eiRacialAnalysis = eiIncomeRepository.findIncome35K_60KByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome35K_60KByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome35K_60KByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome35K_60KByNameAndUrban(stateName);
+                }
+            } else if (economicGroupName.equals("60K_100K")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome60K_100KByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome60K_100KByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome60K_100KByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome60K_100KByNameAndUrban(stateName);
+                }
+            } else if (economicGroupName.equals("100K_125K")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome100K_125KByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome100K_125KByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome100K_125KByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome100K_125KByNameAndUrban(stateName);
+                }
+            } else if (economicGroupName.equals("125K_150K")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome125K_150KByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome125K_150KByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome125K_150KByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome125K_150KByNameAndUrban(stateName);
+                }
+            } else if (economicGroupName.equals("150K_MORE")) {
+                if (regionTypeName.equals("ALL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome150K_MOREByNameAndAll(stateName);
+                } else if (regionTypeName.equals("RURAL")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome150K_MOREByNameAndRural(stateName);
+                } else if (regionTypeName.equals("SUBURBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome150K_MOREByNameAndSuburban(stateName);
+                } else if (regionTypeName.equals("URBAN")) {
+                    eiRacialAnalysis = eiIncomeRepository.findIncome150K_MOREByNameAndUrban(stateName);
+                }
+            }
+            System.out.println("EI Racial Analysis: " + eiRacialAnalysis);
+            if (eiRacialAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            SerializeConfig config = new SerializeConfig();
+
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+
+            String jsonResponse = JSON.toJSONString(eiRacialAnalysis, config);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing ei income analysis: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
