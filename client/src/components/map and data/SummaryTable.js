@@ -9,9 +9,7 @@ const SummaryTable = ({ stateSummaryData }) => {
       key !== "poverty_LEVEL" &&
       key !== "native_AMERICAN_PERCENT" &&
       key !== "islander_PERCENT"
-
   );
-  console.log("filteredStateData: ", filteredStateData);
   const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {

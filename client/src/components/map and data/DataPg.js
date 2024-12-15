@@ -63,6 +63,7 @@ export default function DataPg({ stateSummaryData }) {
               <select
                 value={store.firstTabView}
                 onChange={(event) => store.setFirstTabView(event.target.value)}
+                style={{width:"30%"}}
               >
                 <option value="summary">Summary</option>
                 <option value="districtsTable">Districts Table</option>

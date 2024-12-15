@@ -125,6 +125,7 @@ export default function EcologicalInferenceGraph() {
                 <select
                     value={selectedEI}
                     onChange={(event) => setSelectedEI(event.target.value)}
+                    style={{width:"30%"}}
                 >
                     <option value="race">Racial Group</option>
                     <option value="income">Economic Group</option>

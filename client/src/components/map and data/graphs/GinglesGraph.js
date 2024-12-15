@@ -232,6 +232,7 @@ export default function GinglesGraph() {
                 <select 
                     value={selectedGingles} 
                     onChange={(event) => setSelectedGingles(event.target.value)}
+                    style={{width:"30%"}}
                 >
                     <option value="race">Precinct Race</option> 
                     <option value="income">Precinct Income</option>
