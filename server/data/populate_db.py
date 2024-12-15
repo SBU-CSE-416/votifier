@@ -387,3 +387,96 @@ collection.insert_one(md_economic_ecological_inference_data)
 
 print("Maryland Economic Ecological Inference data inserted")
 
+
+collection = db["economic_boxplots_data"]
+
+collection.delete_many({})
+
+sc_economic_boxplots_data_path = "seawulf/results/economic_boxplots_SC.json"
+
+with open(sc_economic_boxplots_data_path, 'r') as file:
+    sc_economic_boxplots_data = json.load(file)
+
+collection.insert_one(sc_economic_boxplots_data)
+
+print("South Carolina Economic Boxplots data inserted")
+
+md_economic_boxplots_data_path = "seawulf/results/economic_boxplots_MD.json"
+
+with open(md_economic_boxplots_data_path, 'r') as file:
+    md_economic_boxplots_data = json.load(file)
+
+collection.insert_one(md_economic_boxplots_data)
+
+print("Maryland Economic Boxplots data inserted")
+
+collection = db["racial_boxplots_data"]
+
+collection.delete_many({})
+
+sc_racial_boxplots_data_path = "seawulf/results/racial_boxplots_SC.json"
+
+with open(sc_racial_boxplots_data_path, 'r') as file:
+    sc_racial_boxplots_data = json.load(file)
+
+collection.insert_one(sc_racial_boxplots_data)
+
+print("South Carolina Racial Boxplots data inserted")
+
+md_racial_boxplots_data_path = "seawulf/results/racial_boxplots_MD.json"
+
+with open(md_racial_boxplots_data_path, 'r') as file:
+    md_racial_boxplots_data = json.load(file)
+
+collection.insert_one(md_racial_boxplots_data)
+
+print("Maryland Racial Boxplots data inserted")
+
+collection = db["region_type_boxplots_data"]
+
+collection.delete_many({})
+
+sc_region_type_boxplots_data_path = "seawulf/results/region_boxplots_SC.json"
+
+with open(sc_region_type_boxplots_data_path, 'r') as file:
+    sc_region_type_boxplots_data = json.load(file)
+
+collection.insert_one(sc_region_type_boxplots_data)
+
+print("South Carolina Region Type Boxplots data inserted")
+
+md_region_type_boxplots_data_path = "seawulf/results/region_boxplots_MD.json"
+
+with open(md_region_type_boxplots_data_path, 'r') as file:
+    md_region_type_boxplots_data = json.load(file)
+
+collection.insert_one(md_region_type_boxplots_data)
+
+print("Maryland Region Type Boxplots data inserted")
+
+collection = db["plan_splits_data"]
+
+collection.delete_many({})
+
+sc_plan_splits_data_path = "seawulf/results/splits_barchart_SC.json"
+
+with open(sc_plan_splits_data_path, 'r') as file:
+    sc_plan_splits_data = json.load(file)
+
+collection.insert_one(sc_plan_splits_data)
+
+
+print("South Carolina Plan Splits data inserted")
+
+md_plan_splits_data_path = "seawulf/results/splits_barchart_MD.json"
+
+with open(md_plan_splits_data_path, 'r') as file:
+    md_plan_splits_data = json.load(file)
+
+collection.insert_one(md_plan_splits_data)
+
+print("Maryland Plan Splits data inserted")
+
+
+
+
