@@ -32,6 +32,8 @@ import me.Votifier.server.model.documents.GinglesRacialDocuments.GinglesRacialAn
 import me.Votifier.server.model.documents.GinglesRacialIncomeDocuments.GinglesRacialIncomeAnalysis;
 import me.Votifier.server.model.documents.EcologicalInferenceRacialDocuments.EIRacialAnalysis;
 import me.Votifier.server.model.documents.EcologicalInferenceIncomeDocuments.EIIncomeAnalysis;
+
+import me.Votifier.server.model.documents.BoxplotRacialDocuments.BoxplotRacialAnalysis;
 import me.Votifier.server.model.documents.StateSummary;
 import me.Votifier.server.model.exceptions.UnknownFileException;
 
@@ -71,10 +73,10 @@ public class DataController {
     public ResponseEntity<Resource> getIncomeEIAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation,@PathVariable("economicGroup") EconomicGroup economicGroup, @PathVariable("regionType") RegionType regionType) {
         return gatherIncomeEIAnalysisDataFromCache(stateAbbreviation,economicGroup, regionType);
     }
-    // @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
-    // public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
-    //     return gatherBoxplotDataFromCache(stateAbbreviation, racialGroup);
-    // }
+    @GetMapping("/{stateAbbreviation}/boxplot/demographics/{racialGroup}")
+    public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
+        return gatherBoxplotRacialDataFromCache(stateAbbreviation, racialGroup);
+    }
     // @GetMapping("/{stateAbbreviation}/boxplot/economics/{economicGroup}")
     // public ResponseEntity<Resource> getBoxplotByEconomicGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("economciGroup") EconomicGroup economicGroup) {
     //     return gatherBoxplotDataFromCache(stateAbbreviation, economicGroup);
@@ -431,6 +433,51 @@ public class DataController {
 
         } catch (Exception e) {
             System.out.println("Error fetching or serializing ei income analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired me.Votifier.server.model.repository.BoxplotRacialRepository boxplotRacialRepository;
+    
+    @Cacheable(value = "boxplotRacialAnalysis", key = "#stateAbbreviation + '-' + #racialGroup.ginglesIdentifer")
+
+    public ResponseEntity<Resource> gatherBoxplotRacialDataFromCache(StateAbbreviation stateAbbreviation, RacialGroup racialGroup) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            String racialGroupName = racialGroup.getGinglesIdentifer();
+    
+            BoxplotRacialAnalysis boxplotRacialAnalysis = null;
+
+            if (racialGroupName.equals("WHITE")) {
+                boxplotRacialAnalysis = boxplotRacialRepository.findWhiteByName(stateName);
+            } else if (racialGroupName.equals("BLACK")) {
+                boxplotRacialAnalysis = boxplotRacialRepository.findBlackByName(stateName);
+            } else if (racialGroupName.equals("ASIAN")) {
+                boxplotRacialAnalysis = boxplotRacialRepository.findAsianByName(stateName);
+            }
+
+            if (boxplotRacialAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            SerializeConfig config = new SerializeConfig();
+
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+
+            String jsonResponse = JSON.toJSONString(boxplotRacialAnalysis, config);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing boxplot racial analysis: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
