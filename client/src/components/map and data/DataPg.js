@@ -71,8 +71,6 @@ export default function DataPg({ stateSummaryData }) {
               {store.firstTabView === "summary" ? 
                 <StateSummaryBarChart
                   data={incomeDistributionData}
-                  w={500}
-                  h={250}
                   title={"Household Income Distribution"}
                 /> : 
                 <DistrictsTable/>
@@ -93,8 +91,6 @@ export default function DataPg({ stateSummaryData }) {
           {activeTab === "ei-analysis" && (
             <div className="data-charts">
               <EcologicalInferenceGraph/>
-
-              {/* <EcologicalInferenceChart/> */}
             </div>
           )}
         </div>
