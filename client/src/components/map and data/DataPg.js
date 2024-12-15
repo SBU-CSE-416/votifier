@@ -1,11 +1,5 @@
-import RacialBarChart from "./graphs/RacialChart";
-import HistogramChart from "./graphs/StateSummaryBarChart";
 import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
-import EcologicalInferenceChart from "./graphs/EcologicalInferenceChart"
 import EcologicalInferenceGraph from "./graphs/EcologicalInferenceGraph";
-import VotingGraph from "./graphs/VotingGraph";
-import MedianIncomeBoxPlot from "./graphs/MedianIncomeBoxPlot"
-import IncomeRangeDensityChart from "./graphs/IncomeRangeDensityChart"
 import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
 import "../../stylesheets/map and data/DataPg.css";
@@ -98,6 +92,8 @@ export default function DataPg({ stateSummaryData }) {
           {activeTab === "ei-analysis" && (
             <div className="data-charts">
               <EcologicalInferenceGraph/>
+
+              {/* <EcologicalInferenceChart/> */}
             </div>
           )}
         </div>

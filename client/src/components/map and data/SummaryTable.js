@@ -6,7 +6,7 @@ const SummaryTable = ({ stateSummaryData }) => {
     ([key]) => key !== "house_HOLD_INCOME_DISTRIBUTION" && key !== "id"
   );
 
-  const maxColumnsPerTable = 6;
+  const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {
     splitData.push(filteredStateData.slice(i, i + maxColumnsPerTable));
@@ -27,10 +27,12 @@ const SummaryTable = ({ stateSummaryData }) => {
           </thead>
           <tbody>
             <tr>
-              {chunk.map(([_, value], colIndex) => (
+              {chunk.map(([key, value], colIndex) => (
                 <td key={colIndex} className="summary-value">
                   {typeof value === "number"
-                    ? value.toLocaleString() 
+                    ? key.includes("PERCENT")
+                      ? `${value.toLocaleString()}%`
+                      : value.toLocaleString()
                     : typeof value === "object"
                     ? JSON.stringify(value)
                     : value}
