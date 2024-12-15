@@ -17,6 +17,10 @@ public class BoxplotRacialEnsembleRace {
     @Field("ASIAN")
 
     private BoxplotRacialPlotData ASIAN;
+
+    @Field("HISPANIC")
+        
+    private BoxplotRacialPlotData HISPANIC;
     // Getters and Setters
 
     public BoxplotRacialPlotData getWHITE() {
@@ -31,5 +35,24 @@ public class BoxplotRacialEnsembleRace {
         return BLACK;
     }
 
+    public void setBLACK(BoxplotRacialPlotData BLACK) {
+        this.BLACK = BLACK;
+    }
+
+    public BoxplotRacialPlotData getASIAN() {
+        return ASIAN;
+    }
+
+    public void setASIAN(BoxplotRacialPlotData ASIAN) {
+        this.ASIAN = ASIAN;
+    }
+
+    public BoxplotRacialPlotData getHISPANIC() {
+        return HISPANIC;
+    }
+
+    public void setHISPANIC(BoxplotRacialPlotData HISPANIC) {
+        this.HISPANIC = HISPANIC;
+    }
     
 }
