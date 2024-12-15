@@ -200,7 +200,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_0_35K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            0-35K
+                            Below Poverty
                         </label>
                         <label>
                             <input
@@ -210,7 +210,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_35K_60K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            35K-60K
+                            Low Income
                         </label>
                         <label>
                             <input
@@ -220,8 +220,10 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_60K_100K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            60K-100K
+                            Lower Middle Income
                         </label>
+                    </div>
+                    <div>
                         <label>
                             <input
                                 type="radio"
@@ -230,7 +232,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_100K_125K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            100K-125K
+                            Middle Income
                         </label>
                         <label>
                             <input
@@ -240,7 +242,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_125K_150K"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            125K-150K
+                            Upper Middle Income
                         </label>
                         <label>
                             <input
@@ -250,7 +252,7 @@ export default function EcologicalInferenceGraph() {
                                 checked={economicGroup === "_150K_MORE"}
                                 onChange={(event) => setEconomicGroup(event.target.value)}
                             />
-                            150K+
+                            High Income
                         </label>
                     </div>
                 </div>

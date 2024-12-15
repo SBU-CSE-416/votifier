@@ -27,10 +27,12 @@ const SummaryTable = ({ stateSummaryData }) => {
           </thead>
           <tbody>
             <tr>
-              {chunk.map(([_, value], colIndex) => (
+              {chunk.map(([key, value], colIndex) => (
                 <td key={colIndex} className="summary-value">
                   {typeof value === "number"
-                    ? value.toLocaleString() 
+                    ? key.includes("PERCENT")
+                      ? `${value.toLocaleString()}%`
+                      : value.toLocaleString()
                     : typeof value === "object"
                     ? JSON.stringify(value)
                     : value}
