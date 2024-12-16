@@ -1,11 +1,12 @@
+import "../../stylesheets/map and data/DataPg.css";
+import { useState, useContext, useEffect } from "react";
+import { MapStoreContext } from "../../stores/MapStore";
 import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
 import EcologicalInferenceGraph from "./graphs/EcologicalInferenceGraph";
 import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
-import "../../stylesheets/map and data/DataPg.css";
-import { useState, useContext, useEffect } from "react";
-import { MapStoreContext } from "../../stores/MapStore";
 import DistrictsTable from "./graphs/DistrictsTable";
+import EnsemblePlansBoxWhisker from "./graphs/EnsemblePlansBoxWhisker";
 
 export default function DataPg({ stateSummaryData }) {
   const { store } = useContext(MapStoreContext);
@@ -63,6 +64,7 @@ export default function DataPg({ stateSummaryData }) {
               <select
                 value={store.firstTabView}
                 onChange={(event) => store.setFirstTabView(event.target.value)}
+                style={{width:"30%"}}
               >
                 <option value="summary">Summary</option>
                 <option value="districtsTable">Districts Table</option>
@@ -70,8 +72,6 @@ export default function DataPg({ stateSummaryData }) {
               {store.firstTabView === "summary" ? 
                 <StateSummaryBarChart
                   data={incomeDistributionData}
-                  w={500}
-                  h={250}
                   title={"Household Income Distribution"}
                 /> : 
                 <DistrictsTable/>
@@ -80,8 +80,7 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "ensemble-data" && (
             <div className="data-charts">
-              {/* <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} /> */}
-              <p>Coming Soon</p>
+              <EnsemblePlansBoxWhisker/>
             </div>
           )}
           {activeTab === "gingles" && (
@@ -92,8 +91,6 @@ export default function DataPg({ stateSummaryData }) {
           {activeTab === "ei-analysis" && (
             <div className="data-charts">
               <EcologicalInferenceGraph/>
-
-              {/* <EcologicalInferenceChart/> */}
             </div>
           )}
         </div>

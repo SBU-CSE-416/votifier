@@ -3,14 +3,45 @@ import "../../stylesheets/map and data/SummaryTable.css";
 import { formatVariable } from "../../utilities/ReformatVariableNamesUtil";
 const SummaryTable = ({ stateSummaryData }) => {
   const filteredStateData = Object.entries(stateSummaryData).filter(
-    ([key]) => key !== "house_HOLD_INCOME_DISTRIBUTION" && key !== "id"
+    ([key]) => 
+      key !== "house_HOLD_INCOME_DISTRIBUTION" && 
+      key !== "id" &&
+      key !== "poverty_LEVEL" &&
+      key !== "native_AMERICAN_PERCENT" &&
+      key !== "islander_PERCENT" &&
+      key !== "ensembles" &&
+      key !== "name"
   );
-
+  console.log("filteredStateData: ", filteredStateData);
   const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {
     splitData.push(filteredStateData.slice(i, i + maxColumnsPerTable));
   }
+  
+  console.log("ensemble", stateSummaryData.ensembles);
+  const ensembleTable = (ensembles) => {
+    return (
+      <table className="summary-table" style={{marginTop:"15px"}}>
+        <thead>
+          <tr className="summary-table-title">
+            <th>Ensemble Name</th>
+            <th>Plan Count</th>
+            <th>Equality Threshold</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(ensembles).map(([key, ensemble], index) => (
+            <tr key={index}>
+              <td>{ensemble.name}</td>
+              <td>{ensemble.plans}</td>
+              <td>{ensemble.mcmc_POP_EQUALITY_THRESHOLD}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
+  };
 
   return (
     <div className="summary-table-container">
@@ -42,6 +73,7 @@ const SummaryTable = ({ stateSummaryData }) => {
           </tbody>
         </table>
       ))}
+      {ensembleTable(stateSummaryData.ensembles)}
     </div>
   );
 };
