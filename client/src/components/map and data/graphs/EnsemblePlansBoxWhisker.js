@@ -10,6 +10,7 @@ export default function EnsemblePlansBoxWhisker(){
     const { store } = useContext(MapStoreContext);
     const [selectedEnsemble, setSelectedEnsemble] = useState("1");
     const [selectedDataType, setSelectedDataType] = useState("race");
+    const [selectedView, setSelectedView] = useState("box-whisker");
     const [racialGroup, setRacialGroup] = useState("WHITE");
     const [incomeGroup, setIncomeGroup] = useState("_0_35K");
     const [regionType, setRegionType] = useState("RURAL");
@@ -133,21 +134,35 @@ export default function EnsemblePlansBoxWhisker(){
                 </div>
 
                 <div className="box-plot-select-container" style={{marginBottom:"10px"}}>
-                    <label>Selected Data Option</label>
+                    <label>Selected View</label>
                     <select 
-                        value={selectedDataType}
-                        onChange={(event) => setSelectedDataType(event.target.value)}
+                        value={selectedView}
+                        onChange={(event) => setSelectedView(event.target.value)}
                         style={{width:"auto"}}
                     >
-                        <option value="race">Racial Data</option> 
-                        <option value="income">Economical Data</option>
-                        <option value="region">Regional Data</option>
+                        <option value="box-whisker">Box & Whisker Plot</option> 
+                        <option value="summary">Summary</option>
                     </select>
                 </div>
+
+                {selectedView === "box-whisker" && (
+                    <div className="box-plot-select-container" style={{marginBottom:"10px"}}>
+                        <label>Selected Data Option</label>
+                        <select 
+                            value={selectedDataType}
+                            onChange={(event) => setSelectedDataType(event.target.value)}
+                            style={{width:"auto"}}
+                        >
+                            <option value="race">Racial Data</option> 
+                            <option value="income">Economical Data</option>
+                            <option value="region">Regional Data</option>
+                        </select>
+                    </div>
+                )}
             </div>
 
-            <div className="box-plot-container">
-                {plotData ? (            
+            {selectedView === "box-whisker" && (            <div className="box-plot-container">
+                {plotData && (            
                     <Plot
                         data={[...plotData, dotData]}
                         layout={{
@@ -178,11 +193,12 @@ export default function EnsemblePlansBoxWhisker(){
                         }}
                         style={{width:"100%", height:"100%"}}
                     />
-                ) : null}
-            </div>
+                )}
+                </div>
+            )}
 
 
-            {selectedDataType==="race" &&
+            {( selectedView==="box-whisker" && selectedDataType==="race") &&
             <>
                 <div className="box-plot-select-container">
                     <label style={{fontWeight:"bold"}}>Racial Group</label>
@@ -233,7 +249,7 @@ export default function EnsemblePlansBoxWhisker(){
                 </div>
             </>}
 
-            {selectedDataType === "region" &&
+            {( selectedView==="box-whisker" && selectedDataType === "region") &&
             <>
                 <div className="box-plot-select-container">
                     <label style={{fontWeight:"bold"}}>Region Type</label>
@@ -273,7 +289,7 @@ export default function EnsemblePlansBoxWhisker(){
                 </div>
             </>}
 
-            {selectedDataType==="income" && (
+            {( selectedView==="box-whisker" && selectedDataType==="income") && (
                 <div className="select-container">
                     <label style={{fontWeight:"bold"}}>Economic Group</label>
                     <div>
