@@ -1,6 +1,6 @@
 .summary-table-container {
-  margin: 20px;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .summary-table {
@@ -11,7 +11,7 @@
 
 .summary-table th, .summary-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 7px;
   font-size: 14px;
 }
 
