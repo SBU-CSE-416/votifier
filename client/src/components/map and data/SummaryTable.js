@@ -9,7 +9,8 @@ const SummaryTable = ({ stateSummaryData }) => {
       key !== "poverty_LEVEL" &&
       key !== "native_AMERICAN_PERCENT" &&
       key !== "islander_PERCENT" &&
-      key !== "ensembles"
+      key !== "ensembles" &&
+      key !== "name"
   );
   console.log("filteredStateData: ", filteredStateData);
   const maxColumnsPerTable = 8;
@@ -24,9 +25,9 @@ const SummaryTable = ({ stateSummaryData }) => {
       <table className="summary-table" style={{marginTop:"15px"}}>
         <thead>
           <tr className="summary-table-title">
-            <th>Ensemble</th>
-            <th>Plans</th>
-            <th>MCMC Population Equality Threshold</th>
+            <th>Ensemble Name</th>
+            <th>Plan Count</th>
+            <th>Equality Threshold</th>
           </tr>
         </thead>
         <tbody>
