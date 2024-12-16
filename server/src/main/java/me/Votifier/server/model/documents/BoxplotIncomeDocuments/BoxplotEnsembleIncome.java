@@ -67,5 +67,13 @@ public class BoxplotEnsembleIncome {
     public void set_125K_150K(BoxplotIncomePlotData _125K_150K) {
         this._125K_150K = _125K_150K;
     }
+
+    public BoxplotIncomePlotData get_150K_MORE() {
+        return _150K_MORE;
+    }
+
+    public void set_150K_MORE(BoxplotIncomePlotData _150K_MORE) {
+        this._150K_MORE = _150K_MORE;
+    }
    
 }

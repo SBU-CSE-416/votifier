@@ -32,6 +32,7 @@ import me.Votifier.server.model.documents.GinglesRacialDocuments.GinglesRacialAn
 import me.Votifier.server.model.documents.GinglesRacialIncomeDocuments.GinglesRacialIncomeAnalysis;
 import me.Votifier.server.model.documents.EcologicalInferenceRacialDocuments.EIRacialAnalysis;
 import me.Votifier.server.model.documents.EcologicalInferenceIncomeDocuments.EIIncomeAnalysis;
+import  me.Votifier.server.model.documents.PlanSplitsDocuments.PlanSplitsAnalysis;
 
 import me.Votifier.server.model.documents.BoxplotRacialDocuments.BoxplotRacialAnalysis;
 import me.Votifier.server.model.documents.StateSummary;
@@ -94,6 +95,11 @@ public class DataController {
     @GetMapping("/{stateAbbreviation}/gingles/economic/{regionType}")
     public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable(value = "regionType") RegionType regionType) {
         return gatherGinglesIncomeDataFromCache(stateAbbreviation, regionType);
+    }
+
+    @GetMapping("/{stateAbbreviation}/plansplits")
+    public ResponseEntity<Resource> getPlanSplits(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
+        return gatherPlanSplitsDataFromCache(stateAbbreviation);
     }
 
     @Autowired
@@ -587,6 +593,36 @@ public class DataController {
                     .body(resource);
         } catch (Exception e) {
             System.out.println("Error fetching or serializing boxplot region analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired me.Votifier.server.model.repository.PlanSplitsRepository planSplitsRepository;
+
+    @Cacheable(value = "planSplits", key = "#stateAbbreviation")
+
+    public ResponseEntity<Resource> gatherPlanSplitsDataFromCache(StateAbbreviation stateAbbreviation) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            
+            PlanSplitsAnalysis planSplitsAnalysis = planSplitsRepository.findByNameAndRace(stateName);
+
+            System.out.println("Plan Splits Analysis: " + planSplitsAnalysis);
+
+            if (planSplitsAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+
+            String jsonResponse = JSON.toJSONString(planSplitsAnalysis);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing plan splits analysis: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
