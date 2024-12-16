@@ -66,7 +66,7 @@ export default function DistrictsTable(){
                             <td>{district.CONG_DIST}</td>
                             <td>{district.REPRESENTATIVE}</td>
                             <td>{district.PARTY}</td>
-                            <td>{district.AVERAGE_HOUSEHOLD_INCOME.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
+                            <td>{district.AVERAGE_HOUSEHOLD_INCOME.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                             <td>{district.DEM_PERCENT}%</td>
                             <td>{district.REP_PERCENT}%</td>
                             <td>{district.PERCENT_BELOW_POVERTY}%</td>
