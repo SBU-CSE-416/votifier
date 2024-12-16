@@ -1,0 +1,19 @@
+.box-plot-select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.box-plot-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 360px;
+}
+
+.box-plot-container h2,
+.box-plot-container p {
+    margin: 0;
+    padding: 0;
+}
