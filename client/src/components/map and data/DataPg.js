@@ -1,10 +1,10 @@
+import "../../stylesheets/map and data/DataPg.css";
+import { useState, useContext, useEffect } from "react";
+import { MapStoreContext } from "../../stores/MapStore";
 import StateSummaryBarChart from "./graphs/StateSummaryBarChart";
 import EcologicalInferenceGraph from "./graphs/EcologicalInferenceGraph";
 import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
-import "../../stylesheets/map and data/DataPg.css";
-import { useState, useContext, useEffect } from "react";
-import { MapStoreContext } from "../../stores/MapStore";
 import DistrictsTable from "./graphs/DistrictsTable";
 
 export default function DataPg({ stateSummaryData }) {
@@ -79,7 +79,6 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "ensemble-data" && (
             <div className="data-charts">
-              {/* <MedianIncomeBoxPlot w={400} h={200} title={"Median Income Distribution"} /> */}
               <p>Coming Soon</p>
             </div>
           )}
