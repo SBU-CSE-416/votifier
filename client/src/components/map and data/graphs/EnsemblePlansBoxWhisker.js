@@ -164,7 +164,7 @@ export default function EnsemblePlansBoxWhisker(){
                         },
                         legend: { 
                             orientation: "h" ,
-                            y:1.05, // Puts the legend above the box plot
+                            y:1.05,
                         },
                         margin:{
                             t:50,
@@ -173,6 +173,8 @@ export default function EnsemblePlansBoxWhisker(){
                         config={{
                             displayModeBar: false,
                             useResizeHandler: true,
+                            responsive: true,
+                            staticPlot: true,
                         }}
                         style={{width:"100%", height:"100%"}}
                     />
