@@ -74,7 +74,7 @@ export default function EnsemblePlansBoxWhisker(){
                 median: ensembleData.data[key].MEDIAN,
                 q3: ensembleData.data[key].UPPER_QUARTILE_Q3,
                 max: ensembleData.data[key].MAX,
-                outliers: [ensembleData.data[key]._2022_DOT_VALUE],
+                outliers: ensembleData.data[key]._2022_DOT_VALUE,
             }));
             setBoxWhiskerData(formattedData);
             setOptionsData(ensembleData.labels);
@@ -85,7 +85,7 @@ export default function EnsemblePlansBoxWhisker(){
         
     };
 
-    const plotData = boxWhiskerData.map((entry) => ({
+    const plotData = boxWhiskerData?.map((entry) => ({
         type: "box",
         name: entry.name,
         y: [
@@ -94,11 +94,9 @@ export default function EnsemblePlansBoxWhisker(){
           entry.median,
           entry.q3,
           entry.max,
-          ...entry.outliers,
+          entry.outliers,
         ],
-        boxpoints: "all",
-        jitter: 0.3,
-        pointpos: -1.8,
+        boxpoints: "outliers",
     }));
     
 
@@ -117,22 +115,24 @@ export default function EnsemblePlansBoxWhisker(){
                 </select>
             </div>
 
-            <Plot
-                data={plotData}
-                layout={{
-                width: 800,
-                height: 600,
-                title: optionsData?.title || "Box and Whisker Plot",
-                xaxis: {
-                    title: optionsData?.axisX || "Bucket Index",
-                    tickvals: optionsData?.axisXTicks,
-                },
-                yaxis: {
-                    title: optionsData?.axisY || "Value",
-                    tickvals: optionsData?.axisYTicks,
-                },
-                }}
-            />
+            {plotData ? (            
+                <Plot
+                    data={plotData}
+                    layout={{
+                    width: "80%",
+                    height: "70%",
+                    title: optionsData?.title,
+                    xaxis: {
+                        title: optionsData?.axisX,
+                        tickvals: optionsData?.axisXTicks,
+                    },
+                    yaxis: {
+                        title: optionsData?.axisY,
+                        tickvals: optionsData?.axisYTicks,
+                    },
+                    }}
+                />
+            ) : null}
 
 
             {selectedDataType==="race" ? 
