@@ -77,10 +77,19 @@ public class DataController {
     public ResponseEntity<Resource> getBoxplotByRacialGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("racialGroup") RacialGroup racialGroup) {
         return gatherBoxplotRacialDataFromCache(stateAbbreviation, racialGroup);
     }
-    // @GetMapping("/{stateAbbreviation}/boxplot/economics/{economicGroup}")
-    // public ResponseEntity<Resource> getBoxplotByEconomicGroup(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable("economciGroup") EconomicGroup economicGroup) {
-    //     return gatherBoxplotDataFromCache(stateAbbreviation, economicGroup);
-    // }
+    @GetMapping("/{stateAbbreviation}/boxplot/economics/{economicGroup}")
+    public ResponseEntity<Resource> getBoxplotByEconomicGroup(
+        @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation,
+        @PathVariable("economicGroup") EconomicGroup economicGroup) {
+        return gatherBoxplotEconomicDataFromCache(stateAbbreviation, economicGroup);
+    }
+
+    @GetMapping("/{stateAbbreviation}/boxplot/region_type/{regionType}")
+    public ResponseEntity<Resource> getBoxplotByRegionType(
+        @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation,
+        @PathVariable(value = "regionType") RegionType regionType) {
+        return gatherBoxplotRegionDataFromCache(stateAbbreviation, regionType);
+    }
 
     @GetMapping("/{stateAbbreviation}/gingles/economic/{regionType}")
     public ResponseEntity<Resource> getGinglesIncomeAnalysisByRegionType(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, @PathVariable(value = "regionType") RegionType regionType) {
@@ -478,6 +487,106 @@ public class DataController {
                     .body(resource);
         } catch (Exception e) {
             System.out.println("Error fetching or serializing boxplot racial analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired me.Votifier.server.model.repository.BoxplotIncomeRepository boxplotIncomeRepository;
+
+    @Cacheable(value = "boxplotIncomeAnalysis", key = "#stateAbbreviation + '-' + #economicGroup.group")
+
+    public ResponseEntity<Resource> gatherBoxplotEconomicDataFromCache(StateAbbreviation stateAbbreviation, EconomicGroup economicGroup) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            String economicGroupName = economicGroup.getGroup();
+            
+            System.out.println("Economic Group: " + economicGroupName);
+
+            me.Votifier.server.model.documents.BoxplotIncomeDocuments.BoxplotIncomeAnalysis boxplotIncomeAnalysis = null;
+
+            if (economicGroupName.equals("0_35K")) {
+                boxplotIncomeAnalysis = boxplotIncomeRepository.findIncome0_35KByName(stateName);
+            } else if (economicGroupName.equals("35K_60K")) {
+                boxplotIncomeAnalysis = boxplotIncomeRepository.findIncome35K_60KByName(stateName);
+            } else if (economicGroupName.equals("60K_100K")) {
+                boxplotIncomeAnalysis = boxplotIncomeRepository.findIncome60K_100KByName(stateName);
+            } else if (economicGroupName.equals("100K_125K")) {
+                boxplotIncomeAnalysis = boxplotIncomeRepository.findIncome100K_125KByName(stateName);
+            } else if (economicGroupName.equals("125K_150K")) {
+                boxplotIncomeAnalysis = boxplotIncomeRepository.findIncome125K_150KByName(stateName);
+            } else if (economicGroupName.equals("150K_MORE")) {
+                boxplotIncomeAnalysis = boxplotIncomeRepository.findIncome150K_MOREByName(stateName);
+            }
+
+            if (boxplotIncomeAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            SerializeConfig config = new SerializeConfig();
+
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+
+            String jsonResponse = JSON.toJSONString(boxplotIncomeAnalysis, config);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing boxplot income analysis: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired me.Votifier.server.model.repository.BoxplotRegionRepository boxplotRegionRepository;
+
+    @Cacheable(value = "boxplotRegionAnalysis", key = "#stateAbbreviation + '-' + #regionType.type")
+
+    public ResponseEntity<Resource> gatherBoxplotRegionDataFromCache(StateAbbreviation stateAbbreviation, RegionType regionType) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            String regionTypeName = regionType.getType();
+            
+            System.out.println("Region Type: " + regionTypeName);
+
+            me.Votifier.server.model.documents.BoxplotRegionDocuments.BoxplotRegionAnalysis boxplotRegionAnalysis = null;
+
+            if (regionTypeName.equals("RURAL")) {
+                boxplotRegionAnalysis = boxplotRegionRepository.findRURALByName(stateName);
+            } else if (regionTypeName.equals("SUBURBAN")) {
+                boxplotRegionAnalysis = boxplotRegionRepository.findSUBURBANByName(stateName);
+            } else if (regionTypeName.equals("URBAN")) {
+                boxplotRegionAnalysis = boxplotRegionRepository.findURBANByName(stateName);
+            }
+
+            if (boxplotRegionAnalysis == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            SerializeConfig config = new SerializeConfig();
+
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+
+            String jsonResponse = JSON.toJSONString(boxplotRegionAnalysis, config);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception e) {
+            System.out.println("Error fetching or serializing boxplot region analysis: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
