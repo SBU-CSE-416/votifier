@@ -119,7 +119,7 @@ export default function EnsemblePlansBoxWhisker(){
                 <Plot
                     data={plotData}
                     layout={{
-                    width: "80%",
+                    width: "65%",
                     height: "70%",
                     title: optionsData?.title,
                     xaxis: {

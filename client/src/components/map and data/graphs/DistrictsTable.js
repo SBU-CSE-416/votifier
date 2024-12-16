@@ -47,7 +47,7 @@ export default function DistrictsTable(){
                         <th>District</th>
                         <th>Representative</th>
                         <th>Party</th>
-                        <th>Avg Household Income</th>
+                        <th>Average Household Income</th>
                         <th>Democratic %</th>
                         <th>Republican %</th>
                         <th>% Below Poverty</th>
@@ -66,7 +66,7 @@ export default function DistrictsTable(){
                             <td>{district.CONG_DIST}</td>
                             <td>{district.REPRESENTATIVE}</td>
                             <td>{district.PARTY}</td>
-                            <td>{district.AVERAGE_HOUSEHOLD_INCOME}</td>
+                            <td>{district.AVERAGE_HOUSEHOLD_INCOME.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</td>
                             <td>{district.DEM_PERCENT}%</td>
                             <td>{district.REP_PERCENT}%</td>
                             <td>{district.PERCENT_BELOW_POVERTY}%</td>
