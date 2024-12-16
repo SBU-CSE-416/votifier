@@ -125,6 +125,7 @@ export default function EcologicalInferenceGraph() {
                 <select
                     value={selectedEI}
                     onChange={(event) => setSelectedEI(event.target.value)}
+                    style={{width:"30%"}}
                 >
                     <option value="race">Racial Group</option>
                     <option value="income">Economic Group</option>
@@ -143,7 +144,7 @@ export default function EcologicalInferenceGraph() {
 
             {selectedEI==="race" && (
                 <div className="select-container">
-                    <label>Racial Group</label>
+                    <label style={{fontWeight:"bold"}}>Racial Group</label>
                     <div>
                         <label>
                             <input
@@ -190,7 +191,7 @@ export default function EcologicalInferenceGraph() {
             )}
             {selectedEI==="income" && (
                 <div className="select-container">
-                    <label>Economic Group</label>
+                    <label style={{fontWeight:"bold"}}>Economic Group</label>
                     <div>
                         <label>
                             <input
@@ -259,7 +260,7 @@ export default function EcologicalInferenceGraph() {
             )}
 
             <div className="select-container">
-                <label>Region Type</label>
+                <label style={{fontWeight:"bold"}}>Region Type</label>
                 <div>
                     <label>
                         <input 

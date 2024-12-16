@@ -1,13 +1,13 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-const HistogramChart = ({ data, w = 1000, h = 500, title = "Title Needed" }) => (
+const HistogramChart = ({ data, title = "Title Needed" }) => (
   
-  <div style={{ margin: '30px' }}>
+  <div style={{ margin: '30px', width:"100%", height:"100%"}}>
     <h2 style={{ textAlign: 'center', marginBottom: '10px', fontFamily: 'Arial, sans-serif', color: '#333' }}>
       {title}
     </h2>
-    <ResponsiveContainer width={w} height={h}>
+    <ResponsiveContainer width={"90%"} height={"70%"}>
       <BarChart data={data} barCategoryGap="20%">
         <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
         <XAxis 

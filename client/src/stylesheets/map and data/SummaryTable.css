@@ -1,24 +1,26 @@
 .summary-table-container {
-  margin: 20px;
+  display:flex;
+  flex-direction: column;
   overflow-x: auto;
+  align-items:center;
+  justify-content: center;
 }
 
 .summary-table {
-  width: 100%;
+  width: auto;
   border-collapse: collapse;
   text-align: left;
 }
 
 .summary-table th, .summary-table td {
   border: 1px solid #ddd;
-  padding: 8px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .summary-title {
   background-color: #f4f4f4;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .summary-value {

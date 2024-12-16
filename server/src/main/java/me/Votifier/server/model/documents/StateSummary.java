@@ -18,8 +18,6 @@ public class StateSummary {
     private double BLACK_PERCENT;
     private double HISPANIC_PERCENT;
     private double ASIAN_PERCENT;
-    private double NATIVE_AMERICAN_PERCENT;
-    private double ISLANDER_PERCENT;
     private double OTHER_RACE_PERCENT;
 
     private double TOTAL_VOTES;
@@ -36,7 +34,8 @@ public class StateSummary {
     private double SUBURBAN_PERCENT;
     private double URBAN_PERCENT;
 
-    private double POVERTY_LEVEL;
+    private Map<String, EnsemblesStateSummary> ENSEMBLES;
+    
 
     // Getters and setters
 
@@ -93,22 +92,6 @@ public class StateSummary {
 
     public void setASIAN_PERCENT(double ASIAN_PERCENT) {
         this.ASIAN_PERCENT = ASIAN_PERCENT;
-    }
-
-    public double getNATIVE_AMERICAN_PERCENT() {
-        return NATIVE_AMERICAN_PERCENT;
-    }
-
-    public void setNATIVE_AMERICAN_PERCENT(double NATIVE_AMERICAN_PERCENT) {
-        this.NATIVE_AMERICAN_PERCENT = NATIVE_AMERICAN_PERCENT;
-    }
-
-    public double getISLANDER_PERCENT() {
-        return ISLANDER_PERCENT;
-    }
-
-    public void setISLANDER_PERCENT(double ISLANDER_PERCENT) {
-        this.ISLANDER_PERCENT = ISLANDER_PERCENT;
     }
 
     public double getOTHER_RACE_PERCENT() {
@@ -199,12 +182,12 @@ public class StateSummary {
         this.URBAN_PERCENT = URBAN_PERCENT;
     }
 
-    public double getPOVERTY_LEVEL() {
-        return POVERTY_LEVEL;
+    public Map<String, EnsemblesStateSummary> getENSEMBLES() {
+        return ENSEMBLES;
     }
 
-    public void setPOVERTY_LEVEL(double POVERTY_LEVEL) {
-        this.POVERTY_LEVEL = POVERTY_LEVEL;
+    public void setENSEMBLES(Map<String, EnsemblesStateSummary> ENSEMBLES) {
+        this.ENSEMBLES = ENSEMBLES;
     }
 }
 

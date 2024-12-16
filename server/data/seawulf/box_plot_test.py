@@ -10,7 +10,7 @@ def is_sequential(lst):
 
 def plot_chart(race, state):
     # Load the JSON data from a file
-  file_path = f"results/ensemble_3/box_and_whisker_results_{state}_racial_group_{race}.json"  # Replace with your JSON file path
+  file_path = f"box_and_whisker_results_{state}_racial_group_{race}.json"  # Replace with your JSON file path
   with open(file_path, "r") as file:
       json_data = json.load(file)
 
