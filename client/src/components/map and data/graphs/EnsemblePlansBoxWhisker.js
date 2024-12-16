@@ -329,6 +329,16 @@ export default function EnsemblePlansBoxWhisker(){
                             />
                             Upper Middle Income
                         </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="incomeGroup"
+                                value="_150K_MORE"
+                                checked={incomeGroup === "_150K_MORE"}
+                                onChange={(event) => setIncomeGroup(event.target.value)}
+                            />
+                            High Income
+                        </label>
                     </div>
                 </div>
             )}
