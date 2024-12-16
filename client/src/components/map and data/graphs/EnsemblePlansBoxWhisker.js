@@ -74,7 +74,7 @@ export default function EnsemblePlansBoxWhisker(){
         console.log("RETRIEVED ENSEMBLE DATA:",ensembleData);
         
         if (response && ensembleData){
-            const formattedData = Object.keys(ensembleData.data).map((key) => ({
+            const formattedData = Object.keys(ensembleData.data).map((key,index) => ({
                 name: `Bucket ${key}`,
                 min: ensembleData.data[key].MIN,
                 q1: ensembleData.data[key].LOWER_QUARTILE_Q1,
@@ -82,6 +82,7 @@ export default function EnsemblePlansBoxWhisker(){
                 q3: ensembleData.data[key].UPPER_QUARTILE_Q3,
                 max: ensembleData.data[key].MAX,
                 dot: ensembleData.data[key]._2022_DOT_VALUE,
+                index: index+1,
             }));
             setBoxWhiskerData(formattedData);
             setOptionsData(ensembleData.labels);
@@ -95,6 +96,7 @@ export default function EnsemblePlansBoxWhisker(){
     const plotData = boxWhiskerData?.map((entry) => ({
         type: "box",
         name: entry.name,
+        x: Array(5).fill(entry.index),
         y: [
           entry.min,
           entry.q1,
@@ -108,7 +110,7 @@ export default function EnsemblePlansBoxWhisker(){
     const dotData = {
         type: "scatter",
         mode: "markers",
-        x: boxWhiskerData?.map((entry) => entry.name),
+        x: boxWhiskerData?.map((entry) => entry.index),
         y: boxWhiskerData?.map((entry) => entry.dot),
         marker: { color: "red", size: 8 },
         name: "2022 Enacted Plan",
@@ -153,7 +155,8 @@ export default function EnsemblePlansBoxWhisker(){
                         title: optionsData?.title,
                         xaxis: {
                             title: optionsData?.axisX,
-                            tickvals: optionsData?.axisXTicks,
+                            tickvals: boxWhiskerData?.map((entry) => entry.index),
+                            ticktext: boxWhiskerData?.map((entry) => entry.index),
                         },
                         yaxis: {
                             title: optionsData?.axisY,
