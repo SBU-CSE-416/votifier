@@ -11,7 +11,7 @@ export default function EnsemblePlansBoxWhisker(){
     const [selectedEnsemble, setSelectedEnsemble] = useState("1");
     const [selectedDataType, setSelectedDataType] = useState("race");
     const [racialGroup, setRacialGroup] = useState("WHITE");
-    const [incomeGroup, setIncomeGroup] = useState("LOW");
+    const [incomeGroup, setIncomeGroup] = useState("_0_35K");
     const [regionType, setRegionType] = useState("RURAL");
     const [boxWhiskerData, setBoxWhiskerData] = useState(null);
     const [optionsData, setOptionsData] = useState(null);
@@ -32,7 +32,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_income = async (stateAbbreviation, incomeGroup) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/economic/${incomeGroup}`);
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/economics/${incomeGroup}`);
             const json = await response.json();
             console.log("boxplot income data:",json);
             return json;
@@ -43,7 +43,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_region = async (stateAbbreviation, regionType) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/region/${regionType}`);
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/region_type/${regionType}`);
             const json = await response.json();
             console.log("boxplot region data:",json);
             return json;
@@ -182,7 +182,7 @@ export default function EnsemblePlansBoxWhisker(){
             </div>
 
 
-            {selectedDataType==="race" ? 
+            {selectedDataType==="race" &&
             <>
                 <div className="box-plot-select-container">
                     <label style={{fontWeight:"bold"}}>Racial Group</label>
@@ -231,24 +231,13 @@ export default function EnsemblePlansBoxWhisker(){
                         </> : null}
                     </div>
                 </div>
-            </>
-            : null}
+            </>}
 
-            {selectedDataType === "region" ? 
+            {selectedDataType === "region" &&
             <>
                 <div className="box-plot-select-container">
                     <label style={{fontWeight:"bold"}}>Region Type</label>
                     <div>
-                        <label>
-                            <input 
-                                type="radio" 
-                                name="regionType" 
-                                value="ALL" 
-                                checked={regionType === "ALL"} 
-                                onChange={(event) => setRegionType(event.target.value)} 
-                            />
-                            All
-                        </label>
                         <label>
                             <input 
                                 type="radio" 
@@ -282,8 +271,67 @@ export default function EnsemblePlansBoxWhisker(){
                     </div>
 
                 </div>
-            </>
-            : null}
+            </>}
+
+            {selectedDataType==="income" && (
+                <div className="select-container">
+                    <label style={{fontWeight:"bold"}}>Economic Group</label>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                name="incomeGroup"
+                                value="_0_35K"
+                                checked={incomeGroup === "_0_35K"}
+                                onChange={(event) => setIncomeGroup(event.target.value)}
+                            />
+                            Below Poverty
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="incomeGroup"
+                                value="_35K_60K"
+                                checked={incomeGroup === "_35K_60K"}
+                                onChange={(event) => setIncomeGroup(event.target.value)}
+                            />
+                            Low Income
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="incomeGroup"
+                                value="_60K_100K"
+                                checked={incomeGroup === "_60K_100K"}
+                                onChange={(event) => setIncomeGroup(event.target.value)}
+                            />
+                            Lower Middle Income
+                        </label>
+                    </div>
+                    <div>
+                        <label>
+                            <input
+                                type="radio"
+                                name="incomeGroup"
+                                value="_100K_125K"
+                                checked={incomeGroup === "_100K_125K"}
+                                onChange={(event) => setIncomeGroup(event.target.value)}
+                            />
+                            Middle Income
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="incomeGroup"
+                                value="_125K_150K"
+                                checked={incomeGroup === "_125K_150K"}
+                                onChange={(event) => setIncomeGroup(event.target.value)}
+                            />
+                            Upper Middle Income
+                        </label>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
