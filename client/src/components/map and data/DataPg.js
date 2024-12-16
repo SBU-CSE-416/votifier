@@ -6,6 +6,7 @@ import EcologicalInferenceGraph from "./graphs/EcologicalInferenceGraph";
 import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
 import DistrictsTable from "./graphs/DistrictsTable";
+import EnsemblePlansBoxWhisker from "./graphs/EnsemblePlansBoxWhisker";
 
 export default function DataPg({ stateSummaryData }) {
   const { store } = useContext(MapStoreContext);
@@ -79,7 +80,7 @@ export default function DataPg({ stateSummaryData }) {
           )}
           {activeTab === "ensemble-data" && (
             <div className="data-charts">
-              <p>Coming Soon</p>
+              <EnsemblePlansBoxWhisker/>
             </div>
           )}
           {activeTab === "gingles" && (

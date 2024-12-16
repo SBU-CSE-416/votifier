@@ -10,7 +10,7 @@ export MAVEN_HOME=/c/Program\ Files/Maven/apache-maven-3.9.9
 ```
 
 ### Client Side
-- cd into client directory, install dependencies: `npm install`, `npm install react-chartjs-2 chart.js`, `npm install d3`
+- cd into client directory, install dependencies: `npm install`, `npm install react-chartjs-2 chart.js`, `npm install d3`, `npm install chart.js chartjs-chart-box-and-violin-plot`
 
 ### Server Side
 - cd into server directory, install dependencies:
