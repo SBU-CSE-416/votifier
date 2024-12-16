@@ -69,12 +69,13 @@ export default function EnsemblePlansBoxWhisker(){
         
         if (response && ensembleData){
             const formattedData = Object.keys(ensembleData.data).map((key) => ({
+                name: `Bucket ${key}`,
                 min: ensembleData.data[key].MIN,
                 q1: ensembleData.data[key].LOWER_QUARTILE_Q1,
                 median: ensembleData.data[key].MEDIAN,
                 q3: ensembleData.data[key].UPPER_QUARTILE_Q3,
                 max: ensembleData.data[key].MAX,
-                outliers: ensembleData.data[key]._2022_DOT_VALUE,
+                dot: ensembleData.data[key]._2022_DOT_VALUE,
             }));
             setBoxWhiskerData(formattedData);
             setOptionsData(ensembleData.labels);
@@ -94,10 +95,18 @@ export default function EnsemblePlansBoxWhisker(){
           entry.median,
           entry.q3,
           entry.max,
-          entry.outliers,
         ],
-        boxpoints: "outliers",
+        showlegend: false,
     }));
+
+    const dotData = {
+        type: "scatter",
+        mode: "markers",
+        x: boxWhiskerData?.map((entry) => entry.name),
+        y: boxWhiskerData?.map((entry) => entry.dot),
+        marker: { color: "red", size: 8 },
+        name: "2022 Enacted Plan", // Single legend item for all dots
+    };
     
 
     return (
@@ -117,7 +126,7 @@ export default function EnsemblePlansBoxWhisker(){
 
             {plotData ? (            
                 <Plot
-                    data={plotData}
+                    data={[...plotData, dotData]}
                     layout={{
                     width: "65%",
                     height: "70%",
@@ -130,6 +139,13 @@ export default function EnsemblePlansBoxWhisker(){
                         title: optionsData?.axisY,
                         tickvals: optionsData?.axisYTicks,
                     },
+                    legend: { 
+                        orientation: "h" ,
+                        y:1.1,
+                    },
+                    }}
+                    config={{
+                        displayModeBar: false,
                     }}
                 />
             ) : null}
