@@ -4,6 +4,9 @@ import { formatVariable } from "../../../utilities/ReformatVariableNamesUtil";
 import { stateCodeMapping } from "../../../utilities/FederalInfomationProcessingStandardEnumUtil";
 import "../../../stylesheets/map and data/graphs/EnsemblePlansBoxWhisker.css";
 import Plot from "react-plotly.js";
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
 export default function EnsemblePlansBoxWhisker(){
@@ -16,9 +19,16 @@ export default function EnsemblePlansBoxWhisker(){
     const [regionType, setRegionType] = useState("RURAL");
     const [boxWhiskerData, setBoxWhiskerData] = useState(null);
     const [optionsData, setOptionsData] = useState(null);
+    const [barChartData, setBarChartData] = useState(null);
+    const [barOptionsData, setBarOptionsData] = useState(null);
     useEffect(() => {
-        check_state();
-    }, [racialGroup, regionType, incomeGroup, selectedEnsemble, selectedDataType]);
+        if (selectedView === "box-whisker"){
+            check_box_plot_state();
+        }
+        else if (selectedView === "summary"){
+            handle_ensemble_summary();
+        }
+    }, [racialGroup, regionType, incomeGroup, selectedEnsemble, selectedDataType, selectedView]);
 
     const fetch_ensemble_data_race = async (stateAbbreviation, racialGroup) => {
         try{
@@ -53,7 +63,18 @@ export default function EnsemblePlansBoxWhisker(){
         }
     };
 
-    const check_state = async () => {
+    const fetch_ensemble_summary = async (stateAbbreviation) => {
+        try{
+            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/plansplits`);
+            const json = await response.json();
+            console.log("ensemble summary data:",json);
+            return json;
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+    const check_box_plot_state = async () => {
         var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
         var ensemblePlan = `ensemble_${selectedEnsemble}`;
         let response;
@@ -92,6 +113,30 @@ export default function EnsemblePlansBoxWhisker(){
         }
 
         
+    };
+
+    const handle_ensemble_summary = async () => {
+        var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
+        let response = await fetch_ensemble_summary(stateAbbreviation);
+        var ensemblePlan = `ensemble_${selectedEnsemble}`;
+        let ensembleData = response.data[ensemblePlan];
+        console.log("ensemble summary data fetched: ", response);
+        console.log("RETRIEVED ensemble data:",ensembleData);
+        
+        const barData = {
+            labels: Object.keys(ensembleData.data),
+            datasets: [
+              {
+                label: 'Number of Plans',
+                data: Object.values(ensembleData.data),
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1,
+              },
+            ],
+          };
+          setBarChartData(barData);
+          setBarOptionsData(ensembleData.labels);
     };
 
     const plotData = boxWhiskerData?.map((entry) => ({
@@ -161,7 +206,8 @@ export default function EnsemblePlansBoxWhisker(){
                 )}
             </div>
 
-            {selectedView === "box-whisker" && (            <div className="box-plot-container">
+            {selectedView === "box-whisker" && (            
+                <div className="box-plot-container">
                 {plotData && (            
                     <Plot
                         data={[...plotData, dotData]}
@@ -194,6 +240,51 @@ export default function EnsemblePlansBoxWhisker(){
                         style={{width:"100%", height:"100%"}}
                     />
                 )}
+                </div>
+            )}
+
+            {(selectedView === "summary" && barChartData) && (
+                <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                    <p style={{}}>{barOptionsData?.title}</p>
+                    <Bar
+                        data={barChartData}
+                        options={{
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                            position: 'top',
+                            },
+                            title: {
+                            display: true,
+                            text: barOptionsData?.subtitle,
+                            },
+                        },
+                        scales: {
+                            x: {
+                            title: {
+                                display: true,
+                                text: barOptionsData?.axisX,
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                return barOptionsData?.axisXTicks[index];
+                                }
+                            }
+                            },
+                            y: {
+                            title: {
+                                display: true,
+                                text: barOptionsData?.axisY,
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                return barOptionsData?.axisYTicks[index];
+                                }
+                            }
+                            }
+                        }
+                        }}
+                    />
                 </div>
             )}
 
