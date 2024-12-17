@@ -300,13 +300,27 @@ export default function MapPg() {
       }
     }, [map]);
     console.log("featureType: ", featureType);
-    const geojsonStyle = {
-      fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
-      weight: 0.5,
-      opacity: 1,
-      color: "#FFFFFF",
-      dashArray: "",
-      fillOpacity: featureType === "precinct" ? 0.5 : 0.7,
+    const geojsonStyle = (feature) => {
+      let districtName;
+      console.log("STYLE FEATURE:", feature);
+      console.log("STYLE DISTRICTNAME:", districtName);
+      if(store.selectedDistrict){
+        districtName = `Congressional District ${store.selectedDistrict}`;
+      }
+      return {
+        fillColor: (feature.properties.NAME === districtName)
+        ? "orange"
+        : featureType === "precinct"
+        ? "#FF5733"
+        : "#3388ff",
+        weight: 0.5,
+        opacity: 1,
+        color: (feature.properties.NAME === districtName) 
+        ? "orange" 
+        : "#FFFFFF",
+        dashArray: "",
+        fillOpacity: 0.7,
+      };
     };
     
 
@@ -321,7 +335,7 @@ export default function MapPg() {
     };
 
     const resetHighlight = (layer) => {
-      layer.setStyle(geojsonStyle);
+      layer.setStyle(geojsonStyle(layer.feature));
     };
 
     const handleFeatureClick = (feature, layer) => {
