@@ -300,18 +300,24 @@ export default function MapPg() {
       }
     }, [map]);
     console.log("featureType: ", featureType);
+
     const geojsonStyle = (feature) => {
       let districtName;
-      console.log("STYLE FEATURE:", feature);
-      console.log("STYLE DISTRICTNAME:", districtName);
+      //console.log("STYLE FEATURE:", feature);
       if(store.selectedDistrict){
         districtName = `Congressional District ${store.selectedDistrict}`;
+        console.log("STYLE DISTRICTNAME:", districtName);
+      }
+      let heatmapColor;
+      if(featureType==="precinct"){
+        //TODO handle heatmap color
+        heatmapColor = heatmapData?.[feature.properties.UNIQUE_ID];
       }
       return {
         fillColor: (feature.properties.NAME === districtName)
         ? "orange"
-        : featureType === "precinct"
-        ? "#FF5733"
+        : (featureType === "precinct" && store.selectedHeatmap !== "none")
+        ? heatmapColor
         : "#3388ff",
         weight: 0.5,
         opacity: 1,
@@ -322,7 +328,6 @@ export default function MapPg() {
         fillOpacity: 0.7,
       };
     };
-    
 
     const highlightFeature = (layer) => {
       layer.setStyle({

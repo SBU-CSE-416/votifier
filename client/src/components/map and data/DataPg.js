@@ -23,7 +23,7 @@ export default function DataPg({ stateSummaryData }) {
       store.setFirstTabView("districtsTable");
     }
   }, [store.selectedDistrict]);
-  
+
   let incomeDistributionData;
   if(stateSummaryData!==null){
     incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
@@ -84,8 +84,7 @@ export default function DataPg({ stateSummaryData }) {
                 <StateSummaryBarChart
                   data={incomeDistributionData}
                   title={"Household Income Distribution"}
-                /> : 
-                <DistrictsTable/>
+                /> : <DistrictsTable/>
               }
             </div>
           )}
