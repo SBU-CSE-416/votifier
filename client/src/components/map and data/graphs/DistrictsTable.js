@@ -18,7 +18,7 @@ export default function DistrictsTable(){
     }, [store.selectedStateCode]);
 
     useEffect(() => {
-        console.log("Selected District: ", store.selectedDistrict);
+        console.log("Selected District in DistrictsTable.js: ", store.selectedDistrict);
         setSelectedDistrict(store.selectedDistrict);
     }, [store.selectedDistrict]);
 

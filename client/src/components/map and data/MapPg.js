@@ -300,13 +300,27 @@ export default function MapPg() {
       }
     }, [map]);
     console.log("featureType: ", featureType);
-    const geojsonStyle = {
-      fillColor: featureType === "district" ? "#FF5733" : featureType === "precinct" ? "#FF5733" :  "#3388ff",
-      weight: 0.5,
-      opacity: 1,
-      color: "#FFFFFF",
-      dashArray: "",
-      fillOpacity: featureType === "precinct" ? 0.5 : 0.7,
+    const geojsonStyle = (feature) => {
+      let districtName;
+      console.log("STYLE FEATURE:", feature);
+      console.log("STYLE DISTRICTNAME:", districtName);
+      if(store.selectedDistrict){
+        districtName = `Congressional District ${store.selectedDistrict}`;
+      }
+      return {
+        fillColor: (feature.properties.NAME === districtName)
+        ? "orange"
+        : featureType === "precinct"
+        ? "#FF5733"
+        : "#3388ff",
+        weight: 0.5,
+        opacity: 1,
+        color: (feature.properties.NAME === districtName) 
+        ? "orange" 
+        : "#FFFFFF",
+        dashArray: "",
+        fillOpacity: 0.7,
+      };
     };
     
 
@@ -321,18 +335,25 @@ export default function MapPg() {
     };
 
     const resetHighlight = (layer) => {
-      layer.setStyle(geojsonStyle);
+      layer.setStyle(geojsonStyle(layer.feature));
     };
 
     const handleFeatureClick = (feature, layer) => {
       highlightFeature(layer);
       const bounds = layer.getBounds();
-      map.fitBounds(bounds, {
-        maxZoom:10, 
-      });
       console.log("FEATURE CONTENTS:", feature);
+      if(store.selectedMapView === "districts"){
+        const districtNumberMatch = feature.properties.NAME.match(/(\d+)$/);
+        if(districtNumberMatch){
+          store.setSelectedDistrict(Number(districtNumberMatch[0]));
+          console.log("District clicked on map:", store.selectedDistrict);
+        }
+      }
       if(feature.properties.NAME === "South Carolina" || feature.properties.NAME === "Maryland"){
         store.setMapView("districts");
+        map.fitBounds(bounds, {
+          maxZoom:10, 
+        });
       }
       onFeatureClick(feature);
     };
@@ -432,6 +453,7 @@ export default function MapPg() {
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
     store.setSelectedHeatmap("none");
+    store.setFirstTabView("summary");
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
