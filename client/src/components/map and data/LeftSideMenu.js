@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import "../../stylesheets/map and data/LeftSideMenu.css";
 import BackButton from "./BackButton";
 import { MapStoreContext } from "../../stores/MapStore";
@@ -6,6 +6,13 @@ import HeatMapLegend from "../HeatMapLegend";
 
 export default function LeftSideMenu(props) {
   const { store } = useContext(MapStoreContext);
+
+  useEffect(() => {
+    if (store.selectedMapView === "precincts"){
+      store.setFirstTabView = "summary";
+      store.setSelectedDistrict(null);
+    }
+  }, [store.selectedMapView]);
 
   const checkSelectedState = () => {
     let stateName = "";
