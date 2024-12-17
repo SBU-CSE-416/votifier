@@ -9,6 +9,7 @@ import axios from "axios";
 import LeftSideMenu from "./LeftSideMenu";
 import { MapStoreContext } from "../../stores/MapStore";
 import { stateCodeMapping } from "../../utilities/FederalInfomationProcessingStandardEnumUtil";
+import { use } from "react";
 
 function MapResizer({store }) {
   const map = useMap();
@@ -40,12 +41,19 @@ export default function MapPg() {
 
   const [disableNavigation, setDisableNavigation] = useState(false);
 
+  //WIP STATES
+  const [heatmapData, setHeatmapData] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+
   const defaultView = [37.7, -94.7];
   const defaultZoom = 4.5;
 
   useEffect(() => {
     console.log("Selected View Updated:", store.selectedMapView);
   }, [store.selectedMapView]);
+
+  useEffect(() => {
+  },[store.selectedDistrict]);
 
   useEffect(() => {
     async function fetchData() {
@@ -171,7 +179,7 @@ export default function MapPg() {
       }
   
       console.log("heatmapData: ", heatmapData);
-
+      setHeatmapData(heatmapData);
     };
     handleHeatmapChange();
   }, [store.selectedHeatmap, store.selectedMapView, store.selectedDemographic, store.selectedStateCode]);
@@ -297,6 +305,7 @@ export default function MapPg() {
       map.fitBounds(bounds, {
         maxZoom:10, 
       });
+      console.log("FEATURE CONTENTS:", feature);
       onFeatureClick(feature);
     };
 
