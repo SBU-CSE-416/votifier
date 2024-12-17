@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
-@Document(collection = "demographic_data")
+@Document(collection = "election_data")
 public class ElectionHeatMap {
     public ElectionHeatMap() {
         // No-args constructor

@@ -37,6 +37,7 @@ import me.Votifier.server.model.documents.DistrictsSummary.DistrictData;
 import me.Votifier.server.model.documents.PrecinctsBoundary;
 import me.Votifier.server.model.documents.StateBoundary;
 import me.Votifier.server.model.documents.HeatmapDocuments.EconomicHeatMap;
+import me.Votifier.server.model.documents.HeatmapDocuments.ElectionHeatMap;
 import me.Votifier.server.model.documents.HeatmapDocuments.RacialHeatMap;
 import me.Votifier.server.model.documents.HeatmapDocuments.RegionTypeHeatMap;
 import me.Votifier.server.model.exceptions.UnknownFileException;
@@ -49,6 +50,7 @@ import me.Votifier.server.model.repository.RacialHeatMapRepository;
 import me.Votifier.server.model.repository.EconomicHeatMapRepository;
 
 import me.Votifier.server.model.repository.RegionTypeHeatMapRepository;
+import me.Votifier.server.model.repository.ElectionHeatMapRepository;
 
 import me.Votifier.server.services.MapService;
 
@@ -178,6 +180,37 @@ public class MapController {
             System.out.println("Error parsing EconomicHeatMap: " + e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/{stateAbbreviation}/heatmap/economic-political")
+    public ResponseEntity<Resource> getHeatmapEconomicPolitical(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
+        try {
+        ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromCache(stateAbbreviation);
+        ResponseEntity<Resource> precinctElectionHeatMapJSON = gatherPrecinctElectionHeatMapFromCache(stateAbbreviation);
+        if (precinctEconomicGroupsJSON.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(precinctEconomicGroupsJSON.getStatusCode());
+        }
+
+        if (precinctElectionHeatMapJSON.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(precinctElectionHeatMapJSON.getStatusCode());
+        }
+
+        EconomicHeatMap precinctEconomicGroups = parseResourceToEconomicHeatMap(precinctEconomicGroupsJSON.getBody());
+        ElectionHeatMap precinctElectionHeatMap = parseResourceToElectionHeatMap(precinctElectionHeatMapJSON.getBody());
+        return mapService.colorHeatmapEconomicPolitical(precinctEconomicGroups, precinctElectionHeatMap);
+        } catch (IOException e) {
+            System.out.println("Error parsing EconomicHeatMap: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private ElectionHeatMap parseResourceToElectionHeatMap(Resource resource) throws IOException {
+        InputStream inputStream = resource.getInputStream();
+        String json = new BufferedReader(new InputStreamReader(inputStream))
+                        .lines()
+                        .collect(Collectors.joining("\n"));
+        
+        return JSON.parseObject(json, ElectionHeatMap.class); // Deserialize to ElectionHeatMap
     }
 
 
@@ -390,6 +423,41 @@ public class MapController {
             });
 
             String jsonResponse = JSON.toJSONString(regionHeatMap, config);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception exception) {
+            System.out.println("Error fetching or serializing precincts economic data: " + exception.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired ElectionHeatMapRepository electionHeatMapRepository;
+
+    @Cacheable(value = "stateElectionHeatMap", key = "#stateAbbreviation")
+
+    public ResponseEntity<Resource> gatherPrecinctElectionHeatMapFromCache(StateAbbreviation stateAbbreviation) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            ElectionHeatMap electionHeatMap = electionHeatMapRepository.findByName(stateName);
+
+            if (electionHeatMap == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            SerializeConfig config = new SerializeConfig();
+
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+
+            String jsonResponse = JSON.toJSONString(electionHeatMap, config);
 
             Resource resource = new ByteArrayResource(jsonResponse.getBytes());
 
