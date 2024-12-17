@@ -439,6 +439,7 @@ export default function MapPg() {
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
     store.setSelectedHeatmap("none");
+    store.setFirstTabView("summary");
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
