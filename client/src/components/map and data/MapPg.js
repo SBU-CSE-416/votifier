@@ -48,6 +48,10 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
+    console.log("Data visibility updated:", store.isDataVisible);
+  }, [store.isDataVisible]);
+
+  useEffect(() => {
     console.log("Selected View Updated:", store.selectedMapView);
     const handle_precincts_view = async () => {
       if (store.selectedMapView === "precincts") {
@@ -66,7 +70,6 @@ export default function MapPg() {
         }
       }
   
-      store.setDataVisibility(true);
       setDisableNavigation(true);
     };
 
@@ -428,6 +431,7 @@ export default function MapPg() {
     setDisableNavigation(false);
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
+    store.setSelectedHeatmap("none");
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
@@ -465,6 +469,7 @@ export default function MapPg() {
       }
     }else
     if (store.selectedMapView === "precincts") {
+      //NOTE THIS IS DEAD CODE, NEVER ACCESSED.
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
@@ -562,7 +567,7 @@ export default function MapPg() {
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-      {store.isDataVisible && <DataPg stateSummaryData={stateSummaryData} />}
+      {store.isDataVisible===true && <DataPg stateSummaryData={stateSummaryData} />}
     </div>
   );
 }
