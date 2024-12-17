@@ -427,6 +427,7 @@ export default function MapPg() {
     setDisableNavigation(false);
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
+    store.setSelectedHeatmap("none");
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
@@ -464,6 +465,7 @@ export default function MapPg() {
       }
     }else
     if (store.selectedMapView === "precincts") {
+      //NOTE THIS IS DEAD CODE, NEVER ACCESSED.
       console.log("inside onFeatureClick precinct");
       console.log("properties.NAME: ", properties.NAME);
       if (properties.NAME === "Maryland") {
