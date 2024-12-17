@@ -302,6 +302,7 @@ export default function MapPg() {
                   `${
                     properties.name ||
                     properties.NAME ||
+                    properties.Pre_Code ||
                     "Congressional District " + properties.DISTRICT
                   }`,
                   {
