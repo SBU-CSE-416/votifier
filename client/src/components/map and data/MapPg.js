@@ -328,6 +328,13 @@ export default function MapPg() {
       highlightFeature(layer);
       const bounds = layer.getBounds();
       console.log("FEATURE CONTENTS:", feature);
+      if(store.selectedMapView === "districts"){
+        const districtNumberMatch = feature.properties.NAME.match(/(\d+)$/);
+        if(districtNumberMatch){
+          store.setSelectedDistrict(Number(districtNumberMatch[0]));
+          console.log("District clicked on map:", store.selectedDistrict);
+        }
+      }
       if(feature.properties.NAME === "South Carolina" || feature.properties.NAME === "Maryland"){
         store.setMapView("districts");
         map.fitBounds(bounds, {

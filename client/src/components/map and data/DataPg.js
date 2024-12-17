@@ -7,6 +7,7 @@ import SummaryTable from "./SummaryTable"
 import GinglesGraph from "./graphs/GinglesGraph";
 import DistrictsTable from "./graphs/DistrictsTable";
 import EnsemblePlansBoxWhisker from "./graphs/EnsemblePlansBoxWhisker";
+import { use } from "react";
 
 export default function DataPg({ stateSummaryData }) {
   const { store } = useContext(MapStoreContext);
@@ -16,6 +17,13 @@ export default function DataPg({ stateSummaryData }) {
       store.setSelectedDistrict(null);
     }
   }, [store.firstTabView, activeTab]);
+  useEffect(() => {
+    if(store.selectedDistrict!==null){
+      setActiveTab("summary");
+      store.setFirstTabView("districtsTable");
+    }
+  }, [store.selectedDistrict]);
+  
   let incomeDistributionData;
   if(stateSummaryData!==null){
     incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
