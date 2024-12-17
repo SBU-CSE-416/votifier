@@ -2,6 +2,7 @@ package me.Votifier.server.model.documents;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Map;
 
@@ -11,29 +12,59 @@ public class StateSummary {
     @Id
     private String id;
 
+    @Field("NAME")
     private String NAME;
+
+    @Field("TOTAL_POPULATION")
     private double TOTAL_POPULATION;
 
+    @Field("WHITE_PERCENT")
     private double WHITE_PERCENT;
+
+    @Field("BLACK_PERCENT")
     private double BLACK_PERCENT;
+
+    @Field("HISPANIC_PERCENT")
     private double HISPANIC_PERCENT;
+
+    @Field("ASIAN_PERCENT")
     private double ASIAN_PERCENT;
+
+    @Field("OTHER_RACE_PERCENT")
     private double OTHER_RACE_PERCENT;
 
+    @Field("TOTAL_VOTES")
     private double TOTAL_VOTES;
-    private double DEM_VOTES;
-    private double DEM_PERCENT;
-    private double REP_VOTES;
-    private double REP_PERCENT;
 
+    @Field("DEM_VOTES")
+    private double DEMOCRATIC_VOTES;
+
+    @Field("DEM_PERCENT")
+    private double DEMOCRATIC_PERCENT;
+
+    @Field("REP_VOTES")
+    private double REPUBLICAN_VOTES;
+
+    @Field("REP_PERCENT")
+    private double REPUBLICAN_PERCENT;
+
+    @Field("TOTAL_HOUSEHOLDS")
     private double TOTAL_HOUSEHOLDS;
+
+    @Field("HOUSEHOLD_INCOME_DISTRIBUTION")
     private Map<String, Double> HOUSEHOLD_INCOME_DISTRIBUTION;
 
     // Regional demographics
+    @Field("RURAL_PERCENT")
     private double RURAL_PERCENT;
+
+    @Field("SUBURBAN_PERCENT")
     private double SUBURBAN_PERCENT;
+
+    @Field("URBAN_PERCENT")
     private double URBAN_PERCENT;
 
+    @Field("ENSEMBLES")
     private Map<String, EnsemblesStateSummary> ENSEMBLES;
     
 
@@ -110,36 +141,36 @@ public class StateSummary {
         this.TOTAL_VOTES = TOTAL_VOTES;
     }
 
-    public double getDEM_VOTES() {
-        return DEM_VOTES;
+    public double getDEMOCRATIC_VOTES() {
+        return DEMOCRATIC_VOTES;
     }
 
-    public void setDEM_VOTES(double DEM_VOTES) {
-        this.DEM_VOTES = DEM_VOTES;
+    public void setDEMOCRATIC_VOTES(double DEM_VOTES) {
+        this.DEMOCRATIC_VOTES = DEM_VOTES;
     }
 
-    public double getDEM_PERCENT() {
-        return DEM_PERCENT;
+    public double getDEMOCRATIC_PERCENT() {
+        return DEMOCRATIC_PERCENT;
     }
 
-    public void setDEM_PERCENT(double DEM_PERCENT) {
-        this.DEM_PERCENT = DEM_PERCENT;
+    public void setDEMOCRATIC_PERCENT(double DEM_PERCENT) {
+        this.DEMOCRATIC_PERCENT = DEM_PERCENT;
     }
 
-    public double getREP_VOTES() {
-        return REP_VOTES;
+    public double getREPUBLICAN_VOTES() {
+        return REPUBLICAN_VOTES;
     }
 
-    public void setREP_VOTES(double REP_VOTES) {
-        this.REP_VOTES = REP_VOTES;
+    public void setREPUBLICAN_VOTES(double REP_VOTES) {
+        this.REPUBLICAN_VOTES = REP_VOTES;
     }
 
-    public double getREP_PERCENT() {
-        return REP_PERCENT;
+    public double getREPUBLICAN_PERCENT() {
+        return REPUBLICAN_PERCENT;
     }
 
-    public void setREP_PERCENT(double REP_PERCENT) {
-        this.REP_PERCENT = REP_PERCENT;
+    public void setREPUBLICAN_PERCENT(double REP_PERCENT) {
+        this.REPUBLICAN_PERCENT = REP_PERCENT;
     }
 
     public double getTOTAL_HOUSEHOLDS() {
