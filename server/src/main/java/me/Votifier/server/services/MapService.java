@@ -32,6 +32,7 @@ import me.Votifier.server.model.documents.HeatmapDocuments.EconomicHeatMap;
 import me.Votifier.server.model.documents.HeatmapDocuments.RacialHeatMap;
 import me.Votifier.server.model.RacialGroup;
 import me.Votifier.server.model.documents.HeatmapDocuments.RegionTypeHeatMap;
+import me.Votifier.server.model.documents.HeatmapDocuments.ElectionHeatMap;
 
 import me.Votifier.server.model.exceptions.InvalidBinRangeException;
 import me.Votifier.server.model.exceptions.InvalidRacialGroupException;
@@ -44,7 +45,6 @@ public class MapService {
     private static Map<Integer, String> indexToEconomicBinStringMapping = new HashMap<>();
     private static final int INVALID_MAPPING_INDEX = -1;
     private static final int INFINITE_BIN_RANGE_INDEX = -1;
-    private static final String TOTAL_HOUSEHOLDS_IDENTIFIER = "TOT_HOUS22";
 
     @Autowired
     public MapService(BinsConfig binsConfig) {
@@ -313,9 +313,67 @@ private Bin assignBin(int estimatedIncome, Map<Integer, Bin> loadedHeatmapBins) 
     
     
 
-    public ResponseEntity<Resource> colorHeatmapPoliticalIncome(StateAbbreviation stateAbbreviation)  {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Resource> colorHeatmapEconomicPolitical(EconomicHeatMap economicHeatMap, ElectionHeatMap electionHeatMap) {
+        try {
+            Map<Integer, Bin> loadedHeatmapBins = loadedBins.get(FeatureName.HEATMAP_ECONOMIC_INCOME);
+            final int BIN_COLOR_INDEX = 0;
+    
+            // Map UNIQUE_ID -> Political LEAN
+            Map<String, String> precinctLeanMap = new HashMap<>();
+            for (ElectionHeatMap.ElectionHeatMapData electionData : electionHeatMap.getData()) {
+                precinctLeanMap.put(electionData.getUNIQUE_ID(), electionData.getLEAN());
+            }
+    
+            // Map UNIQUE_ID -> Color
+            Map<String, String> uniqueIdToColorMap = new HashMap<>();
+            for (EconomicHeatMap.EconomicHeatMapData precinct : economicHeatMap.getData()) {
+                String uniquePrecinctId = precinct.getUNIQUE_ID();
+                double totalAccumulatedIncomeSum = 0.0;
+                double totalHouseholds = parseDouble(precinct.getTOTAL_HOUSEHOLDS());
+    
+                if (totalHouseholds > 0.0) {
+                    totalAccumulatedIncomeSum += calculateBracketIncome(precinct, loadedHeatmapBins);
+    
+                    int estimatedAverageHouseholdIncome = (int) (totalAccumulatedIncomeSum / totalHouseholds);
+                    Bin assignedBin = assignBin(estimatedAverageHouseholdIncome, loadedHeatmapBins);
+    
+                    // Determine political lean and assign color
+                    String lean = precinctLeanMap.getOrDefault(uniquePrecinctId, "Neutral");
+                    String colorHex = assignPoliticalColor(assignedBin.getBinNumber(), lean);
+                    uniqueIdToColorMap.put(uniquePrecinctId, colorHex);
+                } else {
+                    Bin defaultBin = loadedHeatmapBins.get(1);
+                    String lean = precinctLeanMap.getOrDefault(uniquePrecinctId, "Neutral");
+                    String colorHex = assignPoliticalColor(defaultBin.getBinNumber(), lean);
+                    uniqueIdToColorMap.put(uniquePrecinctId, colorHex);
+                }
+            }
+    
+            // Convert result to JSON and return
+            String stringJson = JSON.toJSONString(uniqueIdToColorMap, SerializerFeature.PrettyFormat);
+            Resource resource = new ByteArrayResource(stringJson.getBytes());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+    
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+    
+    private String assignPoliticalColor(int binNumber, String lean) {
+        switch (binNumber) {
+            case 1: return lean.equals("Republican") ? "#FFCDD2" : "#BBDEFB"; // Light Red / Light Blue
+            case 2: return lean.equals("Republican") ? "#EF9A9A" : "#90CAF9"; // Red / Blue
+            case 3: return lean.equals("Republican") ? "#E57373" : "#64B5F6"; // Medium Red / Medium Blue
+            case 4: return lean.equals("Republican") ? "#EF5350" : "#42A5F5"; // Deep Red / Deep Blue
+            case 5: return lean.equals("Republican") ? "#F44336" : "#2196F3"; // Bright Red / Bright Blue
+            case 6: return lean.equals("Republican") ? "#D32F2F" : "#1976D2"; // Dark Red / Dark Blue
+            default: return "#BDBDBD"; // Neutral Grey
+        }
+    }
+    
 
     public String constructJSONString(BufferedReader responseBodyReader, StringBuilder jsonContentBuilder) throws IOException {
         String currentJsonLine = "";
