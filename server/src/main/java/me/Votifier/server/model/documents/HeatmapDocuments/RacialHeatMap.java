@@ -55,7 +55,7 @@ public class RacialHeatMap {
 
         private String ASIAN;
 
-        @Field("HSP_NHSP22")
+        @Field("HSP_POP22")
 
         private String HISPANIC;
 
