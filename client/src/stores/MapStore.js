@@ -23,7 +23,7 @@ function MapStoreContextProvider(props) {
         selectedDistrict: null,
         selectedPrecinct: null,
         selectedHeatmap: "none", 
-        selectedDemographic: "white",
+        selectedDemographic: "WHITE",
         isDataVisible: false,
         firstTabView: "summary",
     });

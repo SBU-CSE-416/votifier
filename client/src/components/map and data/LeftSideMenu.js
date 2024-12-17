@@ -87,7 +87,7 @@ export default function LeftSideMenu(props) {
                   <option value="WHITE">White</option>
                   <option value="BLACK">Black/African American</option>
                   <option value="ASIAN">Asian</option>
-                  <option value="HISPANIC">Hispanic/Latino</option>
+                  {/* <option value="HISPANIC">Hispanic/Latino</option> */}
                 </select>
               </div>
             </>

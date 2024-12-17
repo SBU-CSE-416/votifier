@@ -72,9 +72,9 @@ export default function MapPg() {
       const res = await axios.get(
         `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/demographic/${racialGroup}`
       );
-      const json = res.json;
-      console.log("demographic heatmap data:", json);
-      return json;
+      const data = res.data;
+      console.log("demographic heatmap data:", data);
+      return data;
     } catch (error) {
       console.error("Error fetching demographic heatmap data:", error);
       return null;
@@ -86,9 +86,9 @@ export default function MapPg() {
       const res = await axios.get(
         `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/economic-income`
       );
-      const json = res.json;
-      console.log("economicIncome heatmap data:", json);
-      return json;
+      const data = res.data;
+      console.log("economicIncome heatmap data:", data);
+      return data;
     } catch (error) {
       console.error("Error fetching economicIncome heatmap data:", error);
       return null;
@@ -100,9 +100,9 @@ export default function MapPg() {
       const res = await axios.get(
         `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/regions`
       );
-      const json = res.json;
-      console.log("economicRegions heatmap data:", json);
-      return json;
+      const data = res.data;
+      console.log("economicRegions heatmap data:", data);
+      return data;
     } catch (error) {
       console.error("Error fetching economicRegions heatmap data:", error);
       return null;
@@ -114,9 +114,9 @@ export default function MapPg() {
       const res = await axios.get(
         `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/economic-poverty`
       );
-      const json = res.json;
-      console.log("economicPoverty heatmap data:", json);
-      return json;
+      const data = res.data;
+      console.log("economicPoverty heatmap data:", data);
+      return data;
     } catch (error) { 
       console.error("Error fetching economicPoverty heatmap data:", error);
       return null;
@@ -128,9 +128,9 @@ export default function MapPg() {
       const res = await axios.get(
         `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/economic-political`
       );
-      const json = res.json;
-      console.log("economicPolitical heatmap data:", json);
-      return json;
+      const data = res.data;
+      console.log("economicPolitical heatmap data:", data);
+      return data;
     } catch (error) {
       console.error("Error fetching economicPolitical heatmap data:", error);
       return null;
@@ -153,20 +153,20 @@ export default function MapPg() {
         return;
       }
       else if(store.selectedHeatmap === "demographic"){
-        console.log("demographic heatmap handler");
+        console.log("demographic heatmap HANDLER:", stateAbbreviation, store.selectedDemographic);
         const demographicGroup = store.selectedDemographic;
         heatmapData = await fetch_demographic_heatmap(stateAbbreviation, demographicGroup);
-      }else if(store.selectedHeatmap === "economicIncome"){
-        console.log("economicPoverty heatmap handler");
+      }else if(store.selectedHeatmap === "economicIncome:"){
+        console.log("economicPoverty heatmap HANDLER:", stateAbbreviation);
         heatmapData = await fetch_economicIncome_heatmap(stateAbbreviation);
       }else if(store.selectedHeatmap === "economicRegions"){
-        console.log("economicRegions heatmap handler");
+        console.log("economicRegions heatmap HANDLER:", stateAbbreviation);
         heatmapData = await fetch_economicRegions_heatmap(stateAbbreviation);
       }else if(store.selectedHeatmap === "economicPoverty"){
-        console.log("economicPoverty heatmap handler");
+        console.log("economicPoverty heatmap HANDLER:", stateAbbreviation);
         heatmapData = await fetch_economicPoverty_heatmap(stateAbbreviation);
       }else if(store.selectedHeatmap === "economicPolitical"){
-        console.log("economicPolitical heatmap handler");
+        console.log("economicPolitical heatmap HANDLER:", stateAbbreviation);
         heatmapData = await fetch_economicPolitical_heatmap(stateAbbreviation);
       }
   

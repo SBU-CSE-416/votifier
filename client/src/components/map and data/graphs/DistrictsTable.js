@@ -11,7 +11,7 @@ export default function DistrictsTable(){
         const fetchData = async () => {
             var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
             let response = await fetch_districts_summary(stateAbbreviation);
-            console.log("Districts Table data fetched: ", response);
+            //console.log("Districts Table data fetched: ", response);
             setDistrictsData(response);
         };
         fetchData();
@@ -26,7 +26,7 @@ export default function DistrictsTable(){
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/districts/summary`);
             const json = await response.json();
-            console.log("Districts Summary Data: ", json);
+            //console.log("Districts Summary Data: ", json);
             return json;
         }catch(error){
             console.error(error.message);
@@ -34,7 +34,7 @@ export default function DistrictsTable(){
     }
 
     const handleRowClick = (district) => {
-        console.log("District clicked: ", district);
+        //console.log("District clicked: ", district);
         store.selectedDistrict = district;
         setSelectedDistrict(district);
     }

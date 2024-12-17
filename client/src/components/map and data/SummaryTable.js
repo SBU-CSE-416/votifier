@@ -12,14 +12,12 @@ const SummaryTable = ({ stateSummaryData }) => {
       key !== "ensembles" &&
       key !== "name"
   );
-  console.log("filteredStateData: ", filteredStateData);
   const maxColumnsPerTable = 8;
   const splitData = [];
   for (let i = 0; i < filteredStateData.length; i += maxColumnsPerTable) {
     splitData.push(filteredStateData.slice(i, i + maxColumnsPerTable));
   }
   
-  console.log("ensemble", stateSummaryData.ensembles);
   const ensembleTable = (ensembles) => {
     return (
       <table className="summary-table" style={{marginTop:"15px"}}>

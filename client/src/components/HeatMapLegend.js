@@ -58,10 +58,6 @@ const HeatMapLegend = ({type}) => {
         },
     };
 
-    const capitalizeFirstLetter = (string) => {
-        return string.replace(/\b\w/g, char => char.toUpperCase());
-    };
-
     const legendItems = legends[type];
 
     return (
