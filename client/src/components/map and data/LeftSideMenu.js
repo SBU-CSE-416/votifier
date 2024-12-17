@@ -2,6 +2,7 @@ import { useContext } from "react";
 import "../../stylesheets/map and data/LeftSideMenu.css";
 import BackButton from "./BackButton";
 import { MapStoreContext } from "../../stores/MapStore";
+import HeatMapLegend from "../HeatMapLegend";
 
 export default function LeftSideMenu(props) {
   const { store } = useContext(MapStoreContext);
@@ -20,7 +21,6 @@ export default function LeftSideMenu(props) {
       );
     }
   };
-  console.log("store.selectedMapView:", store.selectedMapView); 
   return (
     <div className="side-nav-container">
       {/* States Dropdown Menu*/}
@@ -47,7 +47,7 @@ export default function LeftSideMenu(props) {
               <option value="precincts">Precincts</option>
             </select>
           </div>
-          {store.selectedMapView === "precincts" ? 
+          {store.selectedMapView === "precincts" && 
             <>
               <div className="left-label">
                 <label>
@@ -65,11 +65,11 @@ export default function LeftSideMenu(props) {
                   <option value="economicIncome">Economic/Income</option>
                   <option value="economicRegions">Economic/Regions</option>
                   <option value="economicPoverty">Economic/Poverty</option>
-                  <option value="politicalIncome">Political/Income</option>
+                  <option value="economicPolitical">Economic/Political</option>
                 </select>
               </div>
             </>
-          : null}
+          }
           {(store.selectedHeatmap === "demographic" && store.selectedMapView==="precincts") ? 
             <>
               <div className="left-label">
@@ -91,6 +91,10 @@ export default function LeftSideMenu(props) {
               </div>
             </>
           : null}
+
+          {(store.selectedMapView==="precincts" && store.selectedHeatmap !== "none") &&
+            <HeatMapLegend type={store.selectedHeatmap} />
+          }
 
         </div>
       ) : (
