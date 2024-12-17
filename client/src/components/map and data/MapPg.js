@@ -48,6 +48,10 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
+    console.log("Data visibility updated:", store.isDataVisible);
+  }, [store.isDataVisible]);
+
+  useEffect(() => {
     console.log("Selected View Updated:", store.selectedMapView);
     const handle_precincts_view = async () => {
       if (store.selectedMapView === "precincts") {
@@ -66,7 +70,6 @@ export default function MapPg() {
         }
       }
   
-      store.setDataVisibility(true);
       setDisableNavigation(true);
     };
 
@@ -563,7 +566,7 @@ export default function MapPg() {
           <BackButtonControl resetView={handleResetView} />
         </MapContainer>
       </div>
-      {store.isDataVisible && <DataPg stateSummaryData={stateSummaryData} />}
+      {store.isDataVisible===true && <DataPg stateSummaryData={stateSummaryData} />}
     </div>
   );
 }
