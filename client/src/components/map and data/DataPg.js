@@ -16,12 +16,15 @@ export default function DataPg({ stateSummaryData }) {
       store.setSelectedDistrict(null);
     }
   }, [store.firstTabView, activeTab]);
-  const incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
-    ([range, percentage]) => ({
-      range: range.replace(/_/g, "-"), 
-      percentage,                    
-    })
-  );
+  let incomeDistributionData;
+  if(stateSummaryData!==null){
+    incomeDistributionData = Object.entries(stateSummaryData.house_HOLD_INCOME_DISTRIBUTION).map(
+      ([range, percentage]) => ({
+        range: range.replace(/_/g, "-"), 
+        percentage,                    
+      })
+    );
+  }
 
   return (
     <div id="info">
