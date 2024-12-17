@@ -31,6 +31,7 @@ import me.Votifier.server.model.configurations.bins.BinsConfig;
 import me.Votifier.server.model.documents.HeatmapDocuments.EconomicHeatMap;
 import me.Votifier.server.model.documents.HeatmapDocuments.RacialHeatMap;
 import me.Votifier.server.model.RacialGroup;
+import me.Votifier.server.model.documents.HeatmapDocuments.RegionTypeHeatMap;
 
 import me.Votifier.server.model.exceptions.InvalidBinRangeException;
 import me.Votifier.server.model.exceptions.InvalidRacialGroupException;
@@ -68,14 +69,11 @@ public class MapService {
             throw new InvalidRacialGroupException();
         }
 
-        // Load heatmap bins
         Map<Integer, Bin> heatmapBins = loadedBins.get(FeatureName.HEATMAP_DEMOGRAPHIC);
         final int BIN_COLOR_INDEX = 0;
 
-        // Prepare the result map for UNIQUE_ID -> ColorHex
         Map<String, String> precinctColorMapping = new HashMap<>();
 
-        // Iterate over RacialHeatMapData entries
         List<RacialHeatMap.RacialHeatMapData> data = racialHeatMap.getData();
         for (RacialHeatMap.RacialHeatMapData entry : data) {
             String uniqueId = entry.getUNIQUE_ID();
@@ -95,7 +93,7 @@ public class MapService {
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                 .body(resource);
     } catch (Exception e) {
-        e.printStackTrace(); // Log exception for debugging
+        e.printStackTrace();
         return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
@@ -151,27 +149,20 @@ public ResponseEntity<Resource> colorHeatmapEconomicIncome(EconomicHeatMap econo
         final int BIN_COLOR_INDEX = 0;
 
         Map<String, String> uniqueIdToColorMap = new HashMap<>();
-
-        // Process each precinct's economic data
         for (EconomicHeatMap.EconomicHeatMapData precinct : economicHeatMap.getData()) {
             String uniquePrecinctId = precinct.getUNIQUE_ID();
             double totalAccumulatedIncomeSum = 0.0;
             double totalHouseholds = parseDouble(precinct.getTOTAL_HOUSEHOLDS());
 
             if (totalHouseholds > 0.0) {
-                // Calculate total income based on income brackets
                 totalAccumulatedIncomeSum += calculateBracketIncome(precinct, loadedHeatmapBins);
 
-                // Compute estimated average household income
                 int estimatedAverageHouseholdIncome = (int) (totalAccumulatedIncomeSum / totalHouseholds);
 
-                // Assign bin based on average income
                 Bin assignedBin = assignBin(estimatedAverageHouseholdIncome, loadedHeatmapBins);
 
-                // Store the color
                 uniqueIdToColorMap.put(uniquePrecinctId, assignedBin.getBinColors()[BIN_COLOR_INDEX]);
             } else {
-                // Default bin for invalid data
                 Bin defaultBin = loadedHeatmapBins.get(1);
                 uniqueIdToColorMap.put(uniquePrecinctId, defaultBin.getBinColors()[BIN_COLOR_INDEX]);
             }
@@ -232,9 +223,34 @@ private Bin assignBin(int estimatedIncome, Map<Integer, Bin> loadedHeatmapBins) 
 
 
 
-    public ResponseEntity<Resource> colorHeatmapEconomicRegions(StateAbbreviation stateAbbreviation) {
-        // TO DO: (GUI-5) Color the precinct heatmap appropriately based on the threshold-defined region type in each precinct
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Resource> colorHeatmapRegions(RegionTypeHeatMap regionTypeHeatMap) {
+        try {
+            Map<String, String> regionTypeToColor = Map.of(
+                "urban", "#2a3eb3",
+                "suburban", "#008f9d",
+                "rural", "#80d043"
+            );
+
+            // Map to store UNIQUE_ID -> ColorHex
+            Map<String, String> uniqueIdToColorMap = new HashMap<>();
+
+            for (RegionTypeHeatMap.RegionTypeHeatMapData regionData : regionTypeHeatMap.getData()) {
+                String uniqueId = regionData.getUNIQUE_ID();
+                String regionType = regionData.getRegion_type();
+                String colorHex = regionTypeToColor.getOrDefault(regionType.toLowerCase(), "#000000");
+                uniqueIdToColorMap.put(uniqueId, colorHex);
+            }
+
+            String jsonResponse = JSON.toJSONString(uniqueIdToColorMap, SerializerFeature.PrettyFormat);
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public ResponseEntity<Resource> colorHeatmapEconomicPoverty(StateAbbreviation stateAbbreviation) {
