@@ -1,0 +1,28 @@
+.heatmap-legend {
+    margin-top: 20px;
+}
+  
+.heatmap-legend h4 {
+    margin-bottom: 10px;
+}
+
+.heatmap-legend h5 {
+    margin: 10px 0 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+}
+
+.legend-label {
+    font-size: 14px;
+}

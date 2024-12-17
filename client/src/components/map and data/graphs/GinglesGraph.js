@@ -106,12 +106,14 @@ export default function GinglesGraph() {
 
         console.log("X Axis Name:", xAxisName);
         if(selectedGingles==="race"){
+            const xName = "RACE_PERCENT";
+            setXAxisName(xName);
             setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
-                x: data[xAxisName],
+                x: data[xName],
                 y: data[yAxisNameRep],
             })) || []);
             setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
-                x: data[xAxisName],
+                x: data[xName],
                 y: data[yAxisNameDem],
             })) || []);
             setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
@@ -124,12 +126,15 @@ export default function GinglesGraph() {
             })) || []);
         }
         else if(selectedGingles==="income"){
+            const xName = "AVG_HOUSEHOLD_INCOME";
+            setXAxisName(xName);
             setRepublicanData(response?.data?.[regionType]?.map((data) => ({
-                x: data[xAxisName],
+                
+                x: data[xName],
                 y: data[yAxisNameRep],
             })) || []);
             setDemocraticData(response?.data?.[regionType]?.map((data) => ({
-                x: data[xAxisName],
+                x: data[xName],
                 y: data[yAxisNameDem],
             })) || []);
             setRepublicanLine(response?.lines?.[regionType]?.republican?.x.map((x, i) => ({
@@ -142,12 +147,14 @@ export default function GinglesGraph() {
             })) || []);
         }
         else if(selectedGingles==="income-race"){
+            const xName = "RACE_INCOME_PERCENT"
+            setXAxisName(xName);
             setRepublicanData(response?.data?.[racialGroup]?.map((data) => ({
-                x: data[xAxisName],
+                x: data[xName],
                 y: data[yAxisNameRep],
             })) || []);
             setDemocraticData(response?.data?.[racialGroup]?.map((data) => ({
-                x: data[xAxisName],
+                x: data[xName],
                 y: data[yAxisNameDem],
             })) || []);
             setRepublicanLine(response?.lines?.[racialGroup]?.republican?.x.map((x, i) => ({
@@ -232,7 +239,6 @@ export default function GinglesGraph() {
                 <select 
                     value={selectedGingles} 
                     onChange={(event) => setSelectedGingles(event.target.value)}
-                    style={{width:"30%"}}
                 >
                     <option value="race">Precinct Race</option> 
                     <option value="income">Precinct Income</option>

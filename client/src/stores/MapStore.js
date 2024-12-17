@@ -18,12 +18,12 @@ export const MapStoreReducerAction = {
 // Context Provider
 function MapStoreContextProvider(props) {
     const [store, setStore] = useState({
-        selectedMapView: "districts",
+        selectedMapView: "states",
         selectedStateCode: null,
         selectedDistrict: null,
         selectedPrecinct: null,
         selectedHeatmap: "none", 
-        selectedDemographic: "white",
+        selectedDemographic: "WHITE",
         isDataVisible: false,
         firstTabView: "summary",
     });
