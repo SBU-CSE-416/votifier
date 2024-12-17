@@ -138,35 +138,46 @@ public class MapController {
     public ResponseEntity<Resource> getHeatmapRegions(
         @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation
         ) {
+        try{
         ResponseEntity<Resource> precinctRegionGeoJSON = gatherPrecinctRegionsFromCache(stateAbbreviation);
-
+        
         if (precinctRegionGeoJSON.getStatusCode() != HttpStatus.OK) {
             return new ResponseEntity<>(precinctRegionGeoJSON.getStatusCode());
         }
 
         RegionTypeHeatMap precinctRegions = parseResourceToRegionTypeHeatMap(precinctRegionGeoJSON.getBody());
         return mapService.colorHeatmapRegions(precinctRegions);
+        } catch (IOException e) {
+            System.out.println("Error parsing RegionTypeHeatMap: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    private RegionTypeHeatMap parseResourceToRegionTypeHeatMap(Resource resource) {
-        try {
-            InputStream inputStream = resource.getInputStream();
-            String json = new BufferedReader(new InputStreamReader(inputStream))
-                            .lines()
-                            .collect(Collectors.joining("\n"));
-    
-            return JSON.parseObject(json, RegionTypeHeatMap.class);
-        } catch (IOException e) {
-            System.err.println("Error reading resource input stream: " + e.getMessage());
-            e.printStackTrace();
-            return null; // Or handle it appropriately
-        }
+    private RegionTypeHeatMap parseResourceToRegionTypeHeatMap(Resource resource) throws IOException {
+        InputStream inputStream = resource.getInputStream();
+        String json = new BufferedReader(new InputStreamReader(inputStream))
+                        .lines()
+                        .collect(Collectors.joining("\n"));
+        
+        return JSON.parseObject(json, RegionTypeHeatMap.class); // Deserialize to RegionTypeHeatMap
     }
     
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-poverty")
     public ResponseEntity<Resource> getHeatmapEconomicPoverty(@PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation) {
-        return mapService.colorHeatmapEconomicPoverty(stateAbbreviation);
+        try {
+        ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromCache(stateAbbreviation);
+
+        if (precinctEconomicGroupsJSON.getStatusCode() != HttpStatus.OK) {
+            return new ResponseEntity<>(precinctEconomicGroupsJSON.getStatusCode());
+        }
+
+        EconomicHeatMap precinctEconomicGroups = parseResourceToEconomicHeatMap(precinctEconomicGroupsJSON.getBody());
+        return mapService.colorHeatmapEconomicPoverty(precinctEconomicGroups);
+        } catch (IOException e) {
+            System.out.println("Error parsing EconomicHeatMap: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 
