@@ -327,9 +327,6 @@ export default function MapPg() {
     const handleFeatureClick = (feature, layer) => {
       highlightFeature(layer);
       const bounds = layer.getBounds();
-      // map.fitBounds(bounds, {
-      //   maxZoom:10, 
-      // });
       console.log("FEATURE CONTENTS:", feature);
       if(feature.properties.NAME === "South Carolina" || feature.properties.NAME === "Maryland"){
         store.setMapView("districts");
