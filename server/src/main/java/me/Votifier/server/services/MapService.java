@@ -231,7 +231,6 @@ private Bin assignBin(int estimatedIncome, Map<Integer, Bin> loadedHeatmapBins) 
                 "rural", "#80d043"
             );
 
-            // Map to store UNIQUE_ID -> ColorHex
             Map<String, String> uniqueIdToColorMap = new HashMap<>();
 
             for (RegionTypeHeatMap.RegionTypeHeatMapData regionData : regionTypeHeatMap.getData()) {
@@ -253,9 +252,66 @@ private Bin assignBin(int estimatedIncome, Map<Integer, Bin> loadedHeatmapBins) 
         }
     }
 
-    public ResponseEntity<Resource> colorHeatmapEconomicPoverty(StateAbbreviation stateAbbreviation) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<Resource> colorHeatmapEconomicPoverty(EconomicHeatMap economicHeatMap) {
+        try {
+            Map<String, String> uniqueIdToColorMap = new HashMap<>();
+    
+            for (EconomicHeatMap.EconomicHeatMapData precinct : economicHeatMap.getData()) {
+                String uniqueId = precinct.getUNIQUE_ID();
+                int totalHouseholds = (int) parseDouble(precinct.getTOTAL_HOUSEHOLDS());
+                int povertyHouseholds = (int) parseDouble(precinct.get_0_35K());
+
+                // print totalHouseholds until count == 10
+                // int count = 0;
+                // if (count < 10) {
+                //     System.out.println("Total Households: " + totalHouseholds);
+                //     System.out.println("Poverty Households: " + povertyHouseholds);
+                //     count++;
+                // }
+
+                double povertyPercentage = (totalHouseholds > 0) 
+                    ? ((double) povertyHouseholds / totalHouseholds) * 100 
+                    : 0.0;
+    
+                String colorHex = assignPovertyColor(povertyPercentage);
+                uniqueIdToColorMap.put(uniqueId, colorHex);
+            }
+    
+            // Convert result to JSON
+            String jsonResponse = JSON.toJSONString(uniqueIdToColorMap, SerializerFeature.PrettyFormat);
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+    
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+    
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
+    
+    private String assignPovertyColor(double povertyPercentage) {
+        if (povertyPercentage <= 10) {
+            return "#f5f4f0"; // Light Grey
+        } else if (povertyPercentage <= 20) {
+            return "#FFFDE7"; // Pale Yellow
+        } else if (povertyPercentage <= 30) {
+            return "#FFF9C4"; // Light Yellow
+        } else if (povertyPercentage <= 40) {
+            return "#FFF59D"; // Lemon Yellow
+        } else if (povertyPercentage <= 50) {
+            return "#FFEE58"; // Medium Yellow
+        } else if (povertyPercentage <= 60) {
+            return "#FFEB3B"; // Bright Yellow
+        } else if (povertyPercentage <= 70) {
+            return "#FDD835"; // Darker Yellow
+        } else {
+            return "#FBC02D"; // Deep Yellow
+        }
+    }
+    
+    
 
     public ResponseEntity<Resource> colorHeatmapPoliticalIncome(StateAbbreviation stateAbbreviation)  {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
