@@ -2,6 +2,7 @@ import React from "react";
 import "../../stylesheets/map and data/SummaryTable.css";
 import { formatVariable } from "../../utilities/ReformatVariableNamesUtil";
 const SummaryTable = ({ stateSummaryData }) => {
+  if (!stateSummaryData) {return null;}
   const filteredStateData = Object.entries(stateSummaryData).filter(
     ([key]) => 
       key !== "house_HOLD_INCOME_DISTRIBUTION" && 

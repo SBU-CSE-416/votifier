@@ -18,7 +18,7 @@ export const MapStoreReducerAction = {
 // Context Provider
 function MapStoreContextProvider(props) {
     const [store, setStore] = useState({
-        selectedMapView: "districts",
+        selectedMapView: "states",
         selectedStateCode: null,
         selectedDistrict: null,
         selectedPrecinct: null,

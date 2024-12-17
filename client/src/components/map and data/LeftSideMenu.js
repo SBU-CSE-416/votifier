@@ -21,7 +21,6 @@ export default function LeftSideMenu(props) {
       );
     }
   };
-  console.log("store.selectedMapView:", store.selectedMapView); 
   return (
     <div className="side-nav-container">
       {/* States Dropdown Menu*/}
