@@ -42,6 +42,9 @@ public class EconomicHeatMap {
         @Field("UNIQUE_ID")
         private String UNIQUE_ID;
 
+        @Field("TOT_HOUS22")
+        private String TOTAL_HOUSEHOLDS;
+
         @Field("0_35K")
         private String _0_35K;
 
@@ -122,6 +125,14 @@ public class EconomicHeatMap {
 
         public void set_150K_MORE(String _150K_MORE) {
             this._150K_MORE = _150K_MORE;
+        }
+
+        public String getTOTAL_HOUSEHOLDS() {
+            return TOTAL_HOUSEHOLDS;
+        }
+
+        public void setTOTAL_HOUSEHOLDS(String TOTAL_HOUSEHOLDS) {
+            this.TOTAL_HOUSEHOLDS = TOTAL_HOUSEHOLDS;
         }
     }
 }

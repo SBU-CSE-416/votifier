@@ -35,6 +35,7 @@ import me.Votifier.server.model.documents.DistrictsBoundary;
 import me.Votifier.server.model.documents.DistrictsSummary.DistrictData;
 import me.Votifier.server.model.documents.PrecinctsBoundary;
 import me.Votifier.server.model.documents.StateBoundary;
+import me.Votifier.server.model.documents.HeatmapDocuments.EconomicHeatMap;
 import me.Votifier.server.model.documents.HeatmapDocuments.RacialHeatMap;
 import me.Votifier.server.model.exceptions.UnknownFileException;
 import me.Votifier.server.model.repository.DistrictsBoundaryRepository;
@@ -43,6 +44,7 @@ import me.Votifier.server.model.repository.StateBoundaryRepository;
 import me.Votifier.server.model.StateAbbreviation;
 import me.Votifier.server.model.RacialGroup;
 import me.Votifier.server.model.repository.RacialHeatMapRepository;
+import me.Votifier.server.model.repository.EconomicHeatMapRepository;
 
 import me.Votifier.server.services.MapService;
 
@@ -76,17 +78,14 @@ public class MapController {
         @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation, 
         @PathVariable("racialGroup") RacialGroup racialGroup) {
     try {
-        // Gather the JSON data
         ResponseEntity<Resource> precinctRacialGroupsJSON = gatherPrecinctRacialGroupsFromCache(stateAbbreviation);
 
         if (precinctRacialGroupsJSON.getStatusCode() != HttpStatus.OK) {
             return new ResponseEntity<>(precinctRacialGroupsJSON.getStatusCode());
         }
 
-        // Parse JSON back to RacialHeatMap
         RacialHeatMap racialHeatMap = parseResourceToRacialHeatMap(precinctRacialGroupsJSON.getBody());
 
-        // Call the service method with RacialHeatMap
         return mapService.colorHeatmapDemographic(racialHeatMap, racialGroup);
     } catch (IOException e) {
         System.out.println("Error parsing RacialHeatMap: " + e.getMessage());
@@ -107,10 +106,28 @@ public class MapController {
     public ResponseEntity<Resource> getHeatmapEconomicIncome(
         @PathVariable("stateAbbreviation") StateAbbreviation stateAbbreviation
         ) {
-        // Note: The second method will eventually be changed, since we will be accessing the cache/database for this data instead of locally
-        ResponseEntity<Resource> precinctBoundaryGeoJSON = gatherPrecinctsBoundaryDataFromCache(stateAbbreviation);
-        ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromLocal(stateAbbreviation);
-        return mapService.colorHeatmapEconomicIncome(precinctBoundaryGeoJSON, precinctEconomicGroupsJSON);
+        try{
+            ResponseEntity<Resource> precinctEconomicGroupsJSON = gatherPrecinctEconomicGroupsFromCache(stateAbbreviation);
+
+            if (precinctEconomicGroupsJSON.getStatusCode() != HttpStatus.OK) {
+                return new ResponseEntity<>(precinctEconomicGroupsJSON.getStatusCode());
+            }
+
+            EconomicHeatMap precinctEconomicGroups = parseResourceToEconomicHeatMap(precinctEconomicGroupsJSON.getBody());
+            return mapService.colorHeatmapEconomicIncome(precinctEconomicGroups);
+        } catch (IOException e) {
+            System.out.println("Error parsing EconomicHeatMap: " + e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private EconomicHeatMap parseResourceToEconomicHeatMap(Resource resource) throws IOException {
+        InputStream inputStream = resource.getInputStream();
+        String json = new BufferedReader(new InputStreamReader(inputStream))
+                        .lines()
+                        .collect(Collectors.joining("\n"));
+
+        return JSON.parseObject(json, EconomicHeatMap.class); // Deserialize to EconomicHeatMap
     }
 
     @GetMapping("/{stateAbbreviation}/heatmap/economic-regions")
@@ -275,6 +292,41 @@ public class MapController {
                     .body(resource);
         } catch (Exception exception) {
             System.out.println("Error fetching or serializing precincts racial data: " + exception.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Autowired EconomicHeatMapRepository economicHeatMapRepository;
+
+    @Cacheable(value = "stateEconomicGroups", key = "#stateAbbreviation")
+
+    public ResponseEntity<Resource> gatherPrecinctEconomicGroupsFromCache(StateAbbreviation stateAbbreviation) {
+        try {
+            String stateName = stateAbbreviation.getFullStateName();
+            EconomicHeatMap economicHeatMap = economicHeatMapRepository.findByName(stateName);
+
+            if (economicHeatMap == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            SerializeConfig config = new SerializeConfig();
+
+            config.addFilter(DistrictData.class, new NameFilter() {
+                @Override
+                public String process(Object object, String name, Object value) {
+                    return name.toUpperCase();
+                }
+            });
+
+            String jsonResponse = JSON.toJSONString(economicHeatMap, config);
+
+            Resource resource = new ByteArrayResource(jsonResponse.getBytes());
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                    .body(resource);
+        } catch (Exception exception) {
+            System.out.println("Error fetching or serializing precincts economic data: " + exception.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

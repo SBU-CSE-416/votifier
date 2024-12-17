@@ -28,6 +28,7 @@ import me.Votifier.server.model.StateAbbreviation;
 import me.Votifier.server.model.configurations.FeatureName;
 import me.Votifier.server.model.configurations.bins.Bin;
 import me.Votifier.server.model.configurations.bins.BinsConfig;
+import me.Votifier.server.model.documents.HeatmapDocuments.EconomicHeatMap;
 import me.Votifier.server.model.documents.HeatmapDocuments.RacialHeatMap;
 import me.Votifier.server.model.RacialGroup;
 
@@ -42,7 +43,6 @@ public class MapService {
     private static Map<Integer, String> indexToEconomicBinStringMapping = new HashMap<>();
     private static final int INVALID_MAPPING_INDEX = -1;
     private static final int INFINITE_BIN_RANGE_INDEX = -1;
-    private static final String TOTAL_POPULATION_IDENTIFIER = "TOTAL_POPULATION";
     private static final String TOTAL_HOUSEHOLDS_IDENTIFIER = "TOT_HOUS22";
 
     @Autowired
@@ -145,93 +145,92 @@ private String getRacialGroupPopulation(RacialHeatMap.RacialHeatMapData entry, S
 }
 
 
-    public ResponseEntity<Resource> colorHeatmapEconomicIncome(
-        ResponseEntity<Resource> precinctsBoundariesGeoJsonResponse, 
-        ResponseEntity<Resource> precinctsEconomicGroupsJsonResponse) {
-        try {
-            Map<Integer, Bin> loadedHeatmapBins = loadedBins.get(FeatureName.HEATMAP_ECONOMIC_INCOME); 
-            final int BIN_COLOR_INDEX = 0;
-            final String UNIQUE_ID_LABEL = "UNIQUE_ID";
-            final String COLOR_LABEL = "ASSIGNED_COLOR";
-            final String INCOME_LABEL = "AVERAGE_HOUSEHOLD_INCOME";
+public ResponseEntity<Resource> colorHeatmapEconomicIncome(EconomicHeatMap economicHeatMap) {
+    try {
+        Map<Integer, Bin> loadedHeatmapBins = loadedBins.get(FeatureName.HEATMAP_ECONOMIC_INCOME);
+        final int BIN_COLOR_INDEX = 0;
 
-            StringBuilder reusableJsonContentBuilder = new StringBuilder();
+        Map<String, String> uniqueIdToColorMap = new HashMap<>();
 
-            Resource precinctsBoundariesBody = precinctsBoundariesGeoJsonResponse.getBody();
-            InputStreamReader precinctsBoundariesBodyStream = new InputStreamReader(precinctsBoundariesBody.getInputStream());
-            BufferedReader precinctsBoundariesBodyReader = new BufferedReader(precinctsBoundariesBodyStream);
-            String precinctsBoundariesJsonString = constructJSONString(precinctsBoundariesBodyReader, reusableJsonContentBuilder);
-            FeatureCollection precinctsBoundariesJson = JSON.parseObject(precinctsBoundariesJsonString, FeatureCollection.class);
-            
-            reusableJsonContentBuilder.setLength(0);
+        // Process each precinct's economic data
+        for (EconomicHeatMap.EconomicHeatMapData precinct : economicHeatMap.getData()) {
+            String uniquePrecinctId = precinct.getUNIQUE_ID();
+            double totalAccumulatedIncomeSum = 0.0;
+            double totalHouseholds = parseDouble(precinct.getTOTAL_HOUSEHOLDS());
 
-            Resource precinctsEconomicGroupsBody = precinctsEconomicGroupsJsonResponse.getBody();
-            InputStreamReader precinctsEconomicGroupsBodyStream = new InputStreamReader(precinctsEconomicGroupsBody.getInputStream());
-            BufferedReader precinctsEconomicGroupsBodyReader = new BufferedReader(precinctsEconomicGroupsBodyStream);
-            String precinctsEconomicGroupsJsonString = constructJSONString(precinctsEconomicGroupsBodyReader, reusableJsonContentBuilder);
-            JSONArray precinctsEconomicGroupsJson = JSON.parseObject(precinctsEconomicGroupsJsonString, JSONArray.class);
+            if (totalHouseholds > 0.0) {
+                // Calculate total income based on income brackets
+                totalAccumulatedIncomeSum += calculateBracketIncome(precinct, loadedHeatmapBins);
 
-            Map<String, String> assignedPrecinctsColors = new HashMap<>();
-            Map<String, String> assignedPrecinctsIncome = new HashMap<>();
-            List<JSONObject> precincts = precinctsEconomicGroupsJson.toJavaList(JSONObject.class);
+                // Compute estimated average household income
+                int estimatedAverageHouseholdIncome = (int) (totalAccumulatedIncomeSum / totalHouseholds);
 
-            for(JSONObject precinct : precincts) {
-                String uniquePrecinctId = precinct.getString(UNIQUE_ID_LABEL);
-                Bin assignedBin = null;
-                double totalAccumulatedIncomeSum = 0.0;
-                int estimatedAverageHouseholdIncome = 0;
-                double totalHouseholds = precinct.getDoubleValue(TOTAL_HOUSEHOLDS_IDENTIFIER);
+                // Assign bin based on average income
+                Bin assignedBin = assignBin(estimatedAverageHouseholdIncome, loadedHeatmapBins);
 
-                if(totalHouseholds <= 0.0) {
-                    assignedBin = loadedHeatmapBins.get(1);
-                }
-                else {
-                    for(String potentialHouseholdsBracketKey : precinct.keySet()) {
-                        int incomeBracketIndex = economicBinStringToIndexMapping.getOrDefault(potentialHouseholdsBracketKey, INVALID_MAPPING_INDEX);
-                        if(incomeBracketIndex != INVALID_MAPPING_INDEX) {
-                            int[] binRange = loadedHeatmapBins.get(incomeBracketIndex).getBinRange();
-                            double midpointOfRangeValues = 0.0;
-                            if(binRange[1] == INFINITE_BIN_RANGE_INDEX) {
-                                midpointOfRangeValues = binRange[0];
-                            }
-                            else {
-                                midpointOfRangeValues = (binRange[0] + binRange[1]) / 2;
-                            }
-                            double householdsForIncomeBracket = precinct.getDoubleValue(potentialHouseholdsBracketKey);
-                            totalAccumulatedIncomeSum += (int) (midpointOfRangeValues * householdsForIncomeBracket);
-                        }
-                    }
-                    estimatedAverageHouseholdIncome = (int) (totalAccumulatedIncomeSum / totalHouseholds);
-                    for(Bin bin : loadedHeatmapBins.values()) {
-                        if(bin.isInBinRange(estimatedAverageHouseholdIncome)) {
-                            assignedBin = bin;
-                            break;
-                        }
-                    }
-                }
-                if(assignedBin == null) {
-                    throw new InvalidBinRangeException();
-                }   
-                String assignedPrecinctHexColor = assignedBin.getBinColors()[BIN_COLOR_INDEX];
-                String assignedPrecinctAverageHouseholdIncome = String.valueOf(estimatedAverageHouseholdIncome);
-                assignedPrecinctsColors.put(uniquePrecinctId, assignedPrecinctHexColor);
-                assignedPrecinctsIncome.put(uniquePrecinctId, assignedPrecinctAverageHouseholdIncome);
+                // Store the color
+                uniqueIdToColorMap.put(uniquePrecinctId, assignedBin.getBinColors()[BIN_COLOR_INDEX]);
+            } else {
+                // Default bin for invalid data
+                Bin defaultBin = loadedHeatmapBins.get(1);
+                uniqueIdToColorMap.put(uniquePrecinctId, defaultBin.getBinColors()[BIN_COLOR_INDEX]);
             }
-            for(Feature precinct : precinctsBoundariesJson.getFeatures()) {
-                Map<String, String> precinctProperties = precinct.getProperties();
-                String precinctId = precinctProperties.get(UNIQUE_ID_LABEL);
-                precinctProperties.put(COLOR_LABEL, assignedPrecinctsColors.get(precinctId));
-                precinctProperties.put(INCOME_LABEL, assignedPrecinctsIncome.get(precinctId));
-                precinct.setProperties(precinctProperties);
-            }
-            String stringJson = JSON.toJSONString(precinctsBoundariesJson, SerializerFeature.PrettyFormat);
-            Resource resource = new ByteArrayResource(stringJson.getBytes());
-            return ResponseEntity.status(HttpStatus.OK).contentType(org.springframework.http.MediaType.parseMediaType("application/geo+json")).body(resource);
         }
-        catch (Exception exception) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        // Convert result to JSON and return
+        String stringJson = JSON.toJSONString(uniqueIdToColorMap, SerializerFeature.PrettyFormat);
+        Resource resource = new ByteArrayResource(stringJson.getBytes());
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .body(resource);
+
+    } catch (Exception exception) {
+        exception.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
+
+private double calculateBracketIncome(EconomicHeatMap.EconomicHeatMapData precinct, Map<Integer, Bin> loadedHeatmapBins) {
+    double totalIncome = 0.0;
+
+    Map<String, String> bracketMapping = new HashMap<>();
+    if (precinct.get_0_35K() != null) bracketMapping.put("0_35K", precinct.get_0_35K());
+    if (precinct.get_35_60K() != null) bracketMapping.put("35_60K", precinct.get_35_60K());
+    if (precinct.get_60_100K() != null) bracketMapping.put("60_100K", precinct.get_60_100K());
+    if (precinct.get_100K_125K() != null) bracketMapping.put("100K_125K", precinct.get_100K_125K());
+    if (precinct.get_125K_150K() != null) bracketMapping.put("125K_150K", precinct.get_125K_150K());
+    if (precinct.get_150K_MORE() != null) bracketMapping.put("150K_MORE", precinct.get_150K_MORE());
+
+    for (String bracketKey : bracketMapping.keySet()) {
+        int incomeBracketIndex = economicBinStringToIndexMapping.getOrDefault(bracketKey, -1);
+        if (incomeBracketIndex != -1) {
+            Bin bin = loadedHeatmapBins.get(incomeBracketIndex);
+            double midpoint = calculateMidpoint(bin);
+            double households = parseDouble(bracketMapping.get(bracketKey));
+            totalIncome += midpoint * households;
         }
     }
+    return totalIncome;
+}
+
+private double calculateMidpoint(Bin bin) {
+    int[] range = bin.getBinRange();
+    if (range[1] == INFINITE_BIN_RANGE_INDEX) {
+        return range[0];
+    }
+    return (range[0] + range[1]) / 2.0;
+}
+
+private Bin assignBin(int estimatedIncome, Map<Integer, Bin> loadedHeatmapBins) throws InvalidBinRangeException {
+    for (Bin bin : loadedHeatmapBins.values()) {
+        if (bin.isInBinRange(estimatedIncome)) {
+            return bin;
+        }
+    }
+    throw new InvalidBinRangeException("No bin found for income: " + estimatedIncome);
+}
+
+
 
     public ResponseEntity<Resource> colorHeatmapEconomicRegions(StateAbbreviation stateAbbreviation) {
         // TO DO: (GUI-5) Color the precinct heatmap appropriately based on the threshold-defined region type in each precinct
