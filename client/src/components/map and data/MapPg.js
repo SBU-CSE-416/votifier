@@ -80,7 +80,7 @@ export default function MapPg() {
 
     handle_precincts_view();
   }, [store.selectedMapView]);
-  
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -190,7 +190,7 @@ export default function MapPg() {
         console.log("demographic heatmap HANDLER:", stateAbbreviation, store.selectedDemographic);
         const demographicGroup = store.selectedDemographic;
         heatmapData = await fetch_demographic_heatmap(stateAbbreviation, demographicGroup);
-      }else if(store.selectedHeatmap === "economicIncome:"){
+      }else if(store.selectedHeatmap === "economicIncome"){
         console.log("economicPoverty heatmap HANDLER:", stateAbbreviation);
         heatmapData = await fetch_economicIncome_heatmap(stateAbbreviation);
       }else if(store.selectedHeatmap === "economicRegions"){
@@ -326,10 +326,10 @@ export default function MapPg() {
     // }, [store.selectedDistrict, map]);
 
     const geojsonStyle = (feature) => {
-      let districtName;
+      let districtName = "";
       if(store.selectedDistrict){
         districtName = `Congressional District ${store.selectedDistrict}`;
-        console.log("STYLE DISTRICTNAME:", districtName);
+        console.log("STYLE NAME,DISTRICTNAME:", feature.properties.NAME, districtName);
       }
       let heatmapColor;
       if(featureType==="precinct"){
