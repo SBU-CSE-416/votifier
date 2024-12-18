@@ -268,8 +268,8 @@ export default function EnsemblePlansBoxWhisker(){
                         ...barChartData,
                         datasets: barChartData.datasets.map(dataset => ({
                         ...dataset,
-                        backgroundColor: '#94aae4', // Set the color for the box
-                        borderColor: '#283d71', // Set the color for the whiskers
+                        backgroundColor: '#3388ff', // Set the color for the box
+                        borderColor: '#3388ff', // Set the color for the whiskers
                         }))
                     }}                        
                     options={{
