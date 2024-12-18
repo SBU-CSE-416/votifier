@@ -32,6 +32,7 @@ export default function DataPg({ stateSummaryData }) {
         percentage,                    
       })
     );
+    console.log("Income Distribution Data: ", incomeDistributionData);
   }
 
   return (
