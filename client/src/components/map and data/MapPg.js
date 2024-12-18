@@ -41,10 +41,6 @@ export default function MapPg() {
   }, [store.selectedStateCode]);
 
   useEffect(() => {
-    console.log("Data visibility updated:", store.isDataVisible);
-  }, [store.isDataVisible]);
-
-  useEffect(() => {
     console.log("Selected View Updated:", store.selectedMapView);
     const handle_precincts_view = async () => {
       if (store.selectedMapView === "precincts") {
