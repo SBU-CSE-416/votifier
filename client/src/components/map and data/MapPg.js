@@ -12,6 +12,7 @@ import { stateCodeMapping } from "../../utilities/FederalInfomationProcessingSta
 import { use } from "react";
 
 function MapResizer({store }) {
+  //DEAD CODE?
   const map = useMap();
 
   useEffect(() => {
@@ -48,6 +49,10 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
+    console.log("selected state code updated:", store.selectedStateCode);
+  }, [store.selectedStateCode]);
+
+  useEffect(() => {
     console.log("Data visibility updated:", store.isDataVisible);
   }, [store.isDataVisible]);
 
@@ -75,10 +80,7 @@ export default function MapPg() {
 
     handle_precincts_view();
   }, [store.selectedMapView]);
-
-  useEffect(() => {
-  },[store.selectedDistrict]);
-
+  
   useEffect(() => {
     async function fetchData() {
       try {
@@ -302,6 +304,27 @@ export default function MapPg() {
 
     console.log("featureType: ", featureType);
 
+    // useEffect(() => {
+    //   //Update the map layers to highlight the selected district
+    //   if (store.selectedDistrict) {
+    //     console.log("DO U SEE ME");
+    //     console.log("Selected District Updated:", store.selectedDistrict); // Add console log
+    //     map.eachLayer((obj) => {
+    //       let layers = obj._layers;
+    //       console.log("LAYER:", layers);
+    //       if(layers){
+    //         Object.values(layers).forEach((layer) => {
+    //           if (layer.feature && layer.feature.properties.NAME === `Congressional District ${store.selectedDistrict}`) {
+    //             highlightFeature(layer);
+    //           } else {
+    //             resetHighlight(layer);
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
+    // }, [store.selectedDistrict, map]);
+
     const geojsonStyle = (feature) => {
       let districtName;
       if(store.selectedDistrict){
@@ -329,6 +352,7 @@ export default function MapPg() {
     };
 
     const highlightFeature = (layer) => {
+      //console.log("LAYER2:", layer);
       layer.setStyle({
         weight: 3,
         color: "#000000",
@@ -560,14 +584,14 @@ export default function MapPg() {
           )}
 
           {/* District Boundaries */}
-          {store.isDataVisible===true && store.selectedMapView==="districts" && geojsonMarylandCongress && (
+          {store.isDataVisible===true && store.selectedMapView==="districts" && stateCodeMapping[store.selectedStateCode]==="MD" && geojsonMarylandCongress && (
             <FeatureInteraction
               geojsonData={geojsonMarylandCongress}
               featureType="district"
             />
           )}
 
-          {store.isDataVisible===true && store.selectedMapView==="districts" && geojsonSouthCarolinaCongress && (
+          {store.isDataVisible===true && store.selectedMapView==="districts" && stateCodeMapping[store.selectedStateCode]==="SC" && geojsonSouthCarolinaCongress && (
             <FeatureInteraction
               geojsonData={geojsonSouthCarolinaCongress}
               featureType="district"
