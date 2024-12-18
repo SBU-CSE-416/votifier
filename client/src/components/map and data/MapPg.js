@@ -49,7 +49,7 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
-    console.log("selected state code updated:", store.selectedStateCode);
+    console.log("selected state code UPDATED:", store.selectedStateCode);
   }, [store.selectedStateCode]);
 
   useEffect(() => {
@@ -487,6 +487,10 @@ export default function MapPg() {
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
     store.setSelectedHeatmap("none");
+    setGeojsonMarylandCongress(null);
+    setGeojsonSouthCarolinaCongress(null);
+    setGeojsonMarylandPrecinct(null);
+    setGeojsonSouthCarolinaPrecinct(null);
     // store.setFirstTabView("summary");
   };
   const onFeatureClick = async (feature) => {
@@ -506,7 +510,6 @@ export default function MapPg() {
         const state_summary_data = await fetchStateSummary("MD");
         console.log("Maryland demographics data:", state_summary_data.data);
         store.setSelectedStateCode(24);
-        console.log("store.selectedStateCode updated: ", store.selectedStateCode);
         setStateSummaryData(state_summary_data.data);
       } 
       else if (properties.NAME === "South Carolina") {
@@ -520,7 +523,6 @@ export default function MapPg() {
         const state_summary_data = await fetchStateSummary("SC");
         console.log("South Carolina demographics data:", state_summary_data.data);
         store.setSelectedStateCode(45);
-        console.log("store.selectedStateCode updated: ", store.selectedStateCode);
         setStateSummaryData(state_summary_data.data);
       }
     }else
@@ -604,7 +606,6 @@ export default function MapPg() {
             />
           )}
 
-          {console.log("store.selectedMapView, precinct's geoJson: ", store.selectedMapView, geojsonMarylandPrecinct, geojsonSouthCarolinaPrecinct)  }
           {/* Precinct Boundaries */}
           {store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonSouthCarolinaPrecinct && (
             <FeatureInteraction
