@@ -210,7 +210,18 @@ export default function EnsemblePlansBoxWhisker(){
                 <div className="box-plot-container">
                 {plotData && (            
                     <Plot
-                        data={[...plotData, dotData]}
+                        data={[
+                            ...plotData.map(trace => ({
+                            ...trace,
+                            marker: {
+                                color: '#3388ff',
+                            },
+                            line: {
+                                color: '#3388ff',
+                            },
+                            })),
+                            dotData
+                        ]}
                         layout={{
                         autosize: true,
                         title: optionsData?.title,
