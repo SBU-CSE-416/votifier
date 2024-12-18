@@ -45,7 +45,7 @@ export default function DataPg({ stateSummaryData }) {
             className={`tab ${activeTab === "summary" ? "active" : ""}`}
             onClick={() => setActiveTab("summary")}
           >
-            {store.firstTabView === "summary" ? "Summary" : "Districts Table"}
+            {store.firstTabView === "summary" || store.selectedMapView ==="precincts" ? "Summary" : "Districts Table"}
           </div>
           <div
             className={`tab ${activeTab === "gingles" ? "active" : ""}`}
@@ -69,18 +69,23 @@ export default function DataPg({ stateSummaryData }) {
         <div className="data-charts-container">
           {activeTab === "summary" && (
             <div className="data-charts">
-              <label style={{margin:'0px', padding:'0px'}}>
-                <span>Selected View</span>
-              </label>
-              <select
-                value={store.firstTabView}
-                onChange={(event) => store.setFirstTabView(event.target.value)}
-                style={{width:"30%", margin:'0px', padding:'0px'}}
-              >
-                <option value="summary">Summary</option>
-                <option value="districtsTable">Districts Table</option>
-              </select>
-              {store.firstTabView === "summary" ? 
+              {store.selectedMapView!=="precincts" &&
+              (
+                <>
+                  <label style={{ margin: '0px', padding: '0px' }}>
+                    <span>Selected View</span>
+                  </label>
+                  <select
+                    value={store.firstTabView}
+                    onChange={(event) => store.setFirstTabView(event.target.value)}
+                    style={{ width: "30%", margin: '0px', padding: '0px' }}
+                  >
+                    <option value="summary">Summary</option>
+                    <option value="districtsTable">Districts Table</option>
+                  </select>
+                </>
+              )}
+              {store.firstTabView === "summary" || store.selectedMapView==="precincts" ? 
                 <StateSummaryBarChart
                   data={incomeDistributionData}
                   title={"Household Income Distribution"}
