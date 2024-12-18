@@ -14,8 +14,8 @@ const getColor = (range) => rangeColors[range] || "#283d71";
 
 const HistogramChart = ({ data, title = "Title Needed" }) => (
   
-  <div style={{ margin: '30px', width:"100%", height:"100%"}}>
-    <h2 style={{ textAlign: 'center', marginBottom: '10px', fontFamily: 'Arial, sans-serif', color: '#333' }}>
+  <div style={{ margin: '10px', width:"100%", height:"60vh"}}>
+    <h2 style={{ textAlign: 'center', marginBottom: '0px' }}>
       {title}
     </h2>
     <ResponsiveContainer width={"90%"} height={"70%"}>

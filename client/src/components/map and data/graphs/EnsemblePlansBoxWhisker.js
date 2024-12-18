@@ -208,6 +208,7 @@ export default function EnsemblePlansBoxWhisker(){
 
             {selectedView === "box-whisker" && (            
                 <div className="box-plot-container">
+                    <h2>{optionsData?.title}</h2>
                 {plotData && (            
                     <Plot
                         data={[
@@ -224,13 +225,6 @@ export default function EnsemblePlansBoxWhisker(){
                         ]}
                         layout={{
                         autosize: true,
-                        title: {
-                            text: optionsData?.title,
-                            font: {
-                              family: 'Arial, sans-serif',
-                              weight: 'bold',
-                            },
-                        },
                         xaxis: {
                             title: optionsData?.axisX,
                             tickvals: boxWhiskerData?.map((entry) => entry.index),
@@ -262,7 +256,7 @@ export default function EnsemblePlansBoxWhisker(){
 
             {(selectedView === "summary" && barChartData) && (
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-                    <p style={{fontWeight:"bold"}}>{barOptionsData?.title}</p>
+                    <h2 style={{fontWeight:"bold", margin:0}}>{barOptionsData?.title}</h2>
                     <Bar
                     data={{
                         ...barChartData,
