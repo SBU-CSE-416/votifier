@@ -11,7 +11,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export default function EnsemblePlansBoxWhisker(){
     const { store } = useContext(MapStoreContext);
-    const [selectedEnsemble, setSelectedEnsemble] = useState("1");
+    const [selectedEnsemble, setSelectedEnsemble] = useState("2");
     const [selectedDataType, setSelectedDataType] = useState("race");
     const [selectedView, setSelectedView] = useState("box-whisker");
     const [racialGroup, setRacialGroup] = useState("WHITE");
@@ -208,12 +208,23 @@ export default function EnsemblePlansBoxWhisker(){
 
             {selectedView === "box-whisker" && (            
                 <div className="box-plot-container">
+                    <h2>{optionsData?.title}</h2>
                 {plotData && (            
                     <Plot
-                        data={[...plotData, dotData]}
+                        data={[
+                            ...plotData.map(trace => ({
+                            ...trace,
+                            marker: {
+                                color: '#3388ff',
+                            },
+                            line: {
+                                color: '#3388ff',
+                            },
+                            })),
+                            dotData
+                        ]}
                         layout={{
                         autosize: true,
-                        title: optionsData?.title,
                         xaxis: {
                             title: optionsData?.axisX,
                             tickvals: boxWhiskerData?.map((entry) => entry.index),
@@ -245,19 +256,30 @@ export default function EnsemblePlansBoxWhisker(){
 
             {(selectedView === "summary" && barChartData) && (
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-                    <p style={{}}>{barOptionsData?.title}</p>
+                    <h2 style={{fontWeight:"bold", margin:0}}>{barOptionsData?.title}</h2>
                     <Bar
-                        data={barChartData}
-                        options={{
+                    data={{
+                        ...barChartData,
+                        datasets: barChartData.datasets.map(dataset => ({
+                        ...dataset,
+                        backgroundColor: '#3388ff', // Set the color for the box
+                        borderColor: '#3388ff', // Set the color for the whiskers
+                        }))
+                    }}                        
+                    options={{
                         responsive: true,
                         plugins: {
                             legend: {
                             position: 'top',
                             },
-                            title: {
+                        title: {
                             display: true,
                             text: barOptionsData?.subtitle,
+                            font: {
+                                family: 'Arial, sans-serif',
+                                weight: 'bold', // Set the font weight to bold
                             },
+                        },
                         },
                         scales: {
                             x: {

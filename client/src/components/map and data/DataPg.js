@@ -32,6 +32,7 @@ export default function DataPg({ stateSummaryData }) {
         percentage,                    
       })
     );
+    console.log("Income Distribution Data: ", incomeDistributionData);
   }
 
   return (
@@ -69,13 +70,13 @@ export default function DataPg({ stateSummaryData }) {
         <div className="data-charts-container">
           {activeTab === "summary" && (
             <div className="data-charts">
-              <label>
+              <label style={{margin:'0px', padding:'0px'}}>
                 <span>Selected View</span>
               </label>
               <select
                 value={store.firstTabView}
                 onChange={(event) => store.setFirstTabView(event.target.value)}
-                style={{width:"30%"}}
+                style={{width:"30%", margin:'0px', padding:'0px'}}
               >
                 <option value="summary">Summary</option>
                 <option value="districtsTable">Districts Table</option>

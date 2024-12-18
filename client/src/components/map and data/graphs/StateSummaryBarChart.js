@@ -1,10 +1,21 @@
 import React from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+
+const rangeColors = {
+  "0-35K": "#D8FFD6",
+  "35K-60K": "#B4EAB0",
+  "60K-100K": "#91D48A",
+  "100K-125K": "#6DBF64",
+  "125K-150K": "#47AA3C",
+  "150K-MORE": "#0A9400"
+};
+
+const getColor = (range) => rangeColors[range] || "#283d71";
 
 const HistogramChart = ({ data, title = "Title Needed" }) => (
   
-  <div style={{ margin: '30px', width:"100%", height:"100%"}}>
-    <h2 style={{ textAlign: 'center', marginBottom: '10px', fontFamily: 'Arial, sans-serif', color: '#333' }}>
+  <div style={{ margin: '10px', width:"100%", height:"60vh"}}>
+    <h2 style={{ textAlign: 'center', marginBottom: '0px' }}>
       {title}
     </h2>
     <ResponsiveContainer width={"90%"} height={"70%"}>
@@ -31,7 +42,11 @@ const HistogramChart = ({ data, title = "Title Needed" }) => (
           tick={{ fontSize: 12 }}
         />
         <Tooltip />
-        <Bar dataKey="percentage" fill="#46ACC2" />
+        <Bar dataKey="percentage">
+          {data.map((entry, index) => (
+            <Cell key={`cell-${index}`} fill={getColor(entry.range)} />
+          ))}
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   </div>

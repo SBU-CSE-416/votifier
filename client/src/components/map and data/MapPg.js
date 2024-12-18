@@ -75,7 +75,7 @@ export default function MapPg() {
         }
       }
   
-      setDisableNavigation(true);
+      setDisableNavigation(false);
     };
 
     handle_precincts_view();
@@ -380,8 +380,14 @@ export default function MapPg() {
       if(feature.properties.NAME === "South Carolina" || feature.properties.NAME === "Maryland"){
         store.setMapView("districts");
         map.fitBounds(bounds, {
-          maxZoom:10, 
+          maxZoom:7, 
         });
+        //TODO consider deleting the below cuz redundant?
+        if(feature.properties.NAME === "South Carolina"){
+          store.setSelectedStateCode(45);
+        }else if(feature.properties.NAME === "Maryland"){
+          store.setSelectedStateCode(24);
+        }
       }
       onFeatureClick(feature);
     };
@@ -536,7 +542,7 @@ export default function MapPg() {
     }
 
     store.setDataVisibility(true);
-    setDisableNavigation(true);
+    setDisableNavigation(false);
   };
   return (
     <div style={{ display: "flex" }}>
@@ -549,7 +555,7 @@ export default function MapPg() {
       <div
         style={{
           position: "relative",
-          width: store.isDataVisible ? "39vw" : "86vw",
+          width: store.isDataVisible ? "35vw" : "86vw",
         }}
       >
         <MapContainer
