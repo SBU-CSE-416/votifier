@@ -469,6 +469,8 @@ public class DataController {
                 boxplotRacialAnalysis = boxplotRacialRepository.findBlackByName(stateName);
             } else if (racialGroupName.equals("ASIAN")) {
                 boxplotRacialAnalysis = boxplotRacialRepository.findAsianByName(stateName);
+            } else if (racialGroupName.equals("HISPANIC")) {
+                boxplotRacialAnalysis = boxplotRacialRepository.findHispanicByName(stateName);
             }
 
             if (boxplotRacialAnalysis == null) {

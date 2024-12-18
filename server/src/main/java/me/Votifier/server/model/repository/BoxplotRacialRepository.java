@@ -29,5 +29,13 @@ public interface BoxplotRacialRepository extends MongoRepository<BoxplotRacialAn
         fields = "{ 'data.ensemble_1.ASIAN': 1, 'data.ensemble_2.ASIAN': 1, '_id': 0 }"
     )
     BoxplotRacialAnalysis findAsianByName(String NAME);
+
+    // Queries for HISPANIC
+
+    @Query(
+        value = "{ 'NAME': ?0, 'data.ensemble_1.HISPANIC': { $exists: true }, 'data.ensemble_2.HISPANIC': { $exists: true } }", 
+        fields = "{ 'data.ensemble_1.HISPANIC': 1, 'data.ensemble_2.HISPANIC': 1, '_id': 0 }"
+    )
+    BoxplotRacialAnalysis findHispanicByName(String NAME);
 }
 
