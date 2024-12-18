@@ -247,8 +247,15 @@ export default function EnsemblePlansBoxWhisker(){
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
                     <p style={{}}>{barOptionsData?.title}</p>
                     <Bar
-                        data={barChartData}
-                        options={{
+                    data={{
+                        ...barChartData,
+                        datasets: barChartData.datasets.map(dataset => ({
+                        ...dataset,
+                        backgroundColor: '#94aae4', // Set the color for the box
+                        borderColor: '#283d71', // Set the color for the whiskers
+                        }))
+                    }}                        
+                    options={{
                         responsive: true,
                         plugins: {
                             legend: {
