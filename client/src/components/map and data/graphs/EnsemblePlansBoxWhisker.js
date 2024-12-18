@@ -11,7 +11,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 export default function EnsemblePlansBoxWhisker(){
     const { store } = useContext(MapStoreContext);
-    const [selectedEnsemble, setSelectedEnsemble] = useState("1");
+    const [selectedEnsemble, setSelectedEnsemble] = useState("2");
     const [selectedDataType, setSelectedDataType] = useState("race");
     const [selectedView, setSelectedView] = useState("box-whisker");
     const [racialGroup, setRacialGroup] = useState("WHITE");
