@@ -334,7 +334,7 @@ export default function EnsemblePlansBoxWhisker(){
                             />
                             Asian
                         </label>
-                        {/* <label>
+                        <label>
                             <input 
                                 type="radio" 
                                 name="racialGroup" 
@@ -343,7 +343,7 @@ export default function EnsemblePlansBoxWhisker(){
                                 onChange={(event) => setRacialGroup(event.target.value)} 
                             />
                             Hispanic
-                        </label> */}
+                        </label>
                         </> : null}
                     </div>
                 </div>
