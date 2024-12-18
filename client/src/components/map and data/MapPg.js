@@ -380,8 +380,14 @@ export default function MapPg() {
       if(feature.properties.NAME === "South Carolina" || feature.properties.NAME === "Maryland"){
         store.setMapView("districts");
         map.fitBounds(bounds, {
-          maxZoom:10, 
+          maxZoom:7, 
         });
+        //TODO consider deleting the below cuz redundant?
+        if(feature.properties.NAME === "South Carolina"){
+          store.setSelectedStateCode(45);
+        }else if(feature.properties.NAME === "Maryland"){
+          store.setSelectedStateCode(24);
+        }
       }
       onFeatureClick(feature);
     };
