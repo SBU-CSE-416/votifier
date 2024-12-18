@@ -288,27 +288,6 @@ export default function MapPg() {
 
     console.log("featureType: ", featureType);
 
-    // useEffect(() => {
-    //   //Update the map layers to highlight the selected district
-    //   if (store.selectedDistrict) {
-    //     console.log("DO U SEE ME");
-    //     console.log("Selected District Updated:", store.selectedDistrict); // Add console log
-    //     map.eachLayer((obj) => {
-    //       let layers = obj._layers;
-    //       console.log("LAYER:", layers);
-    //       if(layers){
-    //         Object.values(layers).forEach((layer) => {
-    //           if (layer.feature && layer.feature.properties.NAME === `Congressional District ${store.selectedDistrict}`) {
-    //             highlightFeature(layer);
-    //           } else {
-    //             resetHighlight(layer);
-    //           }
-    //         });
-    //       }
-    //     });
-    //   }
-    // }, [store.selectedDistrict, map]);
-
     const geojsonStyle = (feature) => {
       let districtName = "";
       if(store.selectedDistrict){
