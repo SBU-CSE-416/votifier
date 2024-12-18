@@ -299,18 +299,17 @@ export default function MapPg() {
         map.boxZoom.enable();
       }
     }, [map]);
+
     console.log("featureType: ", featureType);
 
     const geojsonStyle = (feature) => {
       let districtName;
-      //console.log("STYLE FEATURE:", feature);
       if(store.selectedDistrict){
         districtName = `Congressional District ${store.selectedDistrict}`;
         console.log("STYLE DISTRICTNAME:", districtName);
       }
       let heatmapColor;
       if(featureType==="precinct"){
-        //TODO handle heatmap color
         heatmapColor = heatmapData?.[feature.properties.UNIQUE_ID];
       }
       return {
@@ -458,7 +457,7 @@ export default function MapPg() {
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
     store.setSelectedHeatmap("none");
-    store.setFirstTabView("summary");
+    // store.setFirstTabView("summary");
   };
   const onFeatureClick = async (feature) => {
     const properties = feature.properties;
