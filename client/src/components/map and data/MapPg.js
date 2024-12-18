@@ -75,7 +75,7 @@ export default function MapPg() {
         }
       }
   
-      setDisableNavigation(true);
+      setDisableNavigation(false);
     };
 
     handle_precincts_view();
@@ -536,7 +536,7 @@ export default function MapPg() {
     }
 
     store.setDataVisibility(true);
-    setDisableNavigation(true);
+    setDisableNavigation(false);
   };
   return (
     <div style={{ display: "flex" }}>
