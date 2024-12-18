@@ -11,18 +11,6 @@ import { MapStoreContext } from "../../stores/MapStore";
 import { stateCodeMapping } from "../../utilities/FederalInfomationProcessingStandardEnumUtil";
 import { use } from "react";
 
-function MapResizer({store }) {
-  //DEAD CODE?
-  const map = useMap();
-
-  useEffect(() => {
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  }, [store.isDataVisible, map]);
-
-  return null;
-}
 export default function MapPg() {
   const { store } = useContext(MapStoreContext);
 
