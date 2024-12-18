@@ -293,21 +293,21 @@ private Bin assignBin(int estimatedIncome, Map<Integer, Bin> loadedHeatmapBins) 
     
     private String assignPovertyColor(double povertyPercentage) {
         if (povertyPercentage <= 10) {
-            return "#f5f4f0"; // Light Grey
+            return "#FFCCBC"; // Very Light Deep Orange (Deep Orange 100)
         } else if (povertyPercentage <= 20) {
-            return "#FFFDE7"; // Pale Yellow
+            return "#FFAB91"; // Light Deep Orange (Deep Orange 200)
         } else if (povertyPercentage <= 30) {
-            return "#FFF9C4"; // Light Yellow
+            return "#FF8A65"; // Soft Deep Orange (Deep Orange 300)
         } else if (povertyPercentage <= 40) {
-            return "#FFF59D"; // Lemon Yellow
+            return "#FF7043"; // Moderate Deep Orange (Deep Orange 400)
         } else if (povertyPercentage <= 50) {
-            return "#FFEE58"; // Medium Yellow
+            return "#FF5722"; // Standard Deep Orange (Deep Orange 500)
         } else if (povertyPercentage <= 60) {
-            return "#FFEB3B"; // Bright Yellow
+            return "#F4511E"; // Richer Deep Orange (Deep Orange 600)
         } else if (povertyPercentage <= 70) {
-            return "#FDD835"; // Darker Yellow
+            return "#E64A19"; // Dark Deep Orange (Deep Orange 700)
         } else {
-            return "#FBC02D"; // Deep Yellow
+            return "#D84315"; // Deeper, Darker Deep Orange (Deep Orange 800)
         }
     }
     
