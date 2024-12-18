@@ -49,6 +49,7 @@ export default function LeftSideMenu(props) {
               value={store.selectedMapView}
               onChange={(event) => store.setMapView(event.target.value)}
               className="dropdown-select"
+              style={{width: '80%'}}
             >
               <option value="districts">Districts</option>
               <option value="precincts">Precincts</option>
@@ -66,6 +67,7 @@ export default function LeftSideMenu(props) {
                   value={store.selectedHeatmap}
                   onChange={(event) => store.setSelectedHeatmap(event.target.value)}
                   className="dropdown-select"
+                  style={{width: '80%'}}
                 >
                   <option value="none">None</option>
                   <option value="demographic">Demographic</option>
@@ -89,6 +91,7 @@ export default function LeftSideMenu(props) {
                   value={store.selectedDemographic}
                   onChange={(event) => store.setSelectedDemographic(event.target.value)}
                   className="dropdown-select"
+                  style={{width: '80%'}}
                 >
                   <option value="WHITE">White</option>
                   <option value="BLACK">Black/African American</option>

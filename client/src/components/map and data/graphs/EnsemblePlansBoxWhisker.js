@@ -34,7 +34,6 @@ export default function EnsemblePlansBoxWhisker(){
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
             const json = await response.json();
-            console.log("boxplot race data:",json);
             return json;
         } catch (error) {
             console.error(error.message);
@@ -45,7 +44,6 @@ export default function EnsemblePlansBoxWhisker(){
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/economics/${incomeGroup}`);
             const json = await response.json();
-            console.log("boxplot income data:",json);
             return json;
         } catch (error) {
             console.error(error.message);
@@ -56,7 +54,6 @@ export default function EnsemblePlansBoxWhisker(){
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/region_type/${regionType}`);
             const json = await response.json();
-            console.log("boxplot region data:",json);
             return json;
         } catch (error) {
             console.error(error.message);
@@ -67,7 +64,6 @@ export default function EnsemblePlansBoxWhisker(){
         try{
             const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/plansplits`);
             const json = await response.json();
-            console.log("ensemble summary data:",json);
             return json;
         } catch (error) {
             console.error(error.message);
@@ -80,20 +76,15 @@ export default function EnsemblePlansBoxWhisker(){
         let response;
         let ensembleData;
         if (selectedDataType === "race"){
-            console.log("race ensemble for state,racialGroup:",stateAbbreviation,racialGroup);
             response = await fetch_ensemble_data_race(stateAbbreviation, racialGroup);
             ensembleData = response.data[ensemblePlan]?.[racialGroup];
         } else if (selectedDataType === "income"){
-            console.log("income ensemble for state,incomeGroup:",stateAbbreviation,incomeGroup);
             response = await fetch_ensemble_data_income(stateAbbreviation, incomeGroup);
             ensembleData = response.data[ensemblePlan]?.[incomeGroup];
         } else if (selectedDataType === "region"){
-            console.log("region ensemble for state,regionType:",stateAbbreviation,regionType);
             response = await fetch_ensemble_data_region(stateAbbreviation, regionType);
             ensembleData = response.data[ensemblePlan]?.[regionType];
         }
-        console.log("RETRIEVED ENSEMBLE:",response);
-        console.log("RETRIEVED ENSEMBLE DATA:",ensembleData);
         
         if (response && ensembleData){
             const formattedData = Object.keys(ensembleData.data).map((key,index) => ({
@@ -108,8 +99,6 @@ export default function EnsemblePlansBoxWhisker(){
             }));
             setBoxWhiskerData(formattedData);
             setOptionsData(ensembleData.labels);
-            console.log("BOX WHISKER DATA:",formattedData);
-            console.log("BOX WHISKER OPTIONS:",optionsData);
         }
 
         
@@ -120,8 +109,6 @@ export default function EnsemblePlansBoxWhisker(){
         let response = await fetch_ensemble_summary(stateAbbreviation);
         var ensemblePlan = `ensemble_${selectedEnsemble}`;
         let ensembleData = response.data[ensemblePlan];
-        console.log("ensemble summary data fetched: ", response);
-        console.log("RETRIEVED ensemble data:",ensembleData);
         
         const barData = {
             labels: Object.keys(ensembleData.data),

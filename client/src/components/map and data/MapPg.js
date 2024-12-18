@@ -11,18 +11,6 @@ import { MapStoreContext } from "../../stores/MapStore";
 import { stateCodeMapping } from "../../utilities/FederalInfomationProcessingStandardEnumUtil";
 import { use } from "react";
 
-function MapResizer({store }) {
-  //DEAD CODE?
-  const map = useMap();
-
-  useEffect(() => {
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 0);
-  }, [store.isDataVisible, map]);
-
-  return null;
-}
 export default function MapPg() {
   const { store } = useContext(MapStoreContext);
 
@@ -49,12 +37,8 @@ export default function MapPg() {
   const defaultZoom = 4.5;
 
   useEffect(() => {
-    console.log("selected state code updated:", store.selectedStateCode);
+    console.log("selected state code UPDATED:", store.selectedStateCode);
   }, [store.selectedStateCode]);
-
-  useEffect(() => {
-    console.log("Data visibility updated:", store.isDataVisible);
-  }, [store.isDataVisible]);
 
   useEffect(() => {
     console.log("Selected View Updated:", store.selectedMapView);
@@ -304,27 +288,6 @@ export default function MapPg() {
 
     console.log("featureType: ", featureType);
 
-    // useEffect(() => {
-    //   //Update the map layers to highlight the selected district
-    //   if (store.selectedDistrict) {
-    //     console.log("DO U SEE ME");
-    //     console.log("Selected District Updated:", store.selectedDistrict); // Add console log
-    //     map.eachLayer((obj) => {
-    //       let layers = obj._layers;
-    //       console.log("LAYER:", layers);
-    //       if(layers){
-    //         Object.values(layers).forEach((layer) => {
-    //           if (layer.feature && layer.feature.properties.NAME === `Congressional District ${store.selectedDistrict}`) {
-    //             highlightFeature(layer);
-    //           } else {
-    //             resetHighlight(layer);
-    //           }
-    //         });
-    //       }
-    //     });
-    //   }
-    // }, [store.selectedDistrict, map]);
-
     const geojsonStyle = (feature) => {
       let districtName = "";
       if(store.selectedDistrict){
@@ -487,6 +450,10 @@ export default function MapPg() {
     store.setSelectedStateCode(null);
     store.setSelectedDistrict(null);
     store.setSelectedHeatmap("none");
+    setGeojsonMarylandCongress(null);
+    setGeojsonSouthCarolinaCongress(null);
+    setGeojsonMarylandPrecinct(null);
+    setGeojsonSouthCarolinaPrecinct(null);
     // store.setFirstTabView("summary");
   };
   const onFeatureClick = async (feature) => {
@@ -506,7 +473,6 @@ export default function MapPg() {
         const state_summary_data = await fetchStateSummary("MD");
         console.log("Maryland demographics data:", state_summary_data.data);
         store.setSelectedStateCode(24);
-        console.log("store.selectedStateCode updated: ", store.selectedStateCode);
         setStateSummaryData(state_summary_data.data);
       } 
       else if (properties.NAME === "South Carolina") {
@@ -520,7 +486,6 @@ export default function MapPg() {
         const state_summary_data = await fetchStateSummary("SC");
         console.log("South Carolina demographics data:", state_summary_data.data);
         store.setSelectedStateCode(45);
-        console.log("store.selectedStateCode updated: ", store.selectedStateCode);
         setStateSummaryData(state_summary_data.data);
       }
     }else
@@ -604,7 +569,6 @@ export default function MapPg() {
             />
           )}
 
-          {console.log("store.selectedMapView, precinct's geoJson: ", store.selectedMapView, geojsonMarylandPrecinct, geojsonSouthCarolinaPrecinct)  }
           {/* Precinct Boundaries */}
           {store.isDataVisible===true && store.selectedMapView==="precincts" && geojsonSouthCarolinaPrecinct && (
             <FeatureInteraction
