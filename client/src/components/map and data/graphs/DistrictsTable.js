@@ -5,7 +5,7 @@ import "../../../stylesheets/map and data/graphs/DistrictsTable.css";
 export default function DistrictsTable(){
     const { store } = useContext(MapStoreContext);
     const [districtsData, setDistrictsData] = useState([]);
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [selectedDistrict2, setSelectedDistrict2] = useState(null);
     
     useEffect(() => {
         const fetchData = async () => {
@@ -18,8 +18,7 @@ export default function DistrictsTable(){
     }, [store.selectedStateCode]);
 
     useEffect(() => {
-        console.log("Selected District in DistrictsTable.js: ", store.selectedDistrict);
-        setSelectedDistrict(store.selectedDistrict);
+        setSelectedDistrict2(store.selectedDistrict);
     }, [store.selectedDistrict]);
 
     const fetch_districts_summary = async (stateAbbreviation) => {
@@ -34,9 +33,8 @@ export default function DistrictsTable(){
     }
 
     const handleRowClick = (district) => {
-        //console.log("District clicked: ", district);
-        store.selectedDistrict = district;
-        setSelectedDistrict(district);
+        store.setSelectedDistrict(district);
+        setSelectedDistrict2(district);
     }
 
     return (
@@ -60,7 +58,7 @@ export default function DistrictsTable(){
                     {districtsData.data?.map((district, index) => (
                         <tr 
                             key={index}
-                            className={selectedDistrict === district.CONG_DIST ? "highlighted" : ""}
+                            className={selectedDistrict2 === district.CONG_DIST ? "highlighted" : ""}
                             onClick={() => handleRowClick(district.CONG_DIST)}
                         >
                             <td>{district.CONG_DIST}</td>
