@@ -224,7 +224,13 @@ export default function EnsemblePlansBoxWhisker(){
                         ]}
                         layout={{
                         autosize: true,
-                        title: optionsData?.title,
+                        title: {
+                            text: optionsData?.title,
+                            font: {
+                              family: 'Arial, sans-serif',
+                              weight: 'bold',
+                            },
+                        },
                         xaxis: {
                             title: optionsData?.axisX,
                             tickvals: boxWhiskerData?.map((entry) => entry.index),
@@ -256,7 +262,7 @@ export default function EnsemblePlansBoxWhisker(){
 
             {(selectedView === "summary" && barChartData) && (
                 <div style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
-                    <p style={{}}>{barOptionsData?.title}</p>
+                    <p style={{fontWeight:"bold"}}>{barOptionsData?.title}</p>
                     <Bar
                     data={{
                         ...barChartData,
@@ -272,10 +278,14 @@ export default function EnsemblePlansBoxWhisker(){
                             legend: {
                             position: 'top',
                             },
-                            title: {
+                        title: {
                             display: true,
                             text: barOptionsData?.subtitle,
+                            font: {
+                                family: 'Arial, sans-serif',
+                                weight: 'bold', // Set the font weight to bold
                             },
+                        },
                         },
                         scales: {
                             x: {
