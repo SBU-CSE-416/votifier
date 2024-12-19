@@ -292,7 +292,7 @@ export default function MapPg() {
       let districtName = "";
       if(store.selectedDistrict){
         districtName = `Congressional District ${store.selectedDistrict}`;
-        console.log("STYLE NAME,DISTRICTNAME:", feature.properties.NAME, districtName);
+        //console.log("STYLE NAME,DISTRICTNAME:", feature.properties.NAME, districtName);
       }
       let heatmapColor;
       if(featureType==="precinct"){
@@ -337,7 +337,6 @@ export default function MapPg() {
         const districtNumberMatch = feature.properties.NAME.match(/(\d+)$/);
         if(districtNumberMatch){
           store.setSelectedDistrict(Number(districtNumberMatch[0]));
-          console.log("District clicked on map:", store.selectedDistrict);
         }
       }
       if(feature.properties.NAME === "South Carolina" || feature.properties.NAME === "Maryland"){
