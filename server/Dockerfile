@@ -11,5 +11,5 @@ RUN mvn -f /home/app/pom.xml clean package
 #
 FROM eclipse-temurin:17-jre
 COPY --from=build /home/app/target/getyourway-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
-EXPOSE 8080
+EXPOSE 8000
 ENTRYPOINT ["java", "-jar", "/usr/local/lib/demo.jar"]
