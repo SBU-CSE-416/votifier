@@ -6,7 +6,7 @@ export default function DistrictsTable(){
     const { store } = useContext(MapStoreContext);
     const [districtsData, setDistrictsData] = useState([]);
     const [selectedDistrict2, setSelectedDistrict2] = useState(null);
-    
+     const API_URL = process.env.NODE_ENV === 'production' ? 'https://onthefly-server.up.railway.app' : 'http://localhost:8000'
     useEffect(() => {
         const fetchData = async () => {
             var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
@@ -23,7 +23,7 @@ export default function DistrictsTable(){
 
     const fetch_districts_summary = async (stateAbbreviation) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/districts/summary`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/districts/summary`);
             const json = await response.json();
             //console.log("Districts Summary Data: ", json);
             return json;

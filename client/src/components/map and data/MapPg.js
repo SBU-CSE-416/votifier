@@ -33,6 +33,8 @@ export default function MapPg() {
   const [heatmapData, setHeatmapData] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   
+  const API_URL = process.env.NODE_ENV === 'production' ? 'https://onthefly-server.up.railway.app' : 'http://localhost:8000'
+
   const defaultView = [37.7, -94.7];
   const defaultZoom = 4.5;
 
@@ -68,12 +70,12 @@ export default function MapPg() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response1 = await axios.get("http://localhost:8000/api/map/SC/boundary/state");
+        const response1 = await axios.get(`${API_URL}/api/map/SC/boundary/state`);
 
         setGeojsonSouthCarolina(response1.data);
         console.log("SC boundary data from server:", response1.data);
 
-        const response2 = await axios.get("http://localhost:8000/api/map/MD/boundary/state");
+        const response2 = await axios.get(`${API_URL}/api/map/MD/boundary/state`);
 
         setGeojsonMaryland(response2.data);
         console.log("MD boundary data from server:", response2.data);
@@ -88,7 +90,7 @@ export default function MapPg() {
   const fetch_demographic_heatmap = async (stateAbbreviation, racialGroup) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/demographic/${racialGroup}`
+        `${API_URL}/api/map/${stateAbbreviation}/heatmap/demographic/${racialGroup}`
       );
       const data = res.data;
       console.log("demographic heatmap data:", data);
@@ -102,7 +104,7 @@ export default function MapPg() {
   const fetch_economicIncome_heatmap = async (stateAbbreviation) => {
     try{
       const res = await axios.get(
-        `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/economic-income`
+        `${API_URL}/api/map/${stateAbbreviation}/heatmap/economic-income`
       );
       const data = res.data;
       console.log("economicIncome heatmap data:", data);
@@ -116,7 +118,7 @@ export default function MapPg() {
   const fetch_economicRegions_heatmap = async (stateAbbreviation) => {
     try{
       const res = await axios.get(
-        `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/regions`
+        `${API_URL}/api/map/${stateAbbreviation}/heatmap/regions`
       );
       const data = res.data;
       console.log("economicRegions heatmap data:", data);
@@ -130,7 +132,7 @@ export default function MapPg() {
   const fetch_economicPoverty_heatmap = async (stateAbbreviation) => {
     try{
       const res = await axios.get(
-        `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/economic-poverty`
+        `${API_URL}/api/map/${stateAbbreviation}/heatmap/economic-poverty`
       );
       const data = res.data;
       console.log("economicPoverty heatmap data:", data);
@@ -144,7 +146,7 @@ export default function MapPg() {
   const fetch_economicPolitical_heatmap = async (stateAbbreviation) => {
     try{
       const res = await axios.get(
-        `http://localhost:8000/api/map/${stateAbbreviation}/heatmap/economic-political`
+        `${API_URL}/api/map/${stateAbbreviation}/heatmap/economic-political`
       );
       const data = res.data;
       console.log("economicPolitical heatmap data:", data);
@@ -400,7 +402,7 @@ export default function MapPg() {
   const fetchPrecinctBoundary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/map/${state_abbreviation}/boundary/precincts`
+        `${API_URL}/api/map/${state_abbreviation}/boundary/precincts`
       );
       
       return res;
@@ -411,7 +413,7 @@ export default function MapPg() {
   const fetchDistrictBoundary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/map/${state_abbreviation}/boundary/districts`
+        `${API_URL}/api/map/${state_abbreviation}/boundary/districts`
       );
       return res;
     } catch (error) {
@@ -421,7 +423,7 @@ export default function MapPg() {
   const fetchStateSummary = async (state_abbreviation) => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/data/${state_abbreviation}/summary`
+        `${API_URL}/api/data/${state_abbreviation}/summary`
       );
       return res;
     } catch (error) {

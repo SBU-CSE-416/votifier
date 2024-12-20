@@ -21,6 +21,7 @@ export default function EnsemblePlansBoxWhisker(){
     const [optionsData, setOptionsData] = useState(null);
     const [barChartData, setBarChartData] = useState(null);
     const [barOptionsData, setBarOptionsData] = useState(null);
+     const API_URL = process.env.NODE_ENV === 'production' ? 'https://onthefly-server.up.railway.app' : 'http://localhost:8000'
     useEffect(() => {
         if (selectedView === "box-whisker"){
             check_box_plot_state();
@@ -32,7 +33,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_race = async (stateAbbreviation, racialGroup) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
             const json = await response.json();
             return json;
         } catch (error) {
@@ -42,7 +43,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_income = async (stateAbbreviation, incomeGroup) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/economics/${incomeGroup}`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/boxplot/economics/${incomeGroup}`);
             const json = await response.json();
             return json;
         } catch (error) {
@@ -52,7 +53,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_region = async (stateAbbreviation, regionType) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/boxplot/region_type/${regionType}`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/boxplot/region_type/${regionType}`);
             const json = await response.json();
             return json;
         } catch (error) {
@@ -62,7 +63,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_summary = async (stateAbbreviation) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/plansplits`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/plansplits`);
             const json = await response.json();
             return json;
         } catch (error) {

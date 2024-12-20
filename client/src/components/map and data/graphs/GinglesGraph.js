@@ -26,7 +26,7 @@ export default function GinglesGraph() {
     const [republicanCandidate, setRepublicanCandidate] = useState("");
     const [democraticCandidate, setDemocraticCandidate] = useState("");
     const [election, setElection] = useState("");
-    
+    const API_URL = process.env.NODE_ENV === 'production' ? 'https://onthefly-server.up.railway.app' : 'http://localhost:8000'
     useEffect(() => {
         check_state();
     }, [selectedGingles, racialGroup, regionType]);
@@ -34,7 +34,7 @@ export default function GinglesGraph() {
     //GUI-12
     const fetch_gingles_race = async (stateAbbreviation, racialGroup) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/gingles/demographics/${racialGroup}`);
             const json = await response.json();
             return json;
         } catch (error){
@@ -45,7 +45,7 @@ export default function GinglesGraph() {
     //GUI-13 (Specific regions)
     const fetch_gingles_income_by_region = async (stateAbbreviation, regionType) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/gingles/economic/${regionType}`);
             const json = await response.json();
             return json;
         } catch (error){
@@ -56,7 +56,7 @@ export default function GinglesGraph() {
     //GUI-14
     const fetch_gingles_income_race = async (stateAbbreviation, racialGroup) => {
         try{
-            const response = await fetch(`http://localhost:8000/api/data/${stateAbbreviation}/gingles/demographics-and-economic/${racialGroup}`);
+            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/gingles/demographics-and-economic/${racialGroup}`);
             const json = await response.json();
             return json;
         } catch (error){
