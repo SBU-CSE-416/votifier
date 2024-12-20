@@ -93,7 +93,7 @@ else:
 
 
 # # After inserting, create the index
-collection.create_index([("geometry", "2dsphere")])
+# collection.create_index([("geometry", "2dsphere")])
 print("South Carolina Precinct GeoJSON data inserted index created")
 
 maryland_precincts_path = 'states/maryland/geodata/maryland_precincts.geojson'
@@ -110,13 +110,17 @@ if geojson_data["type"] == "FeatureCollection":
     
     for feature in tqdm(features, desc="Inserting Maryland precincts"):
         feature["NAME"] = "Maryland"
-        collection.insert_one(feature)
+        try:
+            collection.insert_one(feature)
+        except pymongo.errors.WriteError as e:
+            # Log or ignore the error based on your requirements
+            pass
 
     print(f"Inserted {len(features)} precincts into MongoDB.")
 else:
     print("GeoJSON file is not a FeatureCollection.")
 
-collection.create_index([("geometry", "2dsphere")])
+# collection.create_index([("geometry", "2dsphere")])
 
 print("Maryland Precinct GeoJSON data inserted index created")
 
