@@ -1,2 +1,4 @@
 *.geojson filter=lfs diff=lfs merge=lfs -text
 *.json filter=lfs diff=lfs merge=lfs -text
+data/raw/precincts/2020-md-precinct-general.csv filter=lfs diff=lfs merge=lfs -text
+data/raw/census_block/election/SC_l2_2022stats_2020block/SC_l2_2022stats_2020block.csv filter=lfs diff=lfs merge=lfs -text
