@@ -21,7 +21,7 @@ export default function EnsemblePlansBoxWhisker(){
     const [optionsData, setOptionsData] = useState(null);
     const [barChartData, setBarChartData] = useState(null);
     const [barOptionsData, setBarOptionsData] = useState(null);
-     const API_URL = process.env.NODE_ENV === 'production' ? 'votifier-server-production.up.railway.app' : 'http://localhost:8000'
+    const API_URL = 'votifier-server-production.up.railway.app'
     useEffect(() => {
         if (selectedView === "box-whisker"){
             check_box_plot_state();

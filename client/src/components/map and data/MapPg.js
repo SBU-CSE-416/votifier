@@ -33,7 +33,7 @@ export default function MapPg() {
   const [heatmapData, setHeatmapData] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   
-  const API_URL = process.env.NODE_ENV === 'production' ? 'votifier-server-production.up.railway.app' : 'http://localhost:8000'
+  const API_URL = 'votifier-server-production.up.railway.app'
 
   const defaultView = [37.7, -94.7];
   const defaultZoom = 4.5;
