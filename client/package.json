@@ -1,3 +1,58 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c301dd75e2bed2d180a07495e3047ea8711f707adf77865b493f1b0821a43e9b
-size 1400
+{
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.7",
+    "browserify-zlib": "^0.2.0",
+    "chart.js": "^4.4.7",
+    "chartjs-chart-box-and-violin-plot": "^4.0.0",
+    "client": "^0.0.1",
+    "d3": "^7.9.0",
+    "dotenv": "^16.4.7",
+    "geojson": "^0.5.0",
+    "https-browserify": "^1.0.0",
+    "leaflet": "^1.9.4",
+    "plotly.js": "^2.35.3",
+    "plotly.js-dist": "^2.35.3",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "react-leaflet": "^4.2.1",
+    "react-plotly.js": "^2.6.0",
+    "react-scripts": "5.0.1",
+    "recharts": "^2.15.0",
+    "stream-http": "^3.2.0",
+    "util": "^0.12.5",
+    "victory": "^37.3.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "npx http-server ./build",
+    "build": "CI=false react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
