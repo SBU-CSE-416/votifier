@@ -33,7 +33,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_race = async (stateAbbreviation, racialGroup) => {
         try{
-            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
+            const response = await fetch(`https://votifier-client-production.up.railway.app/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
             const json = await response.json();
             return json;
         } catch (error) {
