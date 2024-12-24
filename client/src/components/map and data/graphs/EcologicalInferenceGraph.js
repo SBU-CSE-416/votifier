@@ -14,7 +14,7 @@ export default function EcologicalInferenceGraph() {
 
     const [republicanData, setRepublicanData] = useState([]);
     const [democraticData, setDemocraticData] = useState([]);
-    const API_URL = process.env.NODE_ENV === 'production' ? 'https://onthefly-server.up.railway.app' : 'http://localhost:8000'
+    const API_URL = process.env.NODE_ENV === 'production' ? 'votifier-server-production.up.railway.app' : 'http://localhost:8000'
     useEffect(() => {
         check_state();
     },[selectedEI, racialGroup, regionType, economicGroup]);

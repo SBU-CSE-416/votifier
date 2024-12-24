@@ -6,7 +6,7 @@ export default function DistrictsTable(){
     const { store } = useContext(MapStoreContext);
     const [districtsData, setDistrictsData] = useState([]);
     const [selectedDistrict2, setSelectedDistrict2] = useState(null);
-     const API_URL = process.env.NODE_ENV === 'production' ? 'https://onthefly-server.up.railway.app' : 'http://localhost:8000'
+     const API_URL = process.env.NODE_ENV === 'production' ? 'votifier-server-production.up.railway.app' : 'http://localhost:8000'
     useEffect(() => {
         const fetchData = async () => {
             var stateAbbreviation = stateCodeMapping[store.selectedStateCode];
