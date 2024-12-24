@@ -23,7 +23,7 @@ export default function DistrictsTable(){
 
     const fetch_districts_summary = async (stateAbbreviation) => {
         try{
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/districts/summary`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/districts/summary`);
             const json = await response.json();
             //console.log("Districts Summary Data: ", json);
             return json;

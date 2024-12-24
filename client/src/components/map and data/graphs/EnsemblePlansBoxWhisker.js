@@ -33,7 +33,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_race = async (stateAbbreviation, racialGroup) => {
         try{
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/boxplot/demographics/${racialGroup}`);
             const json = await response.json();
             return json;
         } catch (error) {
@@ -43,7 +43,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_income = async (stateAbbreviation, incomeGroup) => {
         try{
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/boxplot/economics/${incomeGroup}`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/boxplot/economics/${incomeGroup}`);
             const json = await response.json();
             return json;
         } catch (error) {
@@ -53,7 +53,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_data_region = async (stateAbbreviation, regionType) => {
         try{
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/boxplot/region_type/${regionType}`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/boxplot/region_type/${regionType}`);
             const json = await response.json();
             return json;
         } catch (error) {
@@ -63,7 +63,7 @@ export default function EnsemblePlansBoxWhisker(){
 
     const fetch_ensemble_summary = async (stateAbbreviation) => {
         try{
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/plansplits`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/plansplits`);
             const json = await response.json();
             return json;
         } catch (error) {

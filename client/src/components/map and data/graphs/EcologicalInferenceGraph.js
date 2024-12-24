@@ -28,7 +28,7 @@ export default function EcologicalInferenceGraph() {
     //GUI-17
     const fetch_ei_race = async (stateAbbreviation, racialGroup, regionType) => {
         try {
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/ei-analysis/demographics/${racialGroup}/${regionType}`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/ei-analysis/demographics/${racialGroup}/${regionType}`);
             const json = await response.json();
             console.log("Ecological Inference Racial Data: ", json);
             return json;
@@ -39,7 +39,7 @@ export default function EcologicalInferenceGraph() {
 
     const fetch_ei_economic = async (stateAbbreviation, economicGroup, regionType) => {
         try{
-            const response = await fetch(`${API_URL}/api/data/${stateAbbreviation}/ei-analysis/economics/${economicGroup}/${regionType}`);
+            const response = await fetch(`votifier-server-production.up.railway.app/api/data/${stateAbbreviation}/ei-analysis/economics/${economicGroup}/${regionType}`);
             const json = await response.json();
             console.log("Ecological Inference Economical Data: ", json);
             return json;
