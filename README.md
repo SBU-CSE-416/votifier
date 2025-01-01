@@ -33,4 +33,4 @@ export MAVEN_HOME=/c/Program\ Files/Maven/apache-maven-3.9.9
 ### Languages, Librarys, & Frameworks used on the Project
 Client: React, Leaflet, Axios, Recharts, Chart.js, D3.js, Victory
 </br>Server: Java, MongoDB, Maven, Spring Boot
-</br>Proprocessing: Python (Pandas, GeoPandas, PyMongo, TQDM, NumPy, Matplotlib, Seaborn, Scikit-learn, PyMC, JAX, NumPyro, Numba, NetCDF4, Graphviz)
+</br>Proprocessing: Python (Pandas, GeoPandas, PyMongo, NumPy, Matplotlib, Seaborn, MGGG, PyEI)
